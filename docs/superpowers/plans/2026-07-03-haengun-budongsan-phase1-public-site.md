@@ -554,8 +554,8 @@ describe('formatPrice', () => {
 
 describe('formatArea / pyeong', () => {
   it('converts ㎡ to 평 and formats', () => {
-    expect(pyeong(1000)).toBe(302);
-    expect(formatArea(1000)).toBe('1,000㎡ (약 302평)');
+    expect(pyeong(1000)).toBe(303);
+    expect(formatArea(1000)).toBe('1,000㎡ (약 303평)');
   });
   it('returns dash for null', () => {
     expect(formatArea(null)).toBe('-');
