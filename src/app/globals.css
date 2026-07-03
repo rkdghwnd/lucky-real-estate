@@ -1,0 +1,12 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand: #0b4a6f;
+  --color-brand-dark: #08344e;
+  --color-accent: #c8102e;
+  --color-ink: #16202a;
+  --color-muted: #4b5563;
+}
+
+html { font-size: 18px; }
+body { color: var(--color-ink); background: #ffffff; -webkit-text-size-adjust: 100%; }
