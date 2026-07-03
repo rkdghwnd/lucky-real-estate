@@ -3,3 +3,7 @@
 
 [build.environment]
   NODE_VERSION = "20"
+
+# Serve the Next.js app (SSG/ISR) — do not rely on auto-detection.
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
