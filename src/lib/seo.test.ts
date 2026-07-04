@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { absoluteUrl, buildListingMetadata, buildOrgJsonLd, buildListingJsonLd } from './seo';
+import { absoluteUrl, buildListingMetadata, buildOrgJsonLd, buildListingJsonLd, buildVerificationMetadata } from './seo';
 import type { Listing } from './types';
 
 // Self-contained literal — this task must not depend on Task 5's rowToListing.
@@ -44,5 +44,21 @@ describe('buildListingJsonLd', () => {
     expect(j['@type']).toBe('Product');
     expect(j.offers.price).toBe(factory.price);
     expect(j.offers.priceCurrency).toBe('KRW');
+  });
+});
+
+describe('buildVerificationMetadata', () => {
+  it('returns undefined when no verification codes are set', () => {
+    expect(buildVerificationMetadata('', '')).toBeUndefined();
+  });
+  it('includes google and naver-site-verification when both are set', () => {
+    const v = buildVerificationMetadata('naver-code', 'google-code');
+    expect(v?.google).toBe('google-code');
+    expect(v?.other?.['naver-site-verification']).toBe('naver-code');
+  });
+  it('includes only the one that is set', () => {
+    const v = buildVerificationMetadata('naver-code', '');
+    expect(v?.other?.['naver-site-verification']).toBe('naver-code');
+    expect(v?.google).toBeUndefined();
   });
 });

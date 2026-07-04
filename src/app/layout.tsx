@@ -4,7 +4,7 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { PhoneCtaBar } from '@/components/layout/PhoneCtaBar';
 import { JsonLd } from '@/components/seo/JsonLd';
-import { buildOrgJsonLd } from '@/lib/seo';
+import { buildOrgJsonLd, buildVerificationMetadata } from '@/lib/seo';
 import { siteConfig } from '@/lib/site';
 
 export const metadata: Metadata = {
@@ -12,6 +12,7 @@ export const metadata: Metadata = {
   title: { default: `${siteConfig.name} | 인천 서구 공장·창고·토지`, template: `%s | ${siteConfig.shortName}` },
   description: siteConfig.positioning,
   openGraph: { siteName: siteConfig.name, locale: 'ko_KR', type: 'website' },
+  verification: buildVerificationMetadata(),
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

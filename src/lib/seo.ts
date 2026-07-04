@@ -37,6 +37,16 @@ export function buildOrgJsonLd(): object {
   };
 }
 
+export function buildVerificationMetadata(
+  naverSiteVerification: string = siteConfig.naverSiteVerification,
+  googleSiteVerification: string = siteConfig.googleSiteVerification,
+): Metadata['verification'] {
+  const verification: NonNullable<Metadata['verification']> = {};
+  if (googleSiteVerification) verification.google = googleSiteVerification;
+  if (naverSiteVerification) verification.other = { 'naver-site-verification': naverSiteVerification };
+  return Object.keys(verification).length > 0 ? verification : undefined;
+}
+
 export function buildListingJsonLd(l: Listing): object {
   return {
     '@context': 'https://schema.org',

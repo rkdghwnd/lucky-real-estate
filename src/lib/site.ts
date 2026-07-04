@@ -10,4 +10,6 @@ export const siteConfig = {
   positioning: '인천 서구 공장·토지, 25년 네트워크. 네이버에 없는 물건까지 연결합니다.',
   siteUrl: process.env.NEXT_PUBLIC_SITE_URL ?? 'https://haengun.example.com',
   naverMapClientId: process.env.NEXT_PUBLIC_NAVER_MAP_CLIENT_ID ?? '',
+  naverSiteVerification: process.env.NEXT_PUBLIC_NAVER_SITE_VERIFICATION ?? '',
+  googleSiteVerification: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION ?? '',
 } as const;
