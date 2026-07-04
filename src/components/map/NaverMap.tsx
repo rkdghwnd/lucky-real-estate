@@ -150,19 +150,19 @@ export function NaverMap({ lat, lng, address }: { lat: number | null; lng: numbe
   }, [address, hasKey, lat, lng]);
 
   return (
-    <div className="relative min-h-[360px] w-full overflow-hidden rounded-xl border border-neutral-200/80 bg-neutral-100">
+    <div className="relative min-h-[360px] w-full overflow-hidden rounded-3xl border border-hairline bg-brand-light">
       <div ref={ref} className="min-h-[360px] w-full" aria-label={`${address} 지도`} />
 
       {status === 'loading' ? (
-        <div className="absolute inset-0 grid place-items-center bg-brand-light text-sm font-bold text-muted" role="status">
+        <div className="absolute inset-0 grid place-items-center bg-brand-light text-sm font-semibold text-muted" role="status">
           지도 불러오는 중
         </div>
       ) : null}
 
       {status === 'error' ? (
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-brand-light p-6 text-center" role="alert">
-          <MapPin aria-hidden="true" className="size-8 text-brand" />
-          <p className="font-black text-ink">지도를 불러오지 못했습니다</p>
+          <MapPin aria-hidden="true" className="size-8 text-muted" />
+          <p className="font-bold text-ink">지도를 불러오지 못했습니다</p>
           <p className="text-sm text-muted">{address}</p>
         </div>
       ) : null}

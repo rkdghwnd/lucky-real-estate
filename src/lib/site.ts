@@ -7,7 +7,7 @@ export const siteConfig = {
   phoneHref: 'tel:0325678770',
   address: '인천광역시 서구 원당대로246번길 3-1',
   businessHours: '평일 09:00–18:00',
-  positioning: '인천 서구 공장·토지, 25년 네트워크. 네이버에 없는 물건까지 연결합니다.',
+  positioning: '인천 서구 공장·토지 전문 부동산',
   siteUrl: process.env.NEXT_PUBLIC_SITE_URL ?? 'https://haengun.example.com',
   naverMapClientId: process.env.NEXT_PUBLIC_NAVER_MAP_CLIENT_ID ?? '',
   naverSiteVerification: process.env.NEXT_PUBLIC_NAVER_SITE_VERIFICATION ?? '',

@@ -16,12 +16,12 @@ export function SpecTable({ listing: l }: { listing: Listing }) {
     ['준공', l.completionYear != null ? `${l.completionYear}년` : null],
   ];
   return (
-    <table className="w-full overflow-hidden rounded-xl border border-neutral-200/80 bg-white text-lg shadow-sm">
+    <table className="w-full overflow-hidden rounded-3xl border border-hairline bg-canvas text-lg">
       <tbody>
         {rows.filter(([, v]) => v != null && v !== '').map(([k, v]) => (
-          <tr key={k} className="border-b border-neutral-100 last:border-b-0">
-            <th scope="row" className="w-28 bg-brand-light/50 py-3 px-4 text-left align-top font-semibold text-brand">{k}</th>
-            <td className="py-3 px-4 text-ink">{v}</td>
+          <tr key={k} className="border-b border-hairline last:border-b-0">
+            <th scope="row" className="w-28 bg-brand-light py-3 px-5 text-left align-top font-semibold text-muted">{k}</th>
+            <td className="py-3 px-5 text-ink">{v}</td>
           </tr>
         ))}
       </tbody>

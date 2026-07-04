@@ -74,13 +74,13 @@ export function ListingsMap({ listings }: { listings: Listing[] }) {
 
   if (!hasKey || located.length === 0) {
     return (
-      <div className="flex h-full min-h-[280px] flex-col items-center justify-center gap-3 rounded-xl border border-neutral-200/80 bg-brand-light p-6 text-center">
-        <MapPin aria-hidden="true" className="size-8 text-brand" />
+      <div className="flex h-full min-h-[280px] flex-col items-center justify-center gap-3 rounded-3xl border border-hairline bg-brand-light p-6 text-center">
+        <MapPin aria-hidden="true" className="size-8 text-muted" />
         <p className="text-sm font-bold text-ink">지도로 볼 수 있는 매물이 준비 중입니다</p>
         <p className="text-sm text-muted">아래 목록에서 매물을 확인하거나 전화로 문의해 주세요.</p>
         <div className="mt-1 flex flex-col gap-1">
           {located.slice(0, 4).map(l => (
-            <Link key={l.id} href={`/listings/${l.slug}`} className="text-sm font-bold text-brand underline">
+            <Link key={l.id} href={`/listings/${l.slug}`} className="text-sm font-semibold text-brand underline">
               {l.title} · {formatDealPrice(l)}
             </Link>
           ))}
@@ -89,5 +89,5 @@ export function ListingsMap({ listings }: { listings: Listing[] }) {
     );
   }
 
-  return <div ref={ref} className="h-full min-h-[280px] w-full overflow-hidden rounded-xl border border-neutral-200/80 bg-neutral-100" aria-label="매물 지도" />;
+  return <div ref={ref} className="h-full min-h-[280px] w-full overflow-hidden rounded-3xl border border-hairline bg-neutral-100" aria-label="매물 지도" />;
 }

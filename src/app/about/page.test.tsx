@@ -4,9 +4,9 @@ import AboutPage from './page';
 import { siteConfig } from '@/lib/site';
 
 describe('AboutPage', () => {
-  it('states the 25-year network positioning and the registration number', () => {
+  it('shows the office address and registration number', () => {
     render(<AboutPage />);
-    expect(screen.getAllByText(/25년/).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(siteConfig.address).length).toBeGreaterThan(0);
     expect(screen.getByText(new RegExp(siteConfig.registrationNumber))).toBeInTheDocument();
   });
 });

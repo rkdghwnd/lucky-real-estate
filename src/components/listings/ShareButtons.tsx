@@ -14,8 +14,8 @@ export function ShareButtons({ slug, title }: { slug: string; title: string }) {
   const sms = `sms:?body=${encodeURIComponent(`${title} ${url}`)}`;
   return (
     <div className="flex gap-2">
-      <button type="button" onClick={copy} className="rounded-lg border border-neutral-300 px-4 py-3 text-lg transition hover:border-brand hover:bg-brand-light hover:text-brand">링크복사</button>
-      <a href={sms} className="rounded-lg border border-neutral-300 px-4 py-3 text-lg transition hover:border-brand hover:bg-brand-light hover:text-brand">문자</a>
+      <button type="button" onClick={copy} className="rounded-full border border-hairline px-5 py-3 text-lg font-medium transition hover:border-brand hover:text-brand">링크복사</button>
+      <a href={sms} className="rounded-full border border-hairline px-5 py-3 text-lg font-medium transition hover:border-brand hover:text-brand">문자</a>
     </div>
   );
 }
