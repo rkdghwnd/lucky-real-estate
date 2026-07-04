@@ -14,7 +14,7 @@ export function ListingBrowser({ listings }: { listings: Listing[] }) {
     <div className="space-y-5">
       <FilterPanel propertyType={type} dealType={deal} onPropertyTypeChange={setType} onDealTypeChange={setDeal} resultCount={shown.length} />
       {shown.length === 0 ? (
-        <p className="rounded-xl border border-neutral-200/80 bg-white py-16 text-center text-muted shadow-sm">
+        <p className="rounded-3xl border border-hairline bg-canvas py-16 text-center text-muted">
           조건에 맞는 공개 매물이 없습니다. 전화 주시면 비공개 매물까지 찾아드립니다.
         </p>
       ) : (

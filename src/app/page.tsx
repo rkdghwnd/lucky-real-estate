@@ -13,6 +13,11 @@ export default async function HomePage() {
 
   return (
     <div className="space-y-14">
+      <section>
+        <h1 className="max-w-2xl text-3xl font-normal tracking-tight text-ink sm:text-4xl">{siteConfig.positioning}</h1>
+        <p className="mt-3 max-w-xl text-lg text-muted">공개 매물은 지도에서 바로 확인하고, 원하는 조건은 전화로 편하게 물어보세요.</p>
+      </section>
+
       <section className="grid gap-4 lg:grid-cols-[1.5fr_1fr]">
         <div className="min-h-[360px] overflow-hidden rounded-3xl border border-hairline">
           <NaverMap lat={null} lng={null} address={siteConfig.address} />
