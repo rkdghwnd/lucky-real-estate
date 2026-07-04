@@ -4,6 +4,11 @@ import { vi } from 'vitest';
 
 vi.mock('next/image', () => ({
   __esModule: true,
-  default: ({ fill, priority, sizes, ...rest }: Record<string, unknown>) =>
-    React.createElement('img', rest as Record<string, unknown>),
+  default: (props: Record<string, unknown>) => {
+    const rest = { ...props };
+    delete rest.fill;
+    delete rest.priority;
+    delete rest.sizes;
+    return React.createElement('img', rest as Record<string, unknown>);
+  },
 }));

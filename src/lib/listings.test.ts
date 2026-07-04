@@ -6,15 +6,31 @@ import { sampleRows } from '@/test/fixtures/listings';
 
 // Minimal thenable stand-in for the Supabase query builder.
 function fakeClient(rows: ListingRow[]): SupabaseClient {
-  const builder: Record<string, unknown> = {
-    _rows: [...rows],
-    select() { return this; },
-    eq(col: string, val: unknown) { (this as any)._rows = (this as any)._rows.filter((r: any) => r[col] === val); return this; },
-    order() { return this; },
-    single() { const r = (this as any)._rows[0] ?? null; return Promise.resolve({ data: r, error: r ? null : { message: 'no rows' } }); },
-    then(resolve: (v: { data: unknown; error: null }) => void) { resolve({ data: (this as any)._rows, error: null }); },
+  let currentRows = [...rows];
+  const builder = {
+    select() { return builder; },
+    eq(col: keyof ListingRow, val: unknown) {
+      currentRows = currentRows.filter(r => r[col] === val);
+      return builder;
+    },
+    order() { return builder; },
+    single() {
+      const row = currentRows[0] ?? null;
+      return Promise.resolve({ data: row, error: row ? null : { message: 'no rows' } });
+    },
+    then<TResult1 = { data: ListingRow[]; error: null }, TResult2 = never>(
+      onfulfilled?: ((value: { data: ListingRow[]; error: null }) => TResult1 | PromiseLike<TResult1>) | null,
+      onrejected?: ((reason: unknown) => TResult2 | PromiseLike<TResult2>) | null,
+    ) {
+      return Promise.resolve({ data: currentRows, error: null }).then(onfulfilled, onrejected);
+    },
   };
-  return { from() { return builder; } } as unknown as SupabaseClient;
+  return {
+    from() {
+      currentRows = [...rows];
+      return builder;
+    },
+  } as unknown as SupabaseClient;
 }
 
 describe('rowToListing', () => {

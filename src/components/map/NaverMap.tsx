@@ -2,6 +2,16 @@
 import { useEffect, useRef } from 'react';
 import { siteConfig } from '@/lib/site';
 
+interface NaverMapsApi {
+  LatLng: new (lat: number, lng: number) => unknown;
+  Map: new (element: HTMLElement, options: { center: unknown; zoom: number }) => unknown;
+  Marker: new (options: { position: unknown; map: unknown }) => unknown;
+}
+
+interface NaverWindow {
+  naver?: { maps?: NaverMapsApi };
+}
+
 export function NaverMap({ lat, lng, address }: { lat: number | null; lng: number | null; address: string }) {
   const ref = useRef<HTMLDivElement>(null);
   const hasKey = Boolean(siteConfig.naverMapClientId);
@@ -10,13 +20,13 @@ export function NaverMap({ lat, lng, address }: { lat: number | null; lng: numbe
   useEffect(() => {
     if (!hasKey || lat == null || lng == null || !ref.current) return;
     const init = () => {
-      const naver = (window as unknown as { naver?: { maps?: any } }).naver;
+      const naver = (window as unknown as NaverWindow).naver;
       if (!naver?.maps || !ref.current) return;
       const center = new naver.maps.LatLng(lat, lng);
       const map = new naver.maps.Map(ref.current, { center, zoom: 16 });
       new naver.maps.Marker({ position: center, map });
     };
-    if ((window as unknown as { naver?: { maps?: unknown } }).naver?.maps) { init(); return; }
+    if ((window as unknown as NaverWindow).naver?.maps) { init(); return; }
     const id = 'naver-map-sdk';
     let script = document.getElementById(id) as HTMLScriptElement | null;
     if (!script) {
@@ -32,8 +42,8 @@ export function NaverMap({ lat, lng, address }: { lat: number | null; lng: numbe
 
   if (!hasKey || lat == null || lng == null) {
     return (
-      <a href={searchUrl} target="_blank" rel="noopener noreferrer" className="block rounded-xl border bg-gray-50 p-6 text-center text-lg">
-        📍 {address}<br /><span className="text-brand underline">네이버 지도에서 위치 보기</span>
+      <a href={searchUrl} target="_blank" rel="noopener noreferrer" className="block rounded-xl border border-neutral-200/80 bg-brand-light p-6 text-center text-lg transition hover:border-brand/30 hover:shadow-sm">
+        📍 {address}<br /><span className="font-bold text-brand underline">네이버 지도에서 위치 보기</span>
       </a>
     );
   }

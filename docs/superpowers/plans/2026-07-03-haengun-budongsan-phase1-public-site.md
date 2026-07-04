@@ -1971,8 +1971,6 @@ export default function AboutPage() {
         <h2 className="text-2xl font-bold">인천 서구에서 25년</h2>
         <p className="mt-3 text-lg leading-8 text-muted">
           오류동·검단·왕길동 일대 공장·창고·토지를 25년간 현장에서 중개해 왔습니다.
-          데이터앱이 알 수 없는 &ldquo;왜 파는지, 얼마까지 되는지, 옆 필지가 어떻게 되는지&rdquo;를
-          네트워크로 압니다. 네이버에 올라오지 않는 비공개 매물까지 연결합니다.
         </p>
       </section>
 

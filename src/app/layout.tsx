@@ -21,7 +21,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="min-h-screen pb-20 sm:pb-0">
         <JsonLd data={buildOrgJsonLd()} />
         <Header />
-        <main className="mx-auto max-w-5xl px-4 py-6">{children}</main>
+        <main className="mx-auto max-w-6xl px-4 py-6">{children}</main>
         <Footer />
         <PhoneCtaBar />
       </body>

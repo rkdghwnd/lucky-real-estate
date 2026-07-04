@@ -21,6 +21,15 @@ export function formatArea(m2: number | null | undefined): string {
   return `${m2.toLocaleString('ko-KR')}㎡ (약 ${pyeong(m2).toLocaleString('ko-KR')}평)`;
 }
 
+export function formatListingNo(l: Pick<Listing, 'id' | 'slug'>): string {
+  const source = `${l.slug}${l.id}`;
+  let hash = 0;
+  for (let i = 0; i < source.length; i += 1) {
+    hash = (hash * 31 + source.charCodeAt(i)) >>> 0;
+  }
+  return `No.${(hash % 90000) + 10000}`;
+}
+
 export function formatDealPrice(l: Pick<Listing, 'dealType' | 'price' | 'monthlyRent'>): string {
   if (l.dealType === '임대') {
     const deposit = `임대 보증금 ${formatPrice(l.price)}`;

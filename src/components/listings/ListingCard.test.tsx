@@ -9,7 +9,7 @@ describe('ListingCard', () => {
     render(<ListingCard listing={rowToListing(sampleRows[0])} />);
     expect(screen.getByText(/공장 · 매매/)).toBeInTheDocument();
     expect(screen.getByText(/인천광역시 서구 오류동/)).toBeInTheDocument();
-    expect(screen.getByText(/㎡/)).toBeInTheDocument();
+    expect(screen.getAllByText(/㎡/).length).toBeGreaterThan(0);
     expect(screen.getByText(/매매 18억/)).toBeInTheDocument();
   });
 });
