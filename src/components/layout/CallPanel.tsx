@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import { siteConfig } from '@/lib/site';
-import { PhoneModalTrigger } from './PhoneModal';
 
 export function CallPanel() {
   return (
@@ -18,10 +17,7 @@ export function CallPanel() {
           <Link href="/listings" className="flex h-11 items-center justify-center rounded-lg bg-brand text-sm font-black text-white transition hover:bg-brand-dark">
             매물 보기
           </Link>
-          <PhoneModalTrigger
-            label="찾는 매물"
-            className="flex h-11 items-center justify-center rounded-lg border border-brand text-sm font-black text-brand transition hover:bg-brand-light"
-          />
+       
         </div>
       </div>
     </section>
