@@ -4,7 +4,7 @@ import { siteConfig } from '@/lib/site';
 
 export const metadata: Metadata = {
   title: '회사소개',
-  description: `${siteConfig.name} — 인천 서구 공장·창고·토지 전문 네트워크.`,
+  description: `${siteConfig.name}. 인천 서구 공장·창고·토지 전문 네트워크.`,
   alternates: { canonical: `${siteConfig.siteUrl}/about` },
 };
 

@@ -15,16 +15,17 @@ export function SpecTable({ listing: l }: { listing: Listing }) {
     ['전력', l.powerCapacity],
     ['준공', l.completionYear != null ? `${l.completionYear}년` : null],
   ];
+
   return (
-    <table className="w-full overflow-hidden rounded-3xl border border-hairline bg-canvas text-lg">
-      <tbody>
-        {rows.filter(([, v]) => v != null && v !== '').map(([k, v]) => (
-          <tr key={k} className="border-b border-hairline last:border-b-0">
-            <th scope="row" className="w-28 bg-brand-light py-3 px-5 text-left align-top font-semibold text-muted">{k}</th>
-            <td className="py-3 px-5 text-ink">{v}</td>
-          </tr>
+    <dl className="grid grid-cols-2 gap-x-6 gap-y-5 rounded-3xl border border-hairline bg-canvas p-6 sm:grid-cols-3">
+      {rows
+        .filter(([, v]) => v != null && v !== '')
+        .map(([k, v]) => (
+          <div key={k}>
+            <dt className="text-sm text-muted">{k}</dt>
+            <dd className="mt-0.5 text-lg font-semibold text-ink">{v}</dd>
+          </div>
         ))}
-      </tbody>
-    </table>
+    </dl>
   );
 }
