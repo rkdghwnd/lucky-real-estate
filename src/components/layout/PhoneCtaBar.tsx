@@ -1,3 +1,4 @@
+import { Button } from '@/components/ui/button';
 import { siteConfig } from '@/lib/site';
 
 export function PhoneCtaBar() {
@@ -9,12 +10,9 @@ export function PhoneCtaBar() {
       >
         📞 지금 전화상담
       </a>
-      <a
-        href={siteConfig.phoneHref}
-        className="fixed bottom-6 right-6 z-50 hidden items-center gap-2 rounded-full bg-brand px-6 py-4 text-lg font-bold text-white transition hover:bg-brand-dark hover:shadow-[0_4px_12px_rgba(0,0,0,0.12)] sm:flex"
-      >
-        📞 전화상담 {siteConfig.phone}
-      </a>
+      <Button asChild size="lg" className="fixed bottom-6 right-6 z-50 hidden hover:shadow-[0_4px_12px_rgba(0,0,0,0.12)] sm:inline-flex">
+        <a href={siteConfig.phoneHref}>📞 전화상담 {siteConfig.phone}</a>
+      </Button>
     </>
   );
 }

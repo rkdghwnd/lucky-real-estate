@@ -1,3 +1,4 @@
+import { Card } from '@/components/ui/card';
 import type { Listing } from '@/lib/types';
 import { formatArea, formatDealPrice } from '@/lib/format';
 
@@ -17,15 +18,17 @@ export function SpecTable({ listing: l }: { listing: Listing }) {
   ];
 
   return (
-    <dl className="grid grid-cols-2 gap-x-6 gap-y-5 rounded-3xl border border-hairline bg-canvas p-6 sm:grid-cols-3">
-      {rows
-        .filter(([, v]) => v != null && v !== '')
-        .map(([k, v]) => (
-          <div key={k}>
-            <dt className="text-sm text-muted">{k}</dt>
-            <dd className="mt-0.5 text-lg font-semibold text-ink">{v}</dd>
-          </div>
-        ))}
-    </dl>
+    <Card className="p-6">
+      <dl className="grid grid-cols-2 gap-x-6 gap-y-5 sm:grid-cols-3">
+        {rows
+          .filter(([, v]) => v != null && v !== '')
+          .map(([k, v]) => (
+            <div key={k}>
+              <dt className="text-sm text-muted">{k}</dt>
+              <dd className="mt-0.5 text-lg font-semibold text-ink">{v}</dd>
+            </div>
+          ))}
+      </dl>
+    </Card>
   );
 }

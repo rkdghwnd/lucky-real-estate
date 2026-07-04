@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import Image from 'next/image';
+import { Button } from '@/components/ui/button';
 
 export function ImageSlider({ images, alt }: { images: string[]; alt: string }) {
   const [i, setI] = useState(0);
@@ -15,8 +16,8 @@ export function ImageSlider({ images, alt }: { images: string[]; alt: string }) 
         <Image src={images[i]} alt={`${alt} 사진 ${i + 1}`} fill sizes="(max-width:768px) 100vw, 768px" className="object-cover" priority />
         {images.length > 1 && (
           <>
-            <button type="button" onClick={prev} aria-label="이전 사진" className="absolute left-2 top-1/2 h-11 w-11 -translate-y-1/2 rounded-full bg-black/50 text-2xl text-white">‹</button>
-            <button type="button" onClick={next} aria-label="다음 사진" className="absolute right-2 top-1/2 h-11 w-11 -translate-y-1/2 rounded-full bg-black/50 text-2xl text-white">›</button>
+            <Button type="button" variant="ghost" size="icon" onClick={prev} aria-label="이전 사진" className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 text-2xl text-white hover:bg-black/60 hover:text-white">‹</Button>
+            <Button type="button" variant="ghost" size="icon" onClick={next} aria-label="다음 사진" className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 text-2xl text-white hover:bg-black/60 hover:text-white">›</Button>
           </>
         )}
       </div>

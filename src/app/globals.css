@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "tw-animate-css";
 
 @theme {
   --color-brand: #0052ff;
@@ -10,6 +11,25 @@
   --color-surface-dark: #0a0b0d;
   --color-surface-dark-elevated: #16181c;
   --color-hairline: #dee1e6;
+  --color-danger: #dc2626;
+
+  /* shadcn/ui primitives (Button/Dialog/Card/Badge) alias onto the tokens above. */
+  --color-background: var(--color-canvas);
+  --color-foreground: var(--color-ink);
+  --color-card: var(--color-canvas);
+  --color-card-foreground: var(--color-ink);
+  --color-popover: var(--color-canvas);
+  --color-popover-foreground: var(--color-ink);
+  --color-primary: var(--color-brand);
+  --color-primary-foreground: #ffffff;
+  --color-secondary: var(--color-brand-light);
+  --color-secondary-foreground: var(--color-ink);
+  --color-muted-foreground: var(--color-muted);
+  --color-destructive: var(--color-danger);
+  --color-destructive-foreground: #ffffff;
+  --color-border: var(--color-hairline);
+  --color-input: var(--color-hairline);
+  --color-ring: var(--color-brand);
 }
 
 html {

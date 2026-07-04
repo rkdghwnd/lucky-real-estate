@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import { Badge } from '@/components/ui/badge';
 import type { Listing } from '@/lib/types';
 import { formatArea, formatDealPrice } from '@/lib/format';
 
@@ -16,7 +17,7 @@ export function ListingCard({ listing: l }: { listing: Listing }) {
         ) : (
           <div className="flex h-full items-center justify-center text-sm font-medium text-muted">사진 준비중</div>
         )}
-        <span className="absolute left-3 top-3 rounded-full bg-canvas px-3 py-1 text-xs font-semibold text-ink">{l.propertyType} · {l.dealType}</span>
+        <Badge className="absolute left-3 top-3">{l.propertyType} · {l.dealType}</Badge>
       </div>
       <div className="flex flex-1 flex-col p-5">
         <h3 className="line-clamp-1 text-lg font-bold text-ink">{l.title}</h3>

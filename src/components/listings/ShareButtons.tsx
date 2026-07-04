@@ -1,4 +1,5 @@
 'use client';
+import { Button } from '@/components/ui/button';
 import { siteConfig } from '@/lib/site';
 
 export function ShareButtons({ slug, title }: { slug: string; title: string }) {
@@ -14,8 +15,10 @@ export function ShareButtons({ slug, title }: { slug: string; title: string }) {
   const sms = `sms:?body=${encodeURIComponent(`${title} ${url}`)}`;
   return (
     <div className="flex gap-2">
-      <button type="button" onClick={copy} className="rounded-full border border-hairline px-5 py-3 text-lg font-medium transition hover:border-brand hover:text-brand">링크복사</button>
-      <a href={sms} className="rounded-full border border-hairline px-5 py-3 text-lg font-medium transition hover:border-brand hover:text-brand">문자</a>
+      <Button type="button" variant="outline" size="lg" onClick={copy}>링크복사</Button>
+      <Button asChild variant="outline" size="lg">
+        <a href={sms}>문자</a>
+      </Button>
     </div>
   );
 }

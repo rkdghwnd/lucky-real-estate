@@ -1,4 +1,5 @@
 'use client';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import type { DealType, PropertyType } from '@/lib/types';
 
 const PROPERTY_TYPES: (PropertyType | '전체')[] = ['전체', '공장', '창고', '토지', '기타'];
@@ -14,11 +15,11 @@ interface FilterPanelProps {
 
 export function FilterPanel({ propertyType, dealType, onPropertyTypeChange, onDealTypeChange, resultCount }: FilterPanelProps) {
   return (
-    <section className="rounded-3xl border border-hairline bg-canvas" aria-label="매물 필터">
-      <div className="border-b border-hairline px-5 py-4">
+    <Card role="region" aria-label="매물 필터">
+      <CardHeader>
         <p className="text-sm font-semibold text-muted">매물 필터 · <span className="font-bold text-ink">{resultCount}</span>건</p>
-      </div>
-      <div className="flex flex-col gap-4 px-5 py-4">
+      </CardHeader>
+      <CardContent className="flex flex-col gap-4">
         <div>
           <p className="mb-2 text-xs font-semibold text-muted">매물 종류</p>
           <div className="flex flex-wrap gap-2">
@@ -55,7 +56,7 @@ export function FilterPanel({ propertyType, dealType, onPropertyTypeChange, onDe
             ))}
           </div>
         </div>
-      </div>
-    </section>
+      </CardContent>
+    </Card>
   );
 }

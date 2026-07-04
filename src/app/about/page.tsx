@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import { NaverMap } from '@/components/map/NaverMap';
+import { Badge } from '@/components/ui/badge';
+import { Card } from '@/components/ui/card';
 import { siteConfig } from '@/lib/site';
 
 export const metadata: Metadata = {
@@ -12,12 +14,12 @@ export default function AboutPage() {
   return (
     <div className="space-y-10">
       <section>
-        <p className="inline-block rounded-full bg-brand-light px-3 py-1 text-sm font-semibold text-brand">회사소개</p>
+        <Badge variant="brand">회사소개</Badge>
         <h1 className="mt-3 text-3xl font-normal tracking-tight text-ink">{siteConfig.shortName}</h1>
         <p className="mt-4 text-xl leading-8 text-muted">{siteConfig.positioning}</p>
       </section>
 
-      <section className="rounded-3xl border border-hairline bg-canvas p-6">
+      <Card className="p-6">
         <h2 className="mb-4 text-2xl font-normal tracking-tight text-ink">사무소 정보</h2>
         <dl className="grid gap-2 text-lg sm:grid-cols-2">
           <div><dt className="text-sm text-muted">상호</dt><dd className="font-medium text-ink">{siteConfig.name}</dd></div>
@@ -32,7 +34,7 @@ export default function AboutPage() {
             </dd>
           </div>
         </dl>
-      </section>
+      </Card>
 
       <NaverMap lat={null} lng={null} address={siteConfig.address} />
     </div>

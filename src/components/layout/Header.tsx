@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
+import { Button } from '@/components/ui/button';
 import { siteConfig } from '@/lib/site';
 
 const NAV_LINKS = [
@@ -42,22 +43,21 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <a
-            href={siteConfig.phoneHref}
-            className="hidden h-11 items-center rounded-full bg-brand px-5 text-sm font-semibold text-white transition hover:bg-brand-dark sm:inline-flex"
-          >
-            📞 전화상담
-          </a>
-          <button
+          <Button asChild className="hidden sm:inline-flex">
+            <a href={siteConfig.phoneHref}>📞 전화상담</a>
+          </Button>
+          <Button
             type="button"
+            variant="outline"
+            size="icon"
             aria-expanded={mobileMenuOpen}
             aria-controls="mobile-primary-navigation"
             onClick={() => setMobileMenuOpen(open => !open)}
-            className="grid size-10 place-items-center rounded-full border border-hairline text-ink md:hidden"
+            className="md:hidden"
             aria-label={mobileMenuOpen ? '메뉴 닫기' : '메뉴'}
           >
             {mobileMenuOpen ? '✕' : '☰'}
-          </button>
+          </Button>
         </div>
       </div>
 
