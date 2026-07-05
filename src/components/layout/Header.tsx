@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { Phone, Menu, X, ChevronRight, Clock, Building2 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Button, Drawer } from 'antd';
 import { siteConfig } from '@/lib/site';
 
 const NAV_LINKS = [
@@ -15,8 +15,8 @@ const NAV_LINKS = [
 ] as const;
 
 export function Header() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const close = () => setMobileMenuOpen(false);
+  const [open, setOpen] = useState(false);
+  const close = () => setOpen(false);
 
   return (
     <header className="sticky top-0 z-40 bg-canvas">
@@ -61,57 +61,54 @@ export function Header() {
           </nav>
 
           <div className="flex items-center gap-2">
-            <Button asChild className="hidden sm:inline-flex">
-              <a href={siteConfig.phoneHref}>
-                <Phone className="size-4" aria-hidden="true" />
-                전화상담
-              </a>
+            <Button
+              type="primary"
+              size="large"
+              href={siteConfig.phoneHref}
+              icon={<Phone className="size-4" aria-hidden="true" />}
+              className="hidden sm:inline-flex"
+            >
+              전화상담
             </Button>
             <Button
-              type="button"
-              variant="outline"
-              size="icon"
-              aria-expanded={mobileMenuOpen}
-              aria-controls="mobile-primary-navigation"
-              onClick={() => setMobileMenuOpen(true)}
-              className="md:hidden"
+              type="text"
               aria-label="메뉴"
-            >
-              <Menu className="size-5" aria-hidden="true" />
-            </Button>
+              onClick={() => setOpen(true)}
+              icon={<Menu className="size-5" aria-hidden="true" />}
+              className="md:hidden"
+            />
           </div>
         </div>
       </div>
 
-      {mobileMenuOpen ? (
-        <nav
-          id="mobile-primary-navigation"
-          aria-label="모바일 메뉴"
-          className="fixed inset-0 z-50 flex flex-col bg-canvas md:hidden"
-        >
-          <div className="flex min-h-[64px] items-center justify-between border-b border-hairline px-4">
+      <Drawer
+        open={open}
+        onClose={close}
+        placement="right"
+        closable={false}
+        styles={{ body: { padding: 0 } }}
+        title={
+          <div className="flex items-center justify-between">
             <span className="flex items-center gap-2.5">
               <span className="grid size-9 place-items-center rounded-lg bg-brand text-white">
                 <Building2 className="size-4" aria-hidden="true" />
               </span>
               <span className="text-lg font-bold tracking-tight text-ink">{siteConfig.shortName}</span>
             </span>
-            <Button type="button" variant="outline" size="icon" onClick={close} aria-label="메뉴 닫기">
-              <X className="size-5" aria-hidden="true" />
-            </Button>
+            <Button type="text" aria-label="메뉴 닫기" onClick={close} icon={<X className="size-5" aria-hidden="true" />} />
           </div>
-
-          <div className="flex items-center gap-2 border-b border-hairline px-4 py-3 text-sm text-muted">
-            <a href={siteConfig.phoneHref} className="inline-flex items-center gap-1.5">
-              <span>문의</span>
-              <span className="font-semibold text-brand">{siteConfig.phone}</span>
-            </a>
+        }
+      >
+        <nav aria-label="모바일 메뉴" className="flex h-full flex-col bg-canvas">
+          <a href={siteConfig.phoneHref} className="flex items-center gap-2 border-b border-hairline px-4 py-3 text-sm text-muted">
+            <span>문의</span>
+            <span className="font-semibold text-brand">{siteConfig.phone}</span>
             <span className="text-hairline">·</span>
             <span className="inline-flex items-center gap-1.5">
               <Clock className="size-3.5" aria-hidden="true" />
               {siteConfig.businessHours}
             </span>
-          </div>
+          </a>
 
           <div className="flex flex-col divide-y divide-hairline px-4">
             {NAV_LINKS.map(link => (
@@ -128,15 +125,12 @@ export function Header() {
           </div>
 
           <div className="mt-auto p-4">
-            <Button asChild size="lg" className="w-full">
-              <a href={siteConfig.phoneHref} onClick={close}>
-                <Phone className="size-5" aria-hidden="true" />
-                전화상담
-              </a>
+            <Button type="primary" size="large" block href={siteConfig.phoneHref} icon={<Phone className="size-5" aria-hidden="true" />} onClick={close}>
+              전화상담
             </Button>
           </div>
         </nav>
-      ) : null}
+      </Drawer>
     </header>
   );
 }

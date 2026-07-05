@@ -1,11 +1,11 @@
 'use client';
 import { useMemo } from 'react';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
+import { Select, Pagination, Empty } from 'antd';
 import { searchListings, criteriaFromParams, availableRegions, type SortKey } from '@/lib/search';
 import type { Listing } from '@/lib/types';
 import { SearchFilters, type FilterDraft } from './SearchFilters';
 import { ListingCard } from './ListingCard';
-import { Pagination } from './Pagination';
 
 const SORTS: { value: SortKey; label: string }[] = [
   { value: 'latest', label: '최신순' },
@@ -80,20 +80,27 @@ export function ListingBrowser({ listings }: { listings: Listing[] }) {
           <p className="text-lg font-bold text-ink">
             전체 매물 <span className="text-brand">{result.total}</span>건
           </p>
-          <select
+          <Select
             aria-label="정렬"
-            value={criteria.sort}
-            onChange={e => changeSort(e.target.value)}
-            className="h-10 rounded-md border border-hairline bg-canvas px-3 text-sm text-ink outline-none transition focus-visible:border-brand focus-visible:ring-2 focus-visible:ring-brand/30"
-          >
-            {SORTS.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
-          </select>
+            value={criteria.sort ?? 'latest'}
+            onChange={changeSort}
+            options={SORTS}
+            style={{ width: 140 }}
+          />
         </div>
 
         {result.items.length === 0 ? (
-          <div className="flex flex-col items-center gap-1.5 rounded-lg border border-dashed border-hairline bg-canvas px-6 py-20 text-center">
-            <p className="font-semibold text-ink">조건에 맞는 공개 매물이 없습니다.</p>
-            <p className="text-sm text-muted">전화 주시면 비공개 매물까지 찾아드립니다.</p>
+          <div className="rounded-lg border border-dashed border-hairline bg-canvas px-6 py-16">
+            <Empty
+              image={Empty.PRESENTED_IMAGE_SIMPLE}
+              description={
+                <span className="text-ink">
+                  조건에 맞는 공개 매물이 없습니다.
+                  <br />
+                  <span className="text-sm text-muted">전화 주시면 찾아드립니다.</span>
+                </span>
+              }
+            />
           </div>
         ) : (
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
@@ -102,8 +109,14 @@ export function ListingBrowser({ listings }: { listings: Listing[] }) {
         )}
 
         {result.totalPages > 1 && (
-          <div className="mt-8">
-            <Pagination page={result.page} totalPages={result.totalPages} onChange={changePage} />
+          <div className="mt-8 flex justify-center">
+            <Pagination
+              current={result.page}
+              total={result.total}
+              pageSize={result.pageSize}
+              onChange={changePage}
+              showSizeChanger={false}
+            />
           </div>
         )}
       </div>

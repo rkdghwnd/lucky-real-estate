@@ -1,13 +1,11 @@
 'use client';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { Select, Input, Button } from 'antd';
 import { Search } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 
 const DEAL = ['전체', '매매', '임대'];
 const TYPE = ['전체', '공장', '창고', '토지', '기타'];
-const selectCls =
-  'h-12 rounded-md border border-hairline bg-canvas px-3 text-ink outline-none transition focus-visible:border-brand focus-visible:ring-2 focus-visible:ring-brand/30';
 
 export function SearchBar({ regions }: { regions: string[] }) {
   const router = useRouter();
@@ -16,8 +14,7 @@ export function SearchBar({ regions }: { regions: string[] }) {
   const [region, setRegion] = useState('전체');
   const [keyword, setKeyword] = useState('');
 
-  const submit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const submit = () => {
     const p = new URLSearchParams();
     if (deal !== '전체') p.set('deal', deal);
     if (type !== '전체') p.set('type', type);
@@ -28,31 +25,46 @@ export function SearchBar({ regions }: { regions: string[] }) {
   };
 
   return (
-    <form
-      onSubmit={submit}
-      className="flex flex-col gap-2 rounded-xl border border-hairline bg-canvas p-3 shadow-[0_12px_32px_rgba(10,11,13,0.12)] sm:flex-row sm:flex-wrap lg:flex-nowrap lg:items-center"
-    >
-      <select aria-label="거래유형" value={deal} onChange={e => setDeal(e.target.value)} className={`${selectCls} sm:flex-1`}>
-        {DEAL.map(v => <option key={v} value={v}>{v === '전체' ? '거래유형 전체' : v}</option>)}
-      </select>
-      <select aria-label="매물종류" value={type} onChange={e => setType(e.target.value)} className={`${selectCls} sm:flex-1`}>
-        {TYPE.map(v => <option key={v} value={v}>{v === '전체' ? '매물종류 전체' : v}</option>)}
-      </select>
-      <select aria-label="지역" value={region} onChange={e => setRegion(e.target.value)} className={`${selectCls} sm:flex-1`}>
-        <option value="전체">지역 전체</option>
-        {regions.map(r => <option key={r} value={r}>{r}</option>)}
-      </select>
-      <input
+    <div className="flex flex-col gap-2 rounded-xl border border-hairline bg-canvas p-3 shadow-[0_12px_32px_rgba(10,11,13,0.12)] sm:flex-row sm:flex-wrap lg:flex-nowrap lg:items-center">
+      <Select
+        aria-label="거래유형"
+        size="large"
+        value={deal}
+        onChange={setDeal}
+        className="sm:flex-1"
+        style={{ width: '100%' }}
+        options={DEAL.map(v => ({ value: v, label: v === '전체' ? '거래유형 전체' : v }))}
+      />
+      <Select
+        aria-label="매물종류"
+        size="large"
+        value={type}
+        onChange={setType}
+        className="sm:flex-1"
+        style={{ width: '100%' }}
+        options={TYPE.map(v => ({ value: v, label: v === '전체' ? '매물종류 전체' : v }))}
+      />
+      <Select
+        aria-label="지역"
+        size="large"
+        value={region}
+        onChange={setRegion}
+        className="sm:flex-1"
+        style={{ width: '100%' }}
+        options={[{ value: '전체', label: '지역 전체' }, ...regions.map(r => ({ value: r, label: r }))]}
+      />
+      <Input
         aria-label="키워드 검색"
+        size="large"
         value={keyword}
         onChange={e => setKeyword(e.target.value)}
+        onPressEnter={submit}
         placeholder="키워드 검색 (예: 원당동 공장)"
-        className={`${selectCls} w-full sm:flex-[2] sm:basis-48`}
+        className="w-full sm:flex-[2] sm:basis-48"
       />
-      <Button type="submit" size="lg" className="h-12 sm:w-auto">
-        <Search className="size-5" aria-hidden="true" />
+      <Button type="primary" size="large" onClick={submit} icon={<Search className="size-5" aria-hidden="true" />}>
         검색
       </Button>
-    </form>
+    </div>
   );
 }

@@ -1,3 +1,4 @@
+import { Descriptions } from 'antd';
 import type { Listing } from '@/lib/types';
 import { formatArea, formatDealPrice } from '@/lib/format';
 
@@ -16,16 +17,9 @@ export function SpecTable({ listing: l }: { listing: Listing }) {
     ['준공연도', l.completionYear != null ? `${l.completionYear}년` : null],
   ];
 
-  return (
-    <dl className="grid grid-cols-1 overflow-hidden rounded-lg border border-hairline sm:grid-cols-2">
-      {rows
-        .filter(([, v]) => v != null && v !== '')
-        .map(([k, v]) => (
-          <div key={k} className="flex border-b border-hairline">
-            <dt className="w-24 shrink-0 bg-brand-light px-4 py-3 text-sm font-semibold text-muted sm:w-28">{k}</dt>
-            <dd className="flex-1 px-4 py-3 text-sm font-medium text-ink">{v}</dd>
-          </div>
-        ))}
-    </dl>
-  );
+  const items = rows
+    .filter(([, v]) => v != null && v !== '')
+    .map(([k, v]) => ({ key: k, label: k, children: v }));
+
+  return <Descriptions bordered size="middle" column={{ xs: 1, sm: 2 }} items={items} />;
 }

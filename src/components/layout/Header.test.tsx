@@ -20,7 +20,7 @@ describe('Header', () => {
     await user.click(screen.getByRole('button', { name: '메뉴' }));
     expect(screen.getByRole('navigation', { name: '모바일 메뉴' })).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: '메뉴 닫기' }));
-    expect(screen.queryByRole('navigation', { name: '모바일 메뉴' })).toBeNull();
+    expect(document.querySelector('.ant-drawer-open')).toBeNull();
   });
 
   it('uses the canvas surface consistently across desktop and mobile header', async () => {

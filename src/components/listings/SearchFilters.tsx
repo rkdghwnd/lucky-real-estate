@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
+import { Card, Input, Radio, Select, InputNumber, Button } from 'antd';
 import { SlidersHorizontal } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 
 export interface FilterDraft {
   dealType: string;
@@ -27,24 +27,9 @@ export const EMPTY_DRAFT: FilterDraft = {
 
 const DEALS = ['전체', '매매', '임대'];
 const TYPES = ['전체', '공장', '창고', '토지', '기타'];
-const fieldCls =
-  'h-11 w-full rounded-md border border-hairline bg-canvas px-3 text-ink outline-none transition focus-visible:border-brand focus-visible:ring-2 focus-visible:ring-brand/30';
 
-function RadioRow({ legend, name, options, value, onChange }: { legend: string; name: string; options: string[]; value: string; onChange: (v: string) => void }) {
-  return (
-    <fieldset>
-      <legend className="mb-2 text-sm font-bold text-ink">{legend}</legend>
-      <div className="flex flex-col gap-1.5">
-        {options.map(o => (
-          <label key={o} className="flex cursor-pointer items-center gap-2 text-sm text-ink">
-            <input type="radio" name={name} value={o} checked={value === o} onChange={() => onChange(o)} className="size-4 accent-brand" />
-            {o}
-          </label>
-        ))}
-      </div>
-    </fieldset>
-  );
-}
+const numToStr = (v: number | null) => (v == null ? '' : String(v));
+const strToNum = (s: string) => (s === '' ? null : Number(s));
 
 export function SearchFilters({
   initial,
@@ -61,53 +46,74 @@ export function SearchFilters({
   const set = (patch: Partial<FilterDraft>) => setD(prev => ({ ...prev, ...patch }));
 
   return (
-    <form
-      onSubmit={e => {
-        e.preventDefault();
-        onApply(d);
-      }}
-      aria-label="매물 검색 필터"
-      className="h-fit rounded-lg border border-hairline bg-canvas p-5 lg:sticky lg:top-24"
-    >
+    <Card className="h-fit lg:sticky lg:top-24" styles={{ body: { padding: 20 } }}>
       <p className="mb-5 flex items-center gap-2 text-base font-bold text-ink">
         <SlidersHorizontal className="size-[1.05rem] text-brand" aria-hidden="true" />
         필터
       </p>
-      <div className="flex flex-col gap-5">
+      <form
+        onSubmit={e => {
+          e.preventDefault();
+          onApply(d);
+        }}
+        aria-label="매물 검색 필터"
+        className="flex flex-col gap-5"
+      >
         <div>
           <label htmlFor="f-keyword" className="mb-2 block text-sm font-bold text-ink">키워드</label>
-          <input id="f-keyword" aria-label="키워드" value={d.keyword} onChange={e => set({ keyword: e.target.value })} placeholder="예: 원당동 공장" className={fieldCls} />
+          <Input id="f-keyword" aria-label="키워드" size="large" value={d.keyword} onChange={e => set({ keyword: e.target.value })} placeholder="예: 원당동 공장" />
         </div>
-        <RadioRow legend="거래유형" name="f-deal" options={DEALS} value={d.dealType} onChange={v => set({ dealType: v })} />
-        <RadioRow legend="매물종류" name="f-type" options={TYPES} value={d.propertyType} onChange={v => set({ propertyType: v })} />
+
+        <div>
+          <p className="mb-2 text-sm font-bold text-ink">거래유형</p>
+          <Radio.Group value={d.dealType} onChange={e => set({ dealType: e.target.value })} className="flex flex-col gap-1.5">
+            {DEALS.map(o => <Radio key={o} value={o}>{o}</Radio>)}
+          </Radio.Group>
+        </div>
+
+        <div>
+          <p className="mb-2 text-sm font-bold text-ink">매물종류</p>
+          <Radio.Group value={d.propertyType} onChange={e => set({ propertyType: e.target.value })} className="flex flex-col gap-1.5">
+            {TYPES.map(o => <Radio key={o} value={o}>{o}</Radio>)}
+          </Radio.Group>
+        </div>
+
         <div>
           <label htmlFor="f-region" className="mb-2 block text-sm font-bold text-ink">지역</label>
-          <select id="f-region" aria-label="지역" value={d.region} onChange={e => set({ region: e.target.value })} className={fieldCls}>
-            <option value="전체">전체</option>
-            {regions.map(r => <option key={r} value={r}>{r}</option>)}
-          </select>
+          <Select
+            id="f-region"
+            aria-label="지역"
+            size="large"
+            style={{ width: '100%' }}
+            value={d.region}
+            onChange={v => set({ region: v })}
+            options={[{ value: '전체', label: '전체' }, ...regions.map(r => ({ value: r, label: r }))]}
+          />
         </div>
+
         <div>
           <p className="mb-2 text-sm font-bold text-ink">가격 (만원)</p>
           <div className="flex items-center gap-2">
-            <input inputMode="numeric" aria-label="가격 최소" placeholder="최소" value={d.priceMin} onChange={e => set({ priceMin: e.target.value })} className={fieldCls} />
+            <InputNumber aria-label="가격 최소" size="large" min={0} controls={false} style={{ width: '100%' }} placeholder="최소" value={strToNum(d.priceMin)} onChange={v => set({ priceMin: numToStr(v) })} />
             <span className="text-muted">~</span>
-            <input inputMode="numeric" aria-label="가격 최대" placeholder="최대" value={d.priceMax} onChange={e => set({ priceMax: e.target.value })} className={fieldCls} />
+            <InputNumber aria-label="가격 최대" size="large" min={0} controls={false} style={{ width: '100%' }} placeholder="최대" value={strToNum(d.priceMax)} onChange={v => set({ priceMax: numToStr(v) })} />
           </div>
         </div>
+
         <div>
           <p className="mb-2 text-sm font-bold text-ink">면적 (㎡)</p>
           <div className="flex items-center gap-2">
-            <input inputMode="numeric" aria-label="면적 최소" placeholder="최소" value={d.areaMin} onChange={e => set({ areaMin: e.target.value })} className={fieldCls} />
+            <InputNumber aria-label="면적 최소" size="large" min={0} controls={false} style={{ width: '100%' }} placeholder="최소" value={strToNum(d.areaMin)} onChange={v => set({ areaMin: numToStr(v) })} />
             <span className="text-muted">~</span>
-            <input inputMode="numeric" aria-label="면적 최대" placeholder="최대" value={d.areaMax} onChange={e => set({ areaMax: e.target.value })} className={fieldCls} />
+            <InputNumber aria-label="면적 최대" size="large" min={0} controls={false} style={{ width: '100%' }} placeholder="최대" value={strToNum(d.areaMax)} onChange={v => set({ areaMax: numToStr(v) })} />
           </div>
         </div>
+
         <div className="flex gap-2 pt-1">
-          <Button type="submit" className="flex-1">검색</Button>
+          <Button type="primary" htmlType="submit" size="large" className="flex-1">검색</Button>
           <Button
-            type="button"
-            variant="outline"
+            htmlType="button"
+            size="large"
             onClick={() => {
               setD(EMPTY_DRAFT);
               onReset();
@@ -116,7 +122,7 @@ export function SearchFilters({
             초기화
           </Button>
         </div>
-      </div>
-    </form>
+      </form>
+    </Card>
   );
 }

@@ -1,7 +1,6 @@
 import Image from 'next/image';
-import Link from 'next/link';
 import { Phone } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Button } from 'antd';
 import { siteConfig } from '@/lib/site';
 
 export function Hero() {
@@ -21,15 +20,10 @@ export function Hero() {
             공장·창고·토지 전문 중개로 최적의 매물을 찾아드립니다.
           </p>
           <div className="mt-7 flex flex-wrap gap-2.5">
-            <Button asChild size="lg">
-              <a href={siteConfig.phoneHref}>
-                <Phone className="size-5" aria-hidden="true" />
-                전화상담
-              </a>
+            <Button type="primary" size="large" href={siteConfig.phoneHref} icon={<Phone className="size-5" aria-hidden="true" />}>
+              전화상담
             </Button>
-            <Button asChild size="lg" variant="onDark">
-              <Link href="/listings">매물보기</Link>
-            </Button>
+            <Button size="large" href="/listings">매물보기</Button>
           </div>
         </div>
       </div>

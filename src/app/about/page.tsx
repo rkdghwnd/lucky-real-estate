@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
+import { Card, Descriptions } from 'antd';
 import { Building2, Target, Zap, Handshake } from 'lucide-react';
 import { siteConfig } from '@/lib/site';
 
@@ -48,27 +49,24 @@ export default function AboutPage() {
 
         <section className="grid gap-4 sm:grid-cols-2">
           {FEATURES.map(({ icon: Icon, title, desc }) => (
-            <div key={title} className="rounded-lg border border-hairline bg-canvas p-6">
+            <Card key={title}>
               <span className="grid size-12 place-items-center rounded-lg bg-brand-light text-brand">
                 <Icon className="size-6" aria-hidden="true" />
               </span>
               <p className="mt-4 text-lg font-bold text-ink">{title}</p>
               <p className="mt-1.5 text-sm leading-relaxed text-muted">{desc}</p>
-            </div>
+            </Card>
           ))}
         </section>
 
         <section>
           <h2 className="mb-4 text-2xl font-bold tracking-tight text-ink">사무소 정보</h2>
           <div className="grid gap-6 lg:grid-cols-[1fr_360px]">
-            <dl className="overflow-hidden rounded-lg border border-hairline">
-              {OFFICE.map(([k, v]) => (
-                <div key={k} className="flex border-b border-hairline last:border-b-0">
-                  <dt className="w-28 shrink-0 bg-brand-light px-4 py-3.5 text-sm font-semibold text-muted sm:w-32">{k}</dt>
-                  <dd className="flex-1 px-4 py-3.5 text-sm font-medium text-ink">{v}</dd>
-                </div>
-              ))}
-            </dl>
+            <Descriptions
+              bordered
+              column={1}
+              items={OFFICE.map(([k, v]) => ({ key: k, label: k, children: v }))}
+            />
             <div className="relative aspect-[4/3] overflow-hidden rounded-lg border border-hairline bg-brand-light">
               <Image src="/banner1.jpg" alt="행운부동산 사무소" fill sizes="(max-width:1024px) 100vw, 360px" className="object-cover" />
             </div>

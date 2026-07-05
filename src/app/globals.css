@@ -1,10 +1,16 @@
+/* Cascade layer order: antd sits above Tailwind's Preflight (base) so antd component
+   styles aren't reset, but below Tailwind utilities so classes like `hidden` /
+   `sm:inline-flex` still override antd. Unlayered globals (html/body) win over all. */
+@layer theme, base, components, antd, utilities;
+
 @import "tailwindcss";
-@import "tw-animate-css";
 
 @theme {
-  --color-brand: #0052ff;
-  --color-brand-dark: #003ecc;
-  --color-brand-light: #eef0f3;
+  /* Aligned to Ant Design's default primary blue so custom (Tailwind) sections
+     and antd components share one accent color. */
+  --color-brand: #1677ff;
+  --color-brand-dark: #0958d9;
+  --color-brand-light: #e6f4ff;
   --color-ink: #0a0b0d;
   --color-muted: #5b616e;
   --color-canvas: #ffffff;
