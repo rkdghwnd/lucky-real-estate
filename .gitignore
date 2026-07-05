@@ -43,3 +43,6 @@ desktop.ini
 
 # Subagent-driven-development scratch (ledger, task briefs, review packages)
 .superpowers/
+
+# Isolated feature worktrees
+.worktrees/
