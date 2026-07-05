@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { formatPrice, formatArea, pyeong, formatDealPrice } from './format';
+import { formatPrice, formatArea, pyeong, formatDealPrice, m2ToPyeong, pyeongToM2 } from './format';
 
 describe('formatPrice', () => {
   it('formats 억 and 만원', () => {
@@ -29,5 +29,14 @@ describe('formatDealPrice', () => {
   });
   it('labels 임대 with deposit and monthly rent', () => {
     expect(formatDealPrice({ dealType: '임대', price: 300_000_000, monthlyRent: 9_000_000 })).toBe('임대 보증금 3억원 / 월 900만원');
+  });
+});
+
+describe('area conversion', () => {
+  it('converts m2 to pyeong', () => {
+    expect(m2ToPyeong(3.305785)).toBeCloseTo(1, 3);
+  });
+  it('converts pyeong to m2', () => {
+    expect(pyeongToM2(1)).toBeCloseTo(3.305785, 3);
   });
 });

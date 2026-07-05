@@ -16,6 +16,14 @@ export function pyeong(m2: number): number {
   return Math.round(m2 / PYEONG_PER_M2);
 }
 
+export function m2ToPyeong(m2: number): number {
+  return m2 / PYEONG_PER_M2;
+}
+
+export function pyeongToM2(p: number): number {
+  return p * PYEONG_PER_M2;
+}
+
 export function formatArea(m2: number | null | undefined): string {
   if (m2 == null || !Number.isFinite(m2) || m2 <= 0) return '-';
   return `${m2.toLocaleString('ko-KR')}㎡ (약 ${pyeong(m2).toLocaleString('ko-KR')}평)`;
