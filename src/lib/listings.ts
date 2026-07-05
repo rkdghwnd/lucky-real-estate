@@ -3,10 +3,11 @@ import type { Listing, ListingRow, PropertyType, DealType } from './types';
 import { pyeong } from './format';
 import { resolveListingImage } from './listing-images';
 
-export function rowToListing(
-  r: ListingRow,
-  supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? '',
-): Listing {
+export function rowToListing(r: ListingRow): Listing {
+  return rowToListingWithUrl(r, process.env.NEXT_PUBLIC_SUPABASE_URL ?? '');
+}
+
+export function rowToListingWithUrl(r: ListingRow, supabaseUrl: string): Listing {
   return {
     id: r.id, slug: r.slug, title: r.title,
     propertyType: r.property_type, dealType: r.deal_type, status: r.status,
@@ -16,6 +17,7 @@ export function rowToListing(
     ceilingHeightM: r.ceiling_height_m, powerCapacity: r.power_capacity, completionYear: r.completion_year,
     lat: r.lat, lng: r.lng,
     images: (r.images ?? []).map(image => resolveListingImage(image, supabaseUrl)).filter(Boolean),
+    description: r.description,
     createdAt: r.created_at, updatedAt: r.updated_at,
   };
 }

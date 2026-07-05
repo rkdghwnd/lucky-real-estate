@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import type { SupabaseClient } from '@supabase/supabase-js';
-import { rowToListing, applyFilters, matchArea, matchPrice, getPublishedListings, getListingBySlug, getAllListingSlugs } from './listings';
+import { rowToListing, rowToListingWithUrl, applyFilters, matchArea, matchPrice, getPublishedListings, getListingBySlug, getAllListingSlugs } from './listings';
 import type { ListingRow } from './types';
 import { sampleRows } from '@/test/fixtures/listings';
 
@@ -40,10 +40,11 @@ describe('rowToListing', () => {
     expect(l.landAreaM2).toBe(1000);
     expect(l.monthlyRent).toBeNull();
     expect(l.images).toHaveLength(2);
+    expect(l.description).toBe(sampleRows[0].description);
   });
 
   it('resolves managed Storage paths without changing legacy URLs', () => {
-    const l = rowToListing(
+    const l = rowToListingWithUrl(
       { ...sampleRows[0], images: ['listing-id/a.webp', 'https://legacy.example/a.jpg'] },
       'https://x.supabase.co',
     );
