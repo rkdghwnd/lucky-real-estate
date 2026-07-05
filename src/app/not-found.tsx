@@ -4,7 +4,7 @@ import { siteConfig } from '@/lib/site';
 
 export default function NotFound() {
   return (
-    <div className="py-20 text-center">
+    <div className="mx-auto max-w-6xl px-4 py-20 text-center">
       <h1 className="text-3xl font-normal tracking-tight text-ink">페이지를 찾을 수 없습니다</h1>
       <p className="mt-2 text-muted">주소가 바뀌었거나 매물이 내려갔을 수 있습니다.</p>
       <div className="mt-6 flex justify-center gap-3">

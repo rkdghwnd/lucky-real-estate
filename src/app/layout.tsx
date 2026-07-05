@@ -18,10 +18,10 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ko">
-      <body className="min-h-screen pb-20 sm:pb-0">
+      <body className="min-h-screen">
         <JsonLd data={buildOrgJsonLd()} />
         <Header />
-        <main className="mx-auto max-w-6xl px-4 py-6">{children}</main>
+        <main>{children}</main>
         <Footer />
       </body>
     </html>

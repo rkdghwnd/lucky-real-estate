@@ -1,24 +1,28 @@
-import { Suspense } from 'react';
 import { getPublishedListings } from '@/lib/listings';
-import { ListingSearch } from '@/components/listings/ListingSearch';
-import { BannerCarousel } from '@/components/home/BannerCarousel';
-import { siteConfig } from '@/lib/site';
+import { availableRegions } from '@/lib/search';
+import { Hero } from '@/components/home/Hero';
+import { SearchBar } from '@/components/home/SearchBar';
+import { FeaturedListings } from '@/components/home/FeaturedListings';
+import { HomeCta } from '@/components/home/HomeCta';
+import { TrustStrip } from '@/components/home/TrustStrip';
 
 // Next 16: bake Supabase reads at build for static HTML.
 export const dynamic = 'force-static';
 
 export default async function HomePage() {
   const listings = await getPublishedListings();
+  const regions = availableRegions(listings);
   return (
-    <div className="space-y-5">
-      <BannerCarousel />
-      <section>
-        <h1 className="text-2xl font-bold tracking-tight text-ink sm:text-3xl">{siteConfig.positioning}</h1>
-        <p className="mt-1 text-muted">인천 서구 공장·창고·토지 매물을 조건별로 확인하고 전화로 편하게 문의하세요.</p>
-      </section>
-      <Suspense fallback={<div className="min-h-[400px]" />}>
-        <ListingSearch listings={listings} />
-      </Suspense>
+    <div>
+      <Hero />
+      <div className="mx-auto max-w-6xl space-y-12 px-4 pb-16">
+        <div className="relative z-10 -mt-8">
+          <SearchBar regions={regions} />
+        </div>
+        <FeaturedListings listings={listings.slice(0, 4)} />
+        <HomeCta />
+        <TrustStrip />
+      </div>
     </div>
   );
 }

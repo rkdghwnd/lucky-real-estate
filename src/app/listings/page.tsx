@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 export default async function ListingsPage() {
   const listings = await getPublishedListings();
   return (
-    <div className="space-y-5">
+    <div className="mx-auto max-w-6xl space-y-5 px-4 py-8">
       <section>
         <h1 className="text-2xl font-bold tracking-tight text-ink sm:text-3xl">매물검색</h1>
         <p className="mt-1 text-muted">종류·거래유형·평수·가격으로 좁혀 보세요.</p>
