@@ -30,7 +30,7 @@ export default async function ListingDetailPage({ params }: { params: Promise<{ 
   if (!l) notFound();
 
   return (
-    <article className="space-y-8">
+    <article className="space-y-6">
       <JsonLd data={buildListingJsonLd(l)} />
       <h1 className="text-3xl font-normal tracking-tight text-ink">{l.title}</h1>
       <ImageSlider images={l.images} alt={l.title} />

@@ -23,7 +23,7 @@ export function SpecTable({ listing: l }: { listing: Listing }) {
         {rows
           .filter(([, v]) => v != null && v !== '')
           .map(([k, v]) => (
-            <div key={k}>
+            <div key={k} className="border-b border-hairline pb-2">
               <dt className="text-sm text-muted">{k}</dt>
               <dd className="mt-0.5 text-lg font-semibold text-ink">{v}</dd>
             </div>
