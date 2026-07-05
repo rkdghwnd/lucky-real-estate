@@ -63,8 +63,14 @@ function builderFor(data: unknown) {
     order: vi.fn(async () => ({ data, error: null })),
     eq: vi.fn(() => builder),
     single: vi.fn(async () => ({ data: Array.isArray(data) ? data[0] ?? null : data, error: null })),
-    insert: vi.fn((_value: unknown) => builder),
-    update: vi.fn((_value: unknown) => builder),
+    insert: vi.fn((value: unknown) => {
+      void value;
+      return builder;
+    }),
+    update: vi.fn((value: unknown) => {
+      void value;
+      return builder;
+    }),
   };
   const client = { from: vi.fn(() => builder) };
   return { client, builder };

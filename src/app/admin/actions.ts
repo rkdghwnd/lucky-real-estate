@@ -7,7 +7,7 @@ import {
   setAdminListingStatus,
   updateAdminListing,
 } from '@/lib/admin/listings';
-import { listingPayloadSchema, type ListingPayload } from '@/lib/admin/listing-schema';
+import { listingPayloadSchema } from '@/lib/admin/listing-schema';
 import { revalidateListingPaths } from '@/lib/admin/revalidate';
 import { createServerSupabaseClient } from '@/lib/supabase/server';
 

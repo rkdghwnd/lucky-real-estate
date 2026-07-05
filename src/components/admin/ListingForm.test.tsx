@@ -106,7 +106,10 @@ it('focuses and labels the first invalid field when required data is missing', a
 });
 
 it('uploads a selected image and passes its managed path to create', async () => {
-  const createAction = vi.fn(async (_input: unknown) => success);
+  const createAction = vi.fn(async (input: unknown) => {
+    void input;
+    return success;
+  });
   const deps = dependencies({ createAction });
   render(<ListingForm mode="create" initialValues={validValues} {...deps} />);
   await userEvent.upload(
@@ -123,7 +126,10 @@ it('uploads a selected image and passes its managed path to create', async () =>
 });
 
 it('cleans newly uploaded paths after a create failure and preserves values', async () => {
-  const createAction = vi.fn(async (_input: unknown) => ({ ok: false as const, code: 'DATABASE' as const, message: '저장 실패' }));
+  const createAction = vi.fn(async (input: unknown) => {
+    void input;
+    return { ok: false as const, code: 'DATABASE' as const, message: '저장 실패' };
+  });
   const cleanupImages = vi.fn(async () => undefined);
   const deps = dependencies({
     createAction,
@@ -147,7 +153,11 @@ it('saves edited image order and removes deleted stored objects only after datab
     path: '123e4567/b.webp',
     previewUrl: 'https://example.com/b.webp',
   };
-  const updateAction = vi.fn(async (_id: string, _input: unknown) => success);
+  const updateAction = vi.fn(async (id: string, input: unknown) => {
+    void id;
+    void input;
+    return success;
+  });
   const cleanupImages = vi.fn(async () => undefined);
   const deps = dependencies({ updateAction, cleanupImages });
   render(
