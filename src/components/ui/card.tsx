@@ -2,7 +2,7 @@ import * as React from 'react';
 import { cn } from '@/lib/utils';
 
 function Card({ className, ...props }: React.ComponentProps<'div'>) {
-  return <div data-slot="card" className={cn('rounded-3xl border border-hairline bg-canvas', className)} {...props} />;
+  return <div data-slot="card" className={cn('rounded-md border border-hairline bg-canvas', className)} {...props} />;
 }
 
 function CardHeader({ className, ...props }: React.ComponentProps<'div'>) {
