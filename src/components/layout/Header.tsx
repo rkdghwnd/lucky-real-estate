@@ -7,6 +7,8 @@ import { siteConfig } from '@/lib/site';
 
 const NAV_LINKS = [
   { href: '/listings', label: '매물검색' },
+  { href: '/listings?deal=매매', label: '매매' },
+  { href: '/listings?deal=임대', label: '임대' },
   { href: '/about', label: '회사소개' },
 ] as const;
 
@@ -26,7 +28,7 @@ export function Header() {
 
       <div className="mx-auto flex min-h-[68px] max-w-6xl items-center justify-between gap-4 border-t border-hairline px-4 py-3">
         <Link href="/" className="flex min-w-0 items-center gap-3" aria-label={siteConfig.shortName}>
-          <span className="grid size-11 shrink-0 place-items-center rounded-full bg-brand text-xl font-bold text-white">행</span>
+          <span className="grid size-11 shrink-0 place-items-center rounded-md bg-brand text-xl font-bold text-white">행</span>
           <span className="min-w-0 text-ink">
             <span className="block text-xs font-medium text-muted">공장·창고·토지 전문 중개</span>
             <span className="block truncate text-xl font-bold tracking-tight">{siteConfig.shortName}</span>
