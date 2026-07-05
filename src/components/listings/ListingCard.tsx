@@ -8,7 +8,7 @@ export function ListingCard({ listing: l }: { listing: Listing }) {
   return (
     <Link
       href={`/listings/${l.slug}`}
-      className="group flex flex-col overflow-hidden rounded-3xl border border-hairline bg-canvas transition hover:shadow-[0_4px_12px_rgba(0,0,0,0.04)]"
+      className="group flex flex-col overflow-hidden rounded-md border border-hairline bg-canvas transition hover:border-brand"
       aria-label={`${l.title} 상세보기`}
     >
       <div className="relative aspect-[4/3] bg-brand-light">
@@ -17,16 +17,16 @@ export function ListingCard({ listing: l }: { listing: Listing }) {
         ) : (
           <div className="flex h-full items-center justify-center text-sm font-medium text-muted">사진 준비중</div>
         )}
-        <Badge className="absolute left-3 top-3">{l.propertyType} · {l.dealType}</Badge>
+        <Badge className="absolute left-2 top-2">{l.propertyType} · {l.dealType}</Badge>
       </div>
-      <div className="flex flex-1 flex-col p-5">
-        <h3 className="line-clamp-1 text-lg font-bold text-ink">{l.title}</h3>
-        <p className="mt-1.5 text-sm text-muted">📍 {l.address}</p>
-        <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1 border-t border-hairline pt-3 text-sm text-ink">
+      <div className="flex flex-1 flex-col gap-1 p-3">
+        <h3 className="line-clamp-1 text-base font-bold text-ink">{l.title}</h3>
+        <p className="line-clamp-1 text-sm text-muted">📍 {l.address}</p>
+        <div className="flex flex-wrap gap-x-3 text-sm text-ink">
           <span>대지 {formatArea(l.landAreaM2)}</span>
           {l.buildingAreaM2 != null && <span>건물 {formatArea(l.buildingAreaM2)}</span>}
         </div>
-        <p className="mt-auto pt-3 text-lg font-bold text-ink">{formatDealPrice(l)}</p>
+        <p className="mt-auto border-t border-hairline pt-2 text-base font-bold text-brand">{formatDealPrice(l)}</p>
       </div>
     </Link>
   );
