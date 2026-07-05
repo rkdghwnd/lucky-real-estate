@@ -1,5 +1,6 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 import type { Listing, ListingRow, PropertyType, DealType } from './types';
+import { pyeong } from './format';
 
 export function rowToListing(r: ListingRow): Listing {
   return {
@@ -15,17 +16,74 @@ export function rowToListing(r: ListingRow): Listing {
   };
 }
 
+export type AreaBucket = '전체' | '~60' | '60-100' | '100-200' | '200-300' | '300~';
+export type PriceBucket =
+  | '전체'
+  | '매매:~5천' | '매매:5천-1억' | '매매:1-2억' | '매매:2-5억' | '매매:5-10억' | '매매:10-20억' | '매매:20억~'
+  | '임대:~100만' | '임대:100-300만' | '임대:300-500만' | '임대:500-1000만' | '임대:1000만~';
+
+interface AreaBucketDef { value: AreaBucket; label: string; min: number; max: number | null } // 평
+export const AREA_BUCKETS: AreaBucketDef[] = [
+  { value: '전체', label: '평수 전체', min: 0, max: null },
+  { value: '~60', label: '60평 이하', min: 0, max: 60 },
+  { value: '60-100', label: '60~100평', min: 60, max: 100 },
+  { value: '100-200', label: '100~200평', min: 100, max: 200 },
+  { value: '200-300', label: '200~300평', min: 200, max: 300 },
+  { value: '300~', label: '300평 이상', min: 300, max: null },
+];
+
+interface PriceBucketDef { value: PriceBucket; label: string; deal: DealType; min: number; max: number | null } // 원
+export const SALE_PRICE_BUCKETS: PriceBucketDef[] = [
+  { value: '매매:~5천', label: '5천만원 이하', deal: '매매', min: 0, max: 50_000_000 },
+  { value: '매매:5천-1억', label: '5천만~1억', deal: '매매', min: 50_000_000, max: 100_000_000 },
+  { value: '매매:1-2억', label: '1억~2억', deal: '매매', min: 100_000_000, max: 200_000_000 },
+  { value: '매매:2-5억', label: '2억~5억', deal: '매매', min: 200_000_000, max: 500_000_000 },
+  { value: '매매:5-10억', label: '5억~10억', deal: '매매', min: 500_000_000, max: 1_000_000_000 },
+  { value: '매매:10-20억', label: '10억~20억', deal: '매매', min: 1_000_000_000, max: 2_000_000_000 },
+  { value: '매매:20억~', label: '20억 이상', deal: '매매', min: 2_000_000_000, max: null },
+];
+export const RENT_PRICE_BUCKETS: PriceBucketDef[] = [
+  { value: '임대:~100만', label: '월 100만원 이하', deal: '임대', min: 0, max: 1_000_000 },
+  { value: '임대:100-300만', label: '월 100~300만', deal: '임대', min: 1_000_000, max: 3_000_000 },
+  { value: '임대:300-500만', label: '월 300~500만', deal: '임대', min: 3_000_000, max: 5_000_000 },
+  { value: '임대:500-1000만', label: '월 500~1000만', deal: '임대', min: 5_000_000, max: 10_000_000 },
+  { value: '임대:1000만~', label: '월 1000만 이상', deal: '임대', min: 10_000_000, max: null },
+];
+
+export function matchArea(bucket: AreaBucket, pyeongVal: number): boolean {
+  const def = AREA_BUCKETS.find(b => b.value === bucket);
+  if (!def || def.value === '전체') return true;
+  return pyeongVal > def.min && (def.max == null || pyeongVal <= def.max);
+}
+
+export function matchPrice(bucket: PriceBucket, l: Listing): boolean {
+  if (bucket === '전체') return true;
+  const def = [...SALE_PRICE_BUCKETS, ...RENT_PRICE_BUCKETS].find(b => b.value === bucket);
+  if (!def || l.dealType !== def.deal) return false;
+  const value = def.deal === '매매' ? l.price : l.monthlyRent;
+  if (value == null) return false;
+  return value > def.min && (def.max == null || value <= def.max);
+}
+
 export interface ListingFilter {
   propertyType?: PropertyType | '전체';
   dealType?: DealType | '전체';
+  areaBucket?: AreaBucket;
+  priceBucket?: PriceBucket;
 }
 
 export function applyFilters(listings: Listing[], f: ListingFilter): Listing[] {
-  return listings.filter(
-    l =>
-      (!f.propertyType || f.propertyType === '전체' || l.propertyType === f.propertyType) &&
-      (!f.dealType || f.dealType === '전체' || l.dealType === f.dealType),
-  );
+  return listings.filter(l => {
+    if (f.propertyType && f.propertyType !== '전체' && l.propertyType !== f.propertyType) return false;
+    if (f.dealType && f.dealType !== '전체' && l.dealType !== f.dealType) return false;
+    if (f.areaBucket && f.areaBucket !== '전체') {
+      if (l.landAreaM2 == null || !matchArea(f.areaBucket, pyeong(l.landAreaM2))) return false;
+    }
+    if (f.priceBucket && f.priceBucket !== '전체') {
+      if (!matchPrice(f.priceBucket, l)) return false;
+    }
+    return true;
+  });
 }
 
 export function createSupabaseServerClient(): SupabaseClient {
