@@ -75,6 +75,10 @@ it('shows status counts, searches title/address, and links to editing', async ()
     'href',
     '/admin/listings/11111111-1111-1111-1111-111111111111/edit',
   );
+  expect(screen.getByRole('img', { name: '오류동 제조공장 대표 사진' })).toHaveAttribute(
+    'src',
+    'https://example.com/factory.jpg',
+  );
 
   const search = screen.getByRole('searchbox', { name: '매물 검색' });
   await userEvent.type(search, '왕길동');
@@ -95,6 +99,7 @@ it('confirms a status change, performs it, and refreshes the dashboard', async (
 
   await waitFor(() => expect(action).toHaveBeenCalledWith(listings[0].id, '거래완료'));
   expect(router.refresh).toHaveBeenCalledOnce();
+  expect(screen.getByRole('status')).toHaveTextContent('거래완료로 변경했습니다. 공개 사이트에서는 숨겨집니다.');
 });
 
 it('keeps the dialog open and reports a failed status change', async () => {

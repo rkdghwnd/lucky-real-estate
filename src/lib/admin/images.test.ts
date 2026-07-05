@@ -52,6 +52,11 @@ it('optimizes to a generated WebP filename with the required limits', async () =
   expect(result.type).toBe('image/webp');
 });
 
+it('rejects an optimized result that still exceeds the 5MB storage limit', async () => {
+  compress.mockResolvedValueOnce(new Blob([new Uint8Array(5 * 1024 * 1024 + 1)], { type: 'image/webp' }));
+  await expect(optimizeListingImage(file('too-dense.jpg'))).rejects.toThrow('5MB');
+});
+
 it('uploads at most three pending images and returns paths in display order', async () => {
   let active = 0;
   let maxActive = 0;

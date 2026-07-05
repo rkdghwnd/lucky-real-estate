@@ -4,6 +4,7 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 export const LISTING_IMAGE_BUCKET = 'listing-images';
 const MAX_IMAGE_COUNT = 20;
 const MAX_SOURCE_BYTES = 20 * 1024 * 1024;
+const MAX_OPTIMIZED_BYTES = 5 * 1024 * 1024;
 const ACCEPTED_IMAGE_TYPES = new Set(['image/jpeg', 'image/png', 'image/webp']);
 
 export interface PendingListingImage {
@@ -46,6 +47,9 @@ export async function optimizeListingImage(file: File): Promise<File> {
     initialQuality: 0.82,
     useWebWorker: true,
   });
+  if (compressed.size > MAX_OPTIMIZED_BYTES) {
+    throw new Error('최적화한 사진이 5MB를 초과합니다. 더 작은 원본 사진을 선택해주세요.');
+  }
   return new File([compressed], `${globalThis.crypto.randomUUID()}.webp`, {
     type: 'image/webp',
     lastModified: Date.now(),

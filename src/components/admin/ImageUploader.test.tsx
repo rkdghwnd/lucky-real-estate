@@ -73,6 +73,7 @@ it('shows upload status and revokes a pending preview when removed', async () =>
   render(<ImageUploader items={[pending]} onChange={onChange} statuses={{ pending: 'uploading' }} />);
 
   expect(screen.getByText('업로드 중…')).toBeInTheDocument();
+  expect(screen.getByRole('status', { name: '사진 업로드 진행률' })).toHaveTextContent('0/1장 완료');
   await userEvent.click(screen.getByRole('button', { name: '1번 사진 삭제' }));
   expect(revokeObjectURL).toHaveBeenCalledWith('blob:pending.jpg');
   expect(onChange).toHaveBeenCalledWith([]);

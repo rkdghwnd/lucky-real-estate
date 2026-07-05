@@ -3,11 +3,17 @@ import { Plus } from 'lucide-react';
 import { AdminListingTable } from '@/components/admin/AdminListingTable';
 import { Button } from '@/components/ui/button';
 import { getAdminListings } from '@/lib/admin/listings';
+import { getAdminDashboardNotice } from '@/lib/admin/notice';
 import { createServerSupabaseClient } from '@/lib/supabase/server';
 
-export default async function AdminDashboardPage() {
+export default async function AdminDashboardPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ created?: string; updated?: string }>;
+}) {
   const client = await createServerSupabaseClient();
   const listings = await getAdminListings(client);
+  const notice = getAdminDashboardNotice(await searchParams);
 
   return (
     <div className="space-y-7">
@@ -21,6 +27,11 @@ export default async function AdminDashboardPage() {
           <Link href="/admin/listings/new"><Plus aria-hidden="true" /> 새 매물 등록</Link>
         </Button>
       </header>
+      {notice ? (
+        <p role="status" className="rounded-2xl border border-blue-200 bg-blue-50 px-5 py-4 font-bold text-brand">
+          {notice}
+        </p>
+      ) : null}
       <AdminListingTable listings={listings} />
     </div>
   );

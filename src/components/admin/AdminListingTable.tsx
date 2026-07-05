@@ -60,6 +60,7 @@ export function AdminListingTable({
   const [selected, setSelected] = useState<AdminListing | null>(null);
   const [pending, setPending] = useState(false);
   const [error, setError] = useState('');
+  const [notice, setNotice] = useState('');
 
   const counts = useMemo(() => ({
     공개: listings.filter(listing => listing.status === '공개').length,
@@ -86,12 +87,16 @@ export function AdminListingTable({
       setError(result.message);
       return;
     }
+    setNotice(copy.next === '거래완료'
+      ? '거래완료로 변경했습니다. 공개 사이트에서는 숨겨집니다.'
+      : '매물을 다시 공개했습니다.');
     setSelected(null);
     router.refresh();
   }
 
   return (
     <section className="space-y-5" aria-label="매물 목록">
+      {notice ? <p role="status" className="rounded-2xl border border-blue-200 bg-blue-50 px-5 py-4 font-bold text-brand">{notice}</p> : null}
       <div className="flex flex-col gap-4 rounded-2xl border border-hairline bg-white p-4 shadow-sm lg:flex-row lg:items-center lg:justify-between">
         <div className="flex gap-2" aria-label="매물 상태">
           {(['공개', '거래완료'] as const).map(status => (
@@ -148,18 +153,27 @@ export function AdminListingTable({
                   return (
                     <tr key={listing.id} className="align-middle hover:bg-[#fafbfc]">
                       <td className="px-5 py-5">
-                        <div className="max-w-md">
-                          <div className="flex items-center gap-2">
-                            <Link
-                              href={`/admin/listings/${listing.id}/edit`}
-                              aria-label={`${listing.title} 수정`}
-                              className="font-extrabold text-ink hover:text-brand hover:underline"
-                            >
-                              {listing.title}
-                            </Link>
-                            <Badge variant={listing.status === '공개' ? 'brand' : 'default'}>{listing.status}</Badge>
+                        <div className="flex max-w-md items-center gap-3">
+                          <div className="grid size-16 shrink-0 place-items-center overflow-hidden rounded-xl bg-[#eef0f3] text-[11px] font-semibold text-muted">
+                            {listing.images[0] ? (
+                              // Managed and legacy image URLs are both supported in the admin preview.
+                              // eslint-disable-next-line @next/next/no-img-element
+                              <img src={listing.images[0]} alt={`${listing.title} 대표 사진`} className="size-full object-cover" />
+                            ) : '사진 없음'}
                           </div>
-                          <p className="mt-1 truncate text-muted">{listing.address}</p>
+                          <div className="min-w-0">
+                            <div className="flex items-center gap-2">
+                              <Link
+                                href={`/admin/listings/${listing.id}/edit`}
+                                aria-label={`${listing.title} 수정`}
+                                className="truncate font-extrabold text-ink hover:text-brand hover:underline"
+                              >
+                                {listing.title}
+                              </Link>
+                              <Badge variant={listing.status === '공개' ? 'brand' : 'default'}>{listing.status}</Badge>
+                            </div>
+                            <p className="mt-1 truncate text-muted">{listing.address}</p>
+                          </div>
                         </div>
                       </td>
                       <td className="px-4 py-5 font-semibold text-ink">{listing.propertyType} · {listing.dealType}</td>

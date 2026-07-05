@@ -68,6 +68,10 @@ export function ImageUploader({
   }
 
   const allErrors = [selectionError, ...errors].filter(Boolean);
+  const hasUploadProgress = Object.keys(statuses).length > 0;
+  const completedCount = items.filter(item => (
+    !isPendingListingImage(item) || statuses[item.id] === 'done'
+  )).length;
 
   return (
     <div className="space-y-4">
@@ -75,6 +79,11 @@ export function ImageUploader({
         <div>
           <p className="font-bold text-ink">사진 <span className="text-danger">*</span></p>
           <p className="mt-1 text-sm text-muted">첫 번째 사진이 대표 사진입니다. 최대 20장, 원본 한 장당 20MB</p>
+          {hasUploadProgress ? (
+            <p role="status" aria-label="사진 업로드 진행률" className="mt-1 text-sm font-bold text-brand">
+              {completedCount}/{items.length}장 완료
+            </p>
+          ) : null}
         </div>
         <label className={`inline-flex h-11 cursor-pointer items-center gap-2 rounded-md bg-ink px-4 text-sm font-bold text-white transition hover:bg-black/80 ${disabled ? 'pointer-events-none opacity-50' : ''}`}>
           <ImagePlus aria-hidden="true" className="size-5" /> 사진 추가
