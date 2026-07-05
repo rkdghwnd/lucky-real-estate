@@ -41,6 +41,17 @@ describe('rowToListing', () => {
     expect(l.monthlyRent).toBeNull();
     expect(l.images).toHaveLength(2);
   });
+
+  it('resolves managed Storage paths without changing legacy URLs', () => {
+    const l = rowToListing(
+      { ...sampleRows[0], images: ['listing-id/a.webp', 'https://legacy.example/a.jpg'] },
+      'https://x.supabase.co',
+    );
+    expect(l.images).toEqual([
+      'https://x.supabase.co/storage/v1/object/public/listing-images/listing-id/a.webp',
+      'https://legacy.example/a.jpg',
+    ]);
+  });
 });
 
 describe('applyFilters', () => {

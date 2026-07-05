@@ -1,8 +1,12 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 import type { Listing, ListingRow, PropertyType, DealType } from './types';
 import { pyeong } from './format';
+import { resolveListingImage } from './listing-images';
 
-export function rowToListing(r: ListingRow): Listing {
+export function rowToListing(
+  r: ListingRow,
+  supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? '',
+): Listing {
   return {
     id: r.id, slug: r.slug, title: r.title,
     propertyType: r.property_type, dealType: r.deal_type, status: r.status,
@@ -11,7 +15,7 @@ export function rowToListing(r: ListingRow): Listing {
     zoning: r.zoning, landCategory: r.land_category, roadAccess: r.road_access,
     ceilingHeightM: r.ceiling_height_m, powerCapacity: r.power_capacity, completionYear: r.completion_year,
     lat: r.lat, lng: r.lng,
-    images: r.images ?? [], description: r.description,
+    images: (r.images ?? []).map(image => resolveListingImage(image, supabaseUrl)).filter(Boolean),
     createdAt: r.created_at, updatedAt: r.updated_at,
   };
 }
