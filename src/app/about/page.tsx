@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
-import { NaverMap } from '@/components/map/NaverMap';
-import { Badge } from '@/components/ui/badge';
-import { Card } from '@/components/ui/card';
+import Image from 'next/image';
+import { Building2, Target, Zap, Handshake } from 'lucide-react';
 import { siteConfig } from '@/lib/site';
 
 export const metadata: Metadata = {
@@ -10,33 +9,72 @@ export const metadata: Metadata = {
   alternates: { canonical: `${siteConfig.siteUrl}/about` },
 };
 
+const FEATURES = [
+  { icon: Building2, title: '전문성', desc: '공장·창고·토지 전문 중개로 조건에 맞는 매물을 정확히 매칭합니다.' },
+  { icon: Target, title: '정확함', desc: '정확한 매물 정보와 시세를 바탕으로 신뢰를 최우선으로 합니다.' },
+  { icon: Zap, title: '신속함', desc: '신속한 매물 상담과 빠른 연결로 소중한 시간을 아껴드립니다.' },
+  { icon: Handshake, title: '책임감', desc: '계약까지 성실히 책임지는 중개 서비스를 제공합니다.' },
+] as const;
+
+const OFFICE: [string, string][] = [
+  ['상호', siteConfig.name],
+  ['대표', siteConfig.representative],
+  ['중개등록번호', siteConfig.registrationNumber],
+  ['소재지', siteConfig.address],
+  ['전화번호', siteConfig.phone],
+  ['영업시간', siteConfig.businessHours],
+];
+
 export default function AboutPage() {
   return (
-    <div className="mx-auto max-w-6xl space-y-6 px-4 py-8">
-      <section>
-        <Badge variant="brand">회사소개</Badge>
-        <h1 className="mt-3 text-3xl font-normal tracking-tight text-ink">{siteConfig.shortName}</h1>
-        <p className="mt-4 text-xl leading-8 text-muted">{siteConfig.positioning}</p>
+    <div>
+      <section className="bg-gradient-to-br from-brand to-brand-dark">
+        <div className="mx-auto max-w-6xl px-4 py-16 sm:py-20">
+          <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl">회사소개</h1>
+          <p className="mt-3 max-w-xl text-white/85 sm:text-lg">정확하고 신뢰할 수 있는 거래를 제공하는 인천 서구 전문 부동산</p>
+        </div>
       </section>
 
-      <Card className="p-6">
-        <h2 className="mb-4 text-2xl font-normal tracking-tight text-ink">사무소 정보</h2>
-        <dl className="grid gap-2 text-lg sm:grid-cols-2">
-          <div><dt className="text-sm text-muted">상호</dt><dd className="font-medium text-ink">{siteConfig.name}</dd></div>
-          <div><dt className="text-sm text-muted">대표</dt><dd className="font-medium text-ink">{siteConfig.representative}</dd></div>
-          <div><dt className="text-sm text-muted">중개등록번호</dt><dd className="font-medium text-ink">{siteConfig.registrationNumber}</dd></div>
-          <div><dt className="text-sm text-muted">소재지</dt><dd className="font-medium text-ink">{siteConfig.address}</dd></div>
-          <div className="sm:col-span-2">
-            <dt className="text-sm text-muted">전화</dt>
-            <dd>
-              <a href={siteConfig.phoneHref} className="font-semibold text-brand transition hover:text-brand-dark">{siteConfig.phone}</a>
-              <span className="text-muted"> · {siteConfig.businessHours}</span>
-            </dd>
-          </div>
-        </dl>
-      </Card>
+      <div className="mx-auto max-w-6xl space-y-14 px-4 py-14">
+        <section>
+          <h2 className="text-2xl font-bold tracking-tight text-ink sm:text-[1.7rem]">
+            행운부동산은 인천 서구 공장·창고·토지 전문 부동산입니다.
+          </h2>
+          <p className="mt-4 max-w-3xl leading-relaxed text-muted">
+            인천 서구 오류동·검단 일대의 공장·창고·토지 매물을 전문으로 중개합니다. 네이버에 없는 물건까지, 조건에
+            맞는 매물을 찾아 전화 한 통으로 편하게 연결해 드립니다.
+          </p>
+        </section>
 
-      <NaverMap lat={null} lng={null} address={siteConfig.address} />
+        <section className="grid gap-4 sm:grid-cols-2">
+          {FEATURES.map(({ icon: Icon, title, desc }) => (
+            <div key={title} className="rounded-lg border border-hairline bg-canvas p-6">
+              <span className="grid size-12 place-items-center rounded-lg bg-brand-light text-brand">
+                <Icon className="size-6" aria-hidden="true" />
+              </span>
+              <p className="mt-4 text-lg font-bold text-ink">{title}</p>
+              <p className="mt-1.5 text-sm leading-relaxed text-muted">{desc}</p>
+            </div>
+          ))}
+        </section>
+
+        <section>
+          <h2 className="mb-4 text-2xl font-bold tracking-tight text-ink">사무소 정보</h2>
+          <div className="grid gap-6 lg:grid-cols-[1fr_360px]">
+            <dl className="overflow-hidden rounded-lg border border-hairline">
+              {OFFICE.map(([k, v]) => (
+                <div key={k} className="flex border-b border-hairline last:border-b-0">
+                  <dt className="w-28 shrink-0 bg-brand-light px-4 py-3.5 text-sm font-semibold text-muted sm:w-32">{k}</dt>
+                  <dd className="flex-1 px-4 py-3.5 text-sm font-medium text-ink">{v}</dd>
+                </div>
+              ))}
+            </dl>
+            <div className="relative aspect-[4/3] overflow-hidden rounded-lg border border-hairline bg-brand-light">
+              <Image src="/banner1.jpg" alt="행운부동산 사무소" fill sizes="(max-width:1024px) 100vw, 360px" className="object-cover" />
+            </div>
+          </div>
+        </section>
+      </div>
     </div>
   );
 }
