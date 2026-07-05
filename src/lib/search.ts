@@ -77,6 +77,31 @@ export function sortListings(listings: Listing[], sort: SortKey = 'latest'): Lis
   return arr;
 }
 
+/** Parse a URL query into search criteria. Price params (pmin/pmax) are 만원; area (amin/amax) is ㎡. */
+export function criteriaFromParams(sp: URLSearchParams): SearchCriteria {
+  const num = (k: string): number | null => {
+    const v = sp.get(k);
+    if (v == null || v === '') return null;
+    const n = Number(v);
+    return Number.isFinite(n) ? n : null;
+  };
+  const pmin = num('pmin');
+  const pmax = num('pmax');
+  const sort = sp.get('sort');
+  return {
+    dealType: (sp.get('deal') as SearchCriteria['dealType']) || '전체',
+    propertyType: (sp.get('type') as SearchCriteria['propertyType']) || '전체',
+    region: sp.get('region') || '전체',
+    priceMin: pmin != null ? pmin * 10_000 : null,
+    priceMax: pmax != null ? pmax * 10_000 : null,
+    areaMin: num('amin'),
+    areaMax: num('amax'),
+    keyword: sp.get('keyword') || '',
+    sort: sort === 'priceDesc' || sort === 'priceAsc' ? sort : 'latest',
+    page: num('page') ?? 1,
+  };
+}
+
 export function searchListings(listings: Listing[], c: SearchCriteria = {}): SearchResult {
   const filtered = sortListings(filterListings(listings, c), c.sort);
   const total = filtered.length;

@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { rowToListing } from './listings';
 import { sampleRows } from '@/test/fixtures/listings';
-import { extractRegion, availableRegions, filterListings, sortListings, searchListings } from './search';
+import { extractRegion, availableRegions, filterListings, sortListings, searchListings, criteriaFromParams } from './search';
 
 const all = sampleRows.map(rowToListing);
 
@@ -65,5 +65,24 @@ describe('searchListings', () => {
   });
   it('clamps the page into range', () => {
     expect(searchListings(all, { pageSize: 2, page: 99 }).page).toBe(2);
+  });
+});
+
+describe('criteriaFromParams', () => {
+  it('parses deal/type/region/keyword/sort/page', () => {
+    const c = criteriaFromParams(new URLSearchParams('deal=매매&type=공장&region=원당동&keyword=신축&sort=priceAsc&page=2'));
+    expect(c).toMatchObject({ dealType: '매매', propertyType: '공장', region: '원당동', keyword: '신축', sort: 'priceAsc', page: 2 });
+  });
+  it('converts price min/max from 만원 to 원 and area stays ㎡', () => {
+    const c = criteriaFromParams(new URLSearchParams('pmin=50000&pmax=100000&amin=500&amax=1000'));
+    expect(c.priceMin).toBe(500_000_000);
+    expect(c.priceMax).toBe(1_000_000_000);
+    expect(c.areaMin).toBe(500);
+    expect(c.areaMax).toBe(1000);
+  });
+  it('defaults to 전체/latest/page 1 when empty', () => {
+    const c = criteriaFromParams(new URLSearchParams(''));
+    expect(c).toMatchObject({ dealType: '전체', propertyType: '전체', region: '전체', sort: 'latest', page: 1 });
+    expect(c.priceMin).toBeNull();
   });
 });
