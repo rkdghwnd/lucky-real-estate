@@ -1,4 +1,3 @@
-import { Card } from '@/components/ui/card';
 import type { Listing } from '@/lib/types';
 import { formatArea, formatDealPrice } from '@/lib/format';
 
@@ -14,21 +13,19 @@ export function SpecTable({ listing: l }: { listing: Listing }) {
     ['도로', l.roadAccess],
     ['층고', l.ceilingHeightM != null ? `${l.ceilingHeightM}m` : null],
     ['전력', l.powerCapacity],
-    ['준공', l.completionYear != null ? `${l.completionYear}년` : null],
+    ['준공연도', l.completionYear != null ? `${l.completionYear}년` : null],
   ];
 
   return (
-    <Card className="p-6">
-      <dl className="grid grid-cols-2 gap-x-6 gap-y-5 sm:grid-cols-3">
-        {rows
-          .filter(([, v]) => v != null && v !== '')
-          .map(([k, v]) => (
-            <div key={k} className="border-b border-hairline pb-2">
-              <dt className="text-sm text-muted">{k}</dt>
-              <dd className="mt-0.5 text-lg font-semibold text-ink">{v}</dd>
-            </div>
-          ))}
-      </dl>
-    </Card>
+    <dl className="grid grid-cols-1 overflow-hidden rounded-lg border border-hairline sm:grid-cols-2">
+      {rows
+        .filter(([, v]) => v != null && v !== '')
+        .map(([k, v]) => (
+          <div key={k} className="flex border-b border-hairline">
+            <dt className="w-24 shrink-0 bg-brand-light px-4 py-3 text-sm font-semibold text-muted sm:w-28">{k}</dt>
+            <dd className="flex-1 px-4 py-3 text-sm font-medium text-ink">{v}</dd>
+          </div>
+        ))}
+    </dl>
   );
 }
