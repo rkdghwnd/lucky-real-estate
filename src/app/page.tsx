@@ -1,39 +1,22 @@
-import Link from 'next/link';
-import { getFeaturedListings } from '@/lib/listings';
-import { ListingCard } from '@/components/listings/ListingCard';
-import { NaverMap } from '@/components/map/NaverMap';
-import { CallPanel } from '@/components/layout/CallPanel';
+import { Suspense } from 'react';
+import { getPublishedListings } from '@/lib/listings';
+import { ListingSearch } from '@/components/listings/ListingSearch';
 import { siteConfig } from '@/lib/site';
 
 // Next 16: bake Supabase reads at build for static HTML.
 export const dynamic = 'force-static';
 
 export default async function HomePage() {
-  const listings = await getFeaturedListings(6);
-
+  const listings = await getPublishedListings();
   return (
-    <div className="space-y-14">
+    <div className="space-y-5">
       <section>
-        <h1 className="max-w-2xl text-3xl font-normal tracking-tight text-ink sm:text-4xl">{siteConfig.positioning}</h1>
-        <p className="mt-3 max-w-xl text-lg text-muted">공개 매물은 지도에서 바로 확인하고, 원하는 조건은 전화로 편하게 물어보세요.</p>
+        <h1 className="text-2xl font-bold tracking-tight text-ink sm:text-3xl">{siteConfig.positioning}</h1>
+        <p className="mt-1 text-muted">인천 서구 공장·창고·토지 매물을 조건별로 확인하고 전화로 편하게 문의하세요.</p>
       </section>
-
-      <section className="grid gap-4 lg:grid-cols-[1.5fr_1fr]">
-        <div className="min-h-[360px] overflow-hidden rounded-3xl border border-hairline">
-          <NaverMap lat={null} lng={null} address={siteConfig.address} />
-        </div>
-        <CallPanel />
-      </section>
-
-      <section>
-        <div className="mb-5 flex items-end justify-between border-b border-hairline pb-3">
-          <h2 className="text-2xl font-normal tracking-tight text-ink">추천 <span className="text-brand">매물</span></h2>
-          <Link href="/listings" className="text-sm font-semibold text-brand transition hover:text-brand-dark">전체 매물 보기 →</Link>
-        </div>
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {listings.map(l => <ListingCard key={l.id} listing={l} />)}
-        </div>
-      </section>
+      <Suspense fallback={<div className="min-h-[400px]" />}>
+        <ListingSearch listings={listings} />
+      </Suspense>
     </div>
   );
 }
