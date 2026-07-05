@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 
 export default function AboutPage() {
   return (
-    <div className="space-y-10">
+    <div className="space-y-6">
       <section>
         <Badge variant="brand">회사소개</Badge>
         <h1 className="mt-3 text-3xl font-normal tracking-tight text-ink">{siteConfig.shortName}</h1>
