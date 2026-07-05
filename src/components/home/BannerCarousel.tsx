@@ -4,6 +4,8 @@ import Image from 'next/image';
 
 const BANNERS = [1, 2, 3, 4].map(n => ({ src: `/banner${n}.jpg`, alt: `행운부동산 배너 ${n}` }));
 const INTERVAL_MS = 5000;
+const NAVER_PLACE_URL =
+  'https://map.naver.com/p/search/%ED%96%89%EC%9A%B4%EB%B6%80%EB%8F%99%EC%82%B0%EA%B3%B5%EC%9D%B8%EC%A4%91%EA%B0%9C%EC%82%AC/place/1399368164?c=15.00,0,0,2,dh&placePath=%2Fhome%3Fbk_query%3D%ED%96%89%EC%9A%B4%EB%B6%80%EB%8F%99%EC%82%B0%EA%B3%B5%EC%9D%B8%EC%A4%91%EA%B0%9C%EC%82%AC%26entry%3Dbmp%26from%3Dmap%26fromPanelNum%3D2%26locale%3Dko%26svcName%3Dmap_pcv5%26searchText%3D%ED%96%89%EC%9A%B4%EB%B6%80%EB%8F%99%EC%82%B0%EA%B3%B5%EC%9D%B8%EC%A4%91%EA%B0%9C%EC%82%AC';
 
 export function BannerCarousel() {
   const count = BANNERS.length;
@@ -37,10 +39,15 @@ export function BannerCarousel() {
     >
       <div className="relative h-56 w-full sm:h-72 lg:h-96">
         {BANNERS.map((b, idx) => (
-          <div
+          <a
             key={b.src}
-            className={`absolute inset-0 transition-opacity duration-700 ${idx === i ? 'opacity-100' : 'pointer-events-none opacity-0'}`}
+            href={NAVER_PLACE_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`${b.alt}, 네이버 지도에서 보기`}
             aria-hidden={idx === i ? undefined : true}
+            tabIndex={idx === i ? undefined : -1}
+            className={`absolute inset-0 block transition-opacity duration-700 ${idx === i ? 'opacity-100' : 'pointer-events-none opacity-0'}`}
           >
             <Image src={b.src} alt="" aria-hidden="true" fill sizes="100vw" className="scale-110 object-cover opacity-40 blur-2xl" />
             <Image
@@ -51,7 +58,7 @@ export function BannerCarousel() {
               className="object-contain"
               priority={idx === 0}
             />
-          </div>
+          </a>
         ))}
       </div>
 

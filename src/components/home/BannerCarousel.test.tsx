@@ -24,4 +24,12 @@ describe('BannerCarousel', () => {
     expect(screen.getByRole('button', { name: '배너 2 보기' })).toHaveAttribute('aria-current', 'true');
     expect(screen.getByRole('button', { name: '배너 1 보기' })).not.toHaveAttribute('aria-current');
   });
+
+  it('links the active banner to the office Naver place in a new tab', () => {
+    render(<BannerCarousel />);
+    const link = screen.getByRole('link', { name: /네이버 지도에서 보기/ });
+    expect(link.getAttribute('href')).toContain('map.naver.com');
+    expect(link).toHaveAttribute('target', '_blank');
+    expect(link.getAttribute('rel')).toContain('noopener');
+  });
 });
