@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import { Phone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { siteConfig } from '@/lib/site';
@@ -27,7 +28,7 @@ export function Hero() {
               </a>
             </Button>
             <Button asChild size="lg" variant="onDark">
-              <a href="/listings">매물보기</a>
+              <Link href="/listings">매물보기</Link>
             </Button>
           </div>
         </div>

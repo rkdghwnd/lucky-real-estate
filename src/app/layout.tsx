@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import './globals.css';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
-import { PhoneCtaBar } from '@/components/layout/PhoneCtaBar';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { buildOrgJsonLd, buildVerificationMetadata } from '@/lib/seo';
 import { siteConfig } from '@/lib/site';
