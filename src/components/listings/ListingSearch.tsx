@@ -55,23 +55,21 @@ export function ListingSearch({ listings }: { listings: Listing[] }) {
   const shown = useMemo(() => applyFilters(listings, state), [listings, state]);
 
   return (
-    <div className="space-y-4">
-      <UnitConverter />
-      <div className="grid gap-4 lg:grid-cols-[1fr_300px]">
-        <div className="order-2 lg:order-1">
-          {shown.length === 0 ? (
-            <p className="rounded-md border border-hairline bg-canvas py-16 text-center text-muted">
-              조건에 맞는 공개 매물이 없습니다. 전화 주시면 비공개 매물까지 찾아드립니다.
-            </p>
-          ) : (
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
-              {shown.map(l => <ListingCard key={l.id} listing={l} />)}
-            </div>
-          )}
-        </div>
-        <div className="order-1 lg:order-2 lg:sticky lg:top-28 lg:self-start">
-          <FilterSidebar state={state} resultCount={shown.length} onChange={onChange} onReset={onReset} />
-        </div>
+    <div className="grid gap-4 lg:grid-cols-[1fr_300px]">
+      <div className="order-2 lg:order-1">
+        {shown.length === 0 ? (
+          <p className="rounded-md border border-hairline bg-canvas py-16 text-center text-muted">
+            조건에 맞는 공개 매물이 없습니다. 전화 주시면 비공개 매물까지 찾아드립니다.
+          </p>
+        ) : (
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
+            {shown.map(l => <ListingCard key={l.id} listing={l} />)}
+          </div>
+        )}
+      </div>
+      <div className="order-1 lg:order-2 flex flex-col gap-4 lg:sticky lg:top-28 lg:self-start">
+        <FilterSidebar state={state} resultCount={shown.length} onChange={onChange} onReset={onReset} />
+        <UnitConverter />
       </div>
     </div>
   );
