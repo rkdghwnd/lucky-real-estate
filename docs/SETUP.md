@@ -1,54 +1,135 @@
-# 행운부동산 사이트 — 세팅 & 배포 가이드 (P1 공개 사이트)
+# 행운부동산 운영·배포 가이드
 
-개발자용 런북. 로컬 실행 → Supabase 연결 → 실데이터 채우기 → Netlify 배포 → 검색등록 순서.
+공개 사이트와 `/admin` 매물 관리 화면을 처음 연결할 때 사용하는 운영 런북입니다.
 
-## 0. 요구사항
-- **Node 20+** (로컬은 최신 버전도 OK), **npm**
-- 계정: **Supabase**(무료), **Netlify**(무료), (선택) **네이버 클라우드 플랫폼**(지도 API), 도메인 등록업체
+## 1. 준비물과 로컬 실행
 
-## 1. 로컬 실행
-```bash
-npm install
-cp .env.local.example .env.local     # 값은 2번에서 채움
-npm run dev        # http://localhost:3000
-npm test           # 전체 테스트 (37개)
-npm run build      # 프로덕션 빌드 — Supabase 값 필요
+- Node.js 20 이상, npm
+- Supabase 프로젝트
+- Netlify 프로젝트
+- 선택: 네이버 클라우드 플랫폼 Maps API 키
+
+```powershell
+npm.cmd install
+Copy-Item .env.local.example .env.local
+npm.cmd run dev
 ```
-> 홈/매물 페이지는 Supabase에서 데이터를 읽으므로 `.env.local`의 Supabase 값이 없으면 빌드/실행이 **의도적으로 실패**합니다(설정 누락을 조용히 넘기지 않기 위함). 회사소개(`/about`)는 DB 없이도 동작합니다.
 
-## 2. Supabase 설정
-1. supabase.com → **New project** 생성.
-2. **SQL Editor** → `supabase/schema.sql` 붙여넣고 **Run** → 이어서 `supabase/seed.sql` **Run**.
-3. 확인: `select count(*) from listings where status='공개';` → **6**.
-4. **Settings → API** 에서 복사해 `.env.local`에 입력:
-   - `NEXT_PUBLIC_SUPABASE_URL` = Project URL
-   - `NEXT_PUBLIC_SUPABASE_ANON_KEY` = anon public key
-5. `NEXT_PUBLIC_SITE_URL` = 배포 도메인(정해지기 전엔 임시 https URL도 가능).
+기본 로컬 주소는 `http://localhost:3000`입니다. 공개 매물 페이지는 Supabase 값을 필수로 사용하므로 `.env.local`을 먼저 채워야 합니다.
 
-> anon 키는 공개돼도 안전합니다 — RLS 정책상 `상태='공개'` 매물만 **읽기 전용**으로 노출됩니다.
+## 2. Supabase 데이터베이스와 Storage
 
-## 3. 실데이터 채우기 (배포 전 필수)
-- **`src/lib/site.ts`**의 `< >` 자리표시자를 실제 값으로: 상호 · 대표자명 · **중개등록번호** · 전화 · `phoneHref`(숫자만, 예 `tel:0320000000`) · 주소 · 영업시간.
-  - 확인: `grep -rn "<[가-힣].*>" src/lib/site.ts` → 아무것도 안 나와야 함.
-- **사진**: Supabase Storage에 공개 버킷 생성 → 업로드 → 공개 URL을 `supabase/seed.sql`의 각 매물 `images` 배열에 넣기.
-- **`supabase/seed.sql`**을 실제 매물 6건으로 교체 후 SQL Editor에서 재실행.
-- **`public/og-default.png`** (1200×630) 추가 — 카톡/검색 미리보기 썸네일.
-- **`src/app/about/page.tsx`**의 25년 스토리·거래사례 문구를 실제 내용으로.
+새 프로젝트라면 Supabase Dashboard의 **SQL Editor**에서 `supabase/schema.sql`을 실행합니다. 이미 공개 사이트가 운영 중이라면 다음 마이그레이션만 실행합니다.
 
-## 4. Netlify 배포
-- **방법 A(권장)**: GitHub에 push → Netlify에서 repo 연결. 빌드는 `netlify.toml`이 처리(`@netlify/plugin-nextjs` 자동 설치).
-- **방법 B**: `npx netlify deploy --build --prod`.
-- Netlify → **Site settings → Environment variables**에 2번의 값 + `NEXT_PUBLIC_SITE_URL`(실도메인) + (선택) `NEXT_PUBLIC_NAVER_MAP_CLIENT_ID` 등록.
-- 배포 후 확인: 홈 · 매물상세 · `/sitemap.xml` · `/robots.txt` 가 200이고, 매물상세 페이지 소스에 `application/ld+json` 과 OG 태그가 보이는지.
+```text
+supabase/migrations/20260706010000_admin_listing_management.sql
+```
 
-## 5. 검색 등록 (1회)
-- **네이버 서치어드바이저** + **구글 서치콘솔**에 사이트 등록 → 소유확인(메타태그는 root `layout.tsx`의 `metadata.verification` 또는 `public/`에 파일) → `sitemap.xml` 제출.
+마이그레이션은 다음을 설정합니다.
 
-## 6. 운영 (현재 단계)
-- 새 매물 등록/수정: 지금은 `supabase/seed.sql` 수정(또는 Supabase 대시보드에서 `listings` 테이블 직접 편집) 후 재배포.
-- **P2에서 "폰으로 큰 버튼" 어드민 UI**가 추가되면 사장님이 직접 등록/수정 예정.
-- 네이버 지도 키가 없으면 상세페이지 지도는 "네이버 지도에서 위치 보기" 링크로 표시됩니다(정상 동작).
+- `admin_users` 고정 관리자 테이블과 `is_admin()` 권한 함수
+- 공개 사용자에게는 `공개` 매물만 보이는 RLS
+- 관리자에게만 매물 등록·수정 권한 부여
+- 영구 삭제 차단, `공개`/`거래완료` 상태만 허용
+- 공개 `listing-images` 버킷, 5MB 저장 제한, 관리자 전용 업로드·수정·삭제 정책
+
+주의: 과거 PIN 방식의 `public.admin` 테이블에 데이터가 있으면 마이그레이션이 의도적으로 중단됩니다. 먼저 해당 데이터를 백업한 뒤 다시 실행합니다.
+
+SQL Editor에서 아래 결과를 확인합니다.
+
+```sql
+select tablename, policyname from pg_policies
+where schemaname = 'public' and tablename in ('listings', 'admin_users');
+
+select id, public, file_size_limit
+from storage.buckets
+where id = 'listing-images';
+```
+
+## 3. 단 하나의 관리자 계정 만들기
+
+계정은 사이트에서 가입하지 않습니다.
+
+1. Supabase Dashboard → **Authentication → Users**에서 이메일/비밀번호 사용자를 한 명 직접 만듭니다.
+2. 생성된 사용자의 UUID를 복사합니다.
+3. SQL Editor에서 아래 SQL의 UUID를 바꿔 실행합니다.
+
+```sql
+insert into public.admin_users (singleton, user_id)
+values (true, 'AUTH-USER-UUID')
+on conflict (singleton) do update set user_id = excluded.user_id;
+```
+
+4. **Authentication → General Configuration**에서 **Allow new users to sign up**을 끕니다.
+5. 같은 화면에서 **Allow anonymous sign-ins**도 끕니다.
+
+`admin_users.singleton`이 기본 키이므로 관리자 계정은 항상 한 명만 유지됩니다. 계정을 교체할 때는 새 Auth 사용자를 만든 뒤 위 SQL을 다시 실행합니다.
+
+## 4. 인증 URL 설정
+
+Supabase Dashboard → **Authentication → URL Configuration**에서 설정합니다.
+
+- **Site URL**: 실제 운영 주소, 예: `https://haengun.example.com`
+- **Redirect URLs**:
+  - `http://localhost:3000/**`
+  - `https://haengun.example.com/admin/auth/callback?next=/admin/reset-password`
+  - Netlify Preview를 쓸 때: `https://**--YOUR-SITE.netlify.app/**`
+
+운영 도메인이 바뀌면 Supabase의 Site URL/Redirect URLs와 배포 환경의 `NEXT_PUBLIC_SITE_URL`을 함께 바꿉니다. 비밀번호 재설정 메일이 다른 주소로 가면 이 세 값이 일치하는지 먼저 확인합니다.
+
+## 5. 환경 변수
+
+Supabase Dashboard → **Project Settings → API**에서 Project URL과 publishable/anon key를 복사합니다.
+
+```dotenv
+NEXT_PUBLIC_SUPABASE_URL=https://YOUR-PROJECT.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=YOUR-ANON-KEY
+NEXT_PUBLIC_SITE_URL=https://haengun.example.com
+NEXT_PUBLIC_NAVER_MAP_CLIENT_ID=
+```
+
+동일한 값을 로컬 `.env.local`과 Netlify **Site configuration → Environment variables**에 설정합니다.
+
+이 프로젝트는 `SUPABASE_SERVICE_ROLE_KEY`를 사용하지 않습니다. 브라우저와 서버 액션 모두 공개 키 + 로그인 세션 + RLS로 권한을 확인합니다. Service Role 키를 `NEXT_PUBLIC_` 변수나 Netlify 환경 변수에 추가하지 마세요.
+
+## 6. 배포 전 확인
+
+```powershell
+npm.cmd test
+npm.cmd run lint
+npx.cmd tsc --noEmit
+npm.cmd run build
+```
+
+Netlify는 GitHub 저장소를 연결하면 `netlify.toml` 설정으로 빌드합니다. 배포 후 다음 주소가 정상인지 확인합니다.
+
+- `/`, `/listings`, 실제 `/listings/{slug}`
+- `/sitemap.xml`, `/robots.txt`
+- `/admin/login`, `/admin/forgot-password`
+- 로그인 전 `/admin` 접근 시 `/admin/login`으로 이동
+
+## 7. 관리자 인수 테스트
+
+PC에서 아래 순서대로 한 번씩 확인합니다.
+
+1. `/admin/login`에서 고정 이메일과 비밀번호로 로그인합니다.
+2. **새 매물 등록**에서 필수 정보와 사진을 넣어 저장합니다.
+3. 공개 `/listings`와 새 상세 페이지에서 즉시 보이는지 확인합니다.
+4. 관리자에서 제목과 사진 순서를 수정하고 공개 페이지 반영을 확인합니다.
+5. **거래완료로 변경** 후 공개 목록과 상세에서 사라지는지 확인합니다.
+6. 거래완료 탭에서 **다시 공개** 후 공개 페이지에 돌아오는지 확인합니다.
+7. 로그아웃 후 `/admin`에 다시 접근할 수 없는지 확인합니다.
+8. **비밀번호를 잊으셨나요?** 메일을 받아 새 비밀번호로 로그인합니다.
+
+사진 업로드 중 저장에 실패하면 화면 값은 유지됩니다. 다시 저장하기 전에 네트워크와 Supabase Storage 정책을 확인합니다.
+
+## 8. 실제 사업자 정보와 검색 등록
+
+- `src/lib/site.ts`의 상호, 대표자명, 중개등록번호, 전화, 주소, 영업시간을 실제 정보로 교체합니다.
+- `public/og-default.png`에 1200×630 기본 공유 이미지를 둡니다.
+- 네이버 서치어드바이저와 구글 서치콘솔에 사이트를 등록하고 `/sitemap.xml`을 제출합니다.
 
 ## 참고 문서
-- 설계 스펙: `docs/superpowers/specs/2026-07-03-haengun-budongsan-website-design.md`
-- 구현 계획(P1, 이후 P2~P4 예정): `docs/superpowers/plans/2026-07-03-haengun-budongsan-phase1-public-site.md`
+
+- 관리자 설계: `docs/superpowers/specs/2026-07-06-admin-listing-management-design.md`
+- 관리자 구현 계획: `docs/superpowers/plans/2026-07-06-admin-listing-management.md`
