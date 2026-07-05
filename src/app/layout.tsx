@@ -5,6 +5,7 @@ import { AntdRegistry } from '@ant-design/nextjs-registry';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { AntdProvider } from '@/components/providers/AntdProvider';
+import { SiteChrome } from '@/components/layout/SiteChrome';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { buildOrgJsonLd, buildVerificationMetadata } from '@/lib/seo';
 import { siteConfig } from '@/lib/site';
@@ -32,9 +33,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <JsonLd data={buildOrgJsonLd()} />
         <AntdRegistry layer>
           <AntdProvider>
-            <Header />
-            <main>{children}</main>
-            <Footer />
+            <SiteChrome header={<Header />} footer={<Footer />}>
+              {children}
+            </SiteChrome>
           </AntdProvider>
         </AntdRegistry>
       </body>

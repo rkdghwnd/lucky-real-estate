@@ -5,9 +5,13 @@ vi.mock('@/lib/listings', () => ({
   getListingBySlug: vi.fn(),
 }));
 
-import { generateStaticParams } from './page';
+import { dynamicParams, generateStaticParams } from './page';
 
 describe('listing detail generateStaticParams', () => {
+  it('allows newly-created slugs to render at runtime', () => {
+    expect(dynamicParams).toBe(true);
+  });
+
   it('returns one param object per published slug', async () => {
     await expect(generateStaticParams()).resolves.toEqual([{ slug: 'a' }, { slug: 'b' }]);
   });

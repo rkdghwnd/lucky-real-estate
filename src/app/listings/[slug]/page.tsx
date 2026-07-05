@@ -11,7 +11,7 @@ import { ContactBox } from '@/components/listings/ContactBox';
 import { formatArea, formatDealPrice } from '@/lib/format';
 
 export const dynamic = 'force-static';
-export const dynamicParams = false;
+export const dynamicParams = true;
 
 export async function generateStaticParams() {
   const slugs = await getAllListingSlugs();
