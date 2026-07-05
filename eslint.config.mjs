@@ -13,6 +13,9 @@ const eslintConfig = defineConfig([
     "build/**",
     "storybook-static/**",
     "next-env.d.ts",
+    // Isolated git worktrees are separate checkouts (own src + build output);
+    // linting them here is noise. Mirrors the vitest `exclude`.
+    ".worktrees/**",
   ]),
 ]);
 

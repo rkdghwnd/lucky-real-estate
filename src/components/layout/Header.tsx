@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { Phone, Menu, X, ChevronRight, Clock, Building2 } from 'lucide-react';
 import { Button, Drawer } from 'antd';
 import { siteConfig } from '@/lib/site';
+import { PhoneModal } from './PhoneModal';
 
 const NAV_LINKS = [
   { href: '/', label: '홈' },
@@ -16,6 +17,7 @@ const NAV_LINKS = [
 
 export function Header() {
   const [open, setOpen] = useState(false);
+  const [phoneOpen, setPhoneOpen] = useState(false);
   const close = () => setOpen(false);
 
   return (
@@ -64,7 +66,7 @@ export function Header() {
             <Button
               type="primary"
               size="large"
-              href={siteConfig.phoneHref}
+              onClick={() => setPhoneOpen(true)}
               icon={<Phone className="size-4" aria-hidden="true" />}
               className="hidden sm:inline-flex"
             >
@@ -131,6 +133,8 @@ export function Header() {
           </div>
         </nav>
       </Drawer>
+
+      <PhoneModal open={phoneOpen} onClose={() => setPhoneOpen(false)} />
     </header>
   );
 }
