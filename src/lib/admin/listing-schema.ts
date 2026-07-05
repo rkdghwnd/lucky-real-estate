@@ -91,13 +91,18 @@ export function wonToManwon(value: number | null): string {
 
 export function parseListingForm(form: FormData): ListingFormParseResult {
   const dealType = textValue(form, 'dealType');
+  const monthlyRentValue = form.get('monthlyRentManwon');
   const parsed = listingFieldsSchema.safeParse({
     title: textValue(form, 'title'),
     propertyType: textValue(form, 'propertyType'),
     dealType,
     address: textValue(form, 'address'),
     price: manwonToWon(form.get('priceManwon')),
-    monthlyRent: dealType === '매매' ? null : manwonToWon(form.get('monthlyRentManwon')),
+    monthlyRent: dealType === '매매'
+      ? null
+      : typeof monthlyRentValue !== 'string' || monthlyRentValue.trim() === ''
+        ? null
+        : manwonToWon(monthlyRentValue),
     landAreaM2: optionalNumber(form.get('landAreaM2')),
     buildingAreaM2: optionalNumber(form.get('buildingAreaM2')),
     zoning: textValue(form, 'zoning'),

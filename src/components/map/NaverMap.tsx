@@ -31,7 +31,17 @@ type NaverAuthWindow = Window & { navermap_authFailure?: () => void };
 
 type MapStatus = 'loading' | 'ready' | 'error';
 
-export function NaverMap({ lat, lng, address }: { lat: number | null; lng: number | null; address: string }) {
+export function NaverMap({
+  lat,
+  lng,
+  address,
+  onResolved,
+}: {
+  lat: number | null;
+  lng: number | null;
+  address: string;
+  onResolved?: (position: { lat: number; lng: number }) => void;
+}) {
   const ref = useRef<HTMLDivElement>(null);
   const hasKey = Boolean(siteConfig.naverMapClientId);
   const [status, setStatus] = useState<MapStatus>(hasKey ? 'loading' : 'error');
@@ -65,11 +75,12 @@ export function NaverMap({ lat, lng, address }: { lat: number | null; lng: numbe
 
     const createMap = (mapLat: number, mapLng: number) => {
       const maps = (window as unknown as NaverWindow).naver?.maps;
-      if (!active || !maps || !ref.current) return fail();
+      if (!active || !maps || !ref.current || !Number.isFinite(mapLat) || !Number.isFinite(mapLng)) return fail();
 
       const center = new maps.LatLng(mapLat, mapLng);
       const map = new maps.Map(ref.current, { center, zoom: 17 });
       new maps.Marker({ position: center, map });
+      onResolved?.({ lat: mapLat, lng: mapLng });
       setStatus('ready');
     };
 
@@ -147,7 +158,7 @@ export function NaverMap({ lat, lng, address }: { lat: number | null; lng: numbe
       script?.removeEventListener('error', fail);
       restoreAuthFailure();
     };
-  }, [address, hasKey, lat, lng]);
+  }, [address, hasKey, lat, lng, onResolved]);
 
   return (
     <div className="relative min-h-[360px] w-full overflow-hidden rounded-3xl border border-hairline bg-brand-light">

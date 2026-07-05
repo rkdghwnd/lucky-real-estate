@@ -100,6 +100,16 @@ describe('NaverMap', () => {
     expect(FakeMarker).toHaveBeenCalledTimes(1);
   });
 
+  it('reports valid geocoded coordinates to an optional consumer', async () => {
+    setClientId('test-client-id');
+    installFakeNaver();
+    const onResolved = vi.fn();
+
+    render(<NaverMap lat={null} lng={null} address={officeAddress} onResolved={onResolved} />);
+
+    await waitFor(() => expect(onResolved).toHaveBeenCalledWith({ lat: 37.597, lng: 126.675 }));
+  });
+
   it('keeps direct coordinate maps compatible', async () => {
     setClientId('test-client-id');
     const { FakeLatLng, FakeMap, FakeMarker, fakeGeocode } = installFakeNaver();
