@@ -11,7 +11,7 @@ export function Footer() {
           <Link href="/listings">매물검색</Link>
           <Link href="/about">회사소개</Link>
         </nav>
-        <div className="grid gap-6 py-6 text-sm leading-7 md:grid-cols-[1fr_260px]">
+        <div className="grid gap-6 py-5 text-sm leading-7 md:grid-cols-[1fr_260px]">
           <div>
             <p className="text-base font-bold text-ink">{siteConfig.name}</p>
             <p>대표: {siteConfig.representative} · 중개등록번호: {siteConfig.registrationNumber}</p>
@@ -25,7 +25,7 @@ export function Footer() {
               </a>
             </p>
           </div>
-          <div className="rounded-2xl border border-hairline bg-brand-light p-5">
+          <div className="rounded-md border border-hairline bg-brand-light p-5">
             <p className="text-xs font-semibold uppercase tracking-wide text-muted">대표번호</p>
             <a href={siteConfig.phoneHref} className="mt-1 block text-2xl font-bold text-ink transition hover:text-brand">
               {siteConfig.phone}
