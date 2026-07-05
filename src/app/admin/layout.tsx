@@ -6,5 +6,5 @@ export const metadata: Metadata = {
 };
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
-  return <div className="min-h-screen bg-[#f5f7fa] text-ink">{children}</div>;
+  return <div className="min-h-[100dvh] bg-[#f5f7fa] text-ink">{children}</div>;
 }

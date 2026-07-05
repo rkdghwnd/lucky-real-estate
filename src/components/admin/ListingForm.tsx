@@ -58,8 +58,8 @@ interface ListingFormProps {
   updateAction?: (id: string, input: unknown) => Promise<SaveResult>;
 }
 
-const inputClass = 'mt-2 h-12 w-full rounded-xl border border-hairline bg-white px-4 text-base text-ink outline-none transition placeholder:text-muted/60 focus:border-brand focus:ring-2 focus:ring-brand/15 aria-[invalid=true]:border-danger aria-[invalid=true]:ring-2 aria-[invalid=true]:ring-red-100';
-const textAreaClass = 'mt-2 min-h-40 w-full resize-y rounded-xl border border-hairline bg-white px-4 py-3 text-base text-ink outline-none transition placeholder:text-muted/60 focus:border-brand focus:ring-2 focus:ring-brand/15 aria-[invalid=true]:border-danger aria-[invalid=true]:ring-2 aria-[invalid=true]:ring-red-100';
+const inputClass = 'mt-2 h-12 w-full rounded-xl border border-hairline bg-white px-4 text-base text-ink outline-none transition placeholder:text-muted focus:border-brand focus:ring-2 focus:ring-brand/15 aria-[invalid=true]:border-danger aria-[invalid=true]:ring-2 aria-[invalid=true]:ring-red-100';
+const textAreaClass = 'mt-2 min-h-40 w-full resize-y rounded-xl border border-hairline bg-white px-4 py-3 text-base text-ink outline-none transition placeholder:text-muted focus:border-brand focus:ring-2 focus:ring-brand/15 aria-[invalid=true]:border-danger aria-[invalid=true]:ring-2 aria-[invalid=true]:ring-red-100';
 
 function Section({ icon, title, description, children }: { icon: ReactNode; title: string; description: string; children: ReactNode }) {
   return (

@@ -9,7 +9,7 @@ export default async function AdminLoginPage() {
   if (await getAdminAccess(client)) redirect('/admin');
 
   return (
-    <div className="grid min-h-screen place-items-center px-4 py-10">
+    <div className="grid min-h-[100dvh] place-items-center px-4 py-10">
       <section className="w-full max-w-md rounded-xl border border-hairline bg-white p-8 shadow-[0_16px_45px_rgba(15,23,42,0.10)]">
         <Link href="/" className="mb-7 flex items-center gap-3">
           <span className="grid size-11 place-items-center rounded-md bg-brand text-xl font-extrabold text-white">행</span>
