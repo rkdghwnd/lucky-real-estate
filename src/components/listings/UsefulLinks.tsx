@@ -4,12 +4,12 @@ import Image from 'next/image';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 
 const LINKS = [
-  { name: '국토교통부', href: 'https://www.molit.go.kr', logo: '/logos/molit.png' },
+  { name: '국토교통부', href: 'https://www.molit.go.kr', logo: '/logos/molit.svg' },
   { name: '인터넷 등기소', href: 'https://www.iros.go.kr', logo: '/logos/iros.png' },
   { name: '국세청', href: 'https://www.nts.go.kr', logo: '/logos/nts.png' },
-  { name: '정부24', href: 'https://www.gov.kr', logo: '/logos/gov24.png' },
-  { name: 'LH한국토지주택공사', href: 'https://www.lh.or.kr', logo: '/logos/lh.png' },
-  { name: 'SEE:REAL', href: 'https://seereal.lh.or.kr', logo: '/logos/seereal.png' },
+  { name: '정부24', href: 'https://www.gov.kr', logo: '/logos/gov24.svg' },
+  { name: 'LH한국토지주택공사', href: 'https://www.lh.or.kr', logo: '/logos/lh.svg' },
+  { name: 'SEE:REAL', href: 'https://seereal.lh.or.kr', logo: '/logos/seereal.svg' },
 ] as const;
 
 function LogoTile({ name, href, logo }: { name: string; href: string; logo: string }) {
@@ -27,7 +27,7 @@ function LogoTile({ name, href, logo }: { name: string; href: string; logo: stri
         <span className="text-center text-xs font-semibold leading-tight text-ink">{name}</span>
       ) : (
         <span className="relative block h-8 w-full">
-          <Image src={logo} alt={name} fill sizes="130px" className="object-contain" onError={() => setFailed(true)} />
+          <Image src={logo} alt={name} fill sizes="130px" unoptimized className="object-contain" onError={() => setFailed(true)} />
         </span>
       )}
     </a>
