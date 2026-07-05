@@ -6,6 +6,7 @@ import type { Listing } from '@/lib/types';
 import { FilterSidebar, type FilterState } from './FilterSidebar';
 import { ListingCard } from './ListingCard';
 import { UnitConverter } from './UnitConverter';
+import { UsefulLinks } from './UsefulLinks';
 
 function stateFromParams(sp: URLSearchParams): FilterState {
   return {
@@ -70,6 +71,7 @@ export function ListingSearch({ listings }: { listings: Listing[] }) {
       <div className="order-1 lg:order-2 flex flex-col gap-4 lg:sticky lg:top-28 lg:self-start">
         <FilterSidebar state={state} resultCount={shown.length} onChange={onChange} onReset={onReset} />
         <UnitConverter />
+        <UsefulLinks />
       </div>
     </div>
   );
