@@ -39,8 +39,8 @@ $$;
 revoke all on function public.is_admin() from public;
 grant execute on function public.is_admin() to authenticated;
 
-update public.listings set status = '거래완료' where status = '비공개';
 alter table public.listings drop constraint if exists listings_status_check;
+update public.listings set status = '거래완료' where status = '비공개';
 alter table public.listings
   add constraint listings_status_check check (status in ('공개','거래완료'));
 

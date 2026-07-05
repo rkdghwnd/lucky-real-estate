@@ -25,4 +25,12 @@ describe('admin listing migration', () => {
     expect(migration).toContain("status in ('공개','거래완료')");
     expect(migration).toContain('set_updated_at');
   });
+
+  it('drops the legacy status constraint before converting 비공개 rows', () => {
+    const dropConstraint = migration.indexOf('drop constraint if exists listings_status_check');
+    const convertRows = migration.indexOf("update public.listings set status = '거래완료'");
+    expect(dropConstraint).toBeGreaterThan(-1);
+    expect(convertRows).toBeGreaterThan(-1);
+    expect(dropConstraint).toBeLessThan(convertRows);
+  });
 });
