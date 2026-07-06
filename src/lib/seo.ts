@@ -17,6 +17,7 @@ export function buildListingMetadata(l: Listing): Metadata {
     description,
     alternates: { canonical: url },
     openGraph: { title, description, url, type: 'website', siteName: siteConfig.name, images: [{ url: image }] },
+    twitter: { card: 'summary_large_image', title, description, images: [image] },
   };
 }
 
@@ -24,9 +25,11 @@ export function buildOrgJsonLd(): object {
   return {
     '@context': 'https://schema.org',
     '@type': 'RealEstateAgent',
+    '@id': `${siteConfig.siteUrl}/#organization`,
     name: siteConfig.name,
     telephone: siteConfig.phone,
     url: siteConfig.siteUrl,
+    image: absoluteUrl('/banner1.jpg'),
     areaServed: '인천광역시 서구',
     address: {
       '@type': 'PostalAddress',
@@ -34,6 +37,46 @@ export function buildOrgJsonLd(): object {
       addressLocality: '인천광역시 서구',
       streetAddress: siteConfig.address,
     },
+    // Mirrors siteConfig.businessHours ('평일 09:00~18:00').
+    openingHoursSpecification: {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+      opens: '09:00',
+      closes: '18:00',
+    },
+  };
+}
+
+// WebSite node with a SearchAction so search engines can surface a sitelinks
+// search box that points at the listings search.
+export function buildWebsiteJsonLd(): object {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    url: siteConfig.siteUrl,
+    name: siteConfig.name,
+    inLanguage: 'ko-KR',
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: {
+        '@type': 'EntryPoint',
+        urlTemplate: `${siteConfig.siteUrl}/listings?keyword={search_term_string}`,
+      },
+      'query-input': 'required name=search_term_string',
+    },
+  };
+}
+
+export function buildBreadcrumbJsonLd(items: { name: string; path?: string }[]): object {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: items.map((item, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: item.name,
+      ...(item.path ? { item: absoluteUrl(item.path) } : {}),
+    })),
   };
 }
 

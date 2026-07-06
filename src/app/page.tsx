@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { getPublishedListings } from '@/lib/listings';
 import { availableRegions } from '@/lib/search';
 import { Hero } from '@/components/home/Hero';
@@ -9,6 +10,10 @@ import { UsefulLinks } from '@/components/home/UsefulLinks';
 
 // Next 16: bake Supabase reads at build for static HTML.
 export const dynamic = 'force-static';
+
+export const metadata: Metadata = {
+  alternates: { canonical: '/' },
+};
 
 export default async function HomePage() {
   const listings = await getPublishedListings();

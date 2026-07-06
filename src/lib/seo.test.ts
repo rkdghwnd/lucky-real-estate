@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { absoluteUrl, buildListingMetadata, buildOrgJsonLd, buildListingJsonLd, buildVerificationMetadata } from './seo';
+import { absoluteUrl, buildListingMetadata, buildOrgJsonLd, buildListingJsonLd, buildVerificationMetadata, buildWebsiteJsonLd, buildBreadcrumbJsonLd } from './seo';
 import type { Listing } from './types';
 
 // Self-contained literal — this task must not depend on Task 5's rowToListing.
@@ -26,6 +26,7 @@ describe('buildListingMetadata', () => {
     const m = buildListingMetadata(factory);
     expect(String(m.alternates?.canonical)).toMatch(/\/listings\/factory-sale-01$/);
     expect(m.openGraph?.images).toBeTruthy();
+    expect(m.twitter).toBeTruthy();
     expect(String(m.title)).toContain(factory.title);
   });
 });
@@ -60,5 +61,32 @@ describe('buildVerificationMetadata', () => {
     const v = buildVerificationMetadata('naver-code', '');
     expect(v?.other?.['naver-site-verification']).toBe('naver-code');
     expect(v?.google).toBeUndefined();
+  });
+});
+
+describe('buildWebsiteJsonLd', () => {
+  it('is a WebSite with a SearchAction pointing at the listings search', () => {
+    const w = buildWebsiteJsonLd() as {
+      '@type': string;
+      potentialAction: { '@type': string; target: { urlTemplate: string }; 'query-input': string };
+    };
+    expect(w['@type']).toBe('WebSite');
+    expect(w.potentialAction['@type']).toBe('SearchAction');
+    expect(w.potentialAction.target.urlTemplate).toContain('/listings?keyword={search_term_string}');
+    expect(w.potentialAction['query-input']).toContain('search_term_string');
+  });
+});
+
+describe('buildBreadcrumbJsonLd', () => {
+  it('numbers items from 1 and only sets item URLs when a path is given', () => {
+    const b = buildBreadcrumbJsonLd([{ name: '홈', path: '/' }, { name: '현재' }]) as {
+      '@type': string;
+      itemListElement: { position: number; name: string; item?: string }[];
+    };
+    expect(b['@type']).toBe('BreadcrumbList');
+    expect(b.itemListElement[0].position).toBe(1);
+    expect(b.itemListElement[0].item).toMatch(/^http/);
+    expect(b.itemListElement[1].position).toBe(2);
+    expect(b.itemListElement[1].item).toBeUndefined();
   });
 });

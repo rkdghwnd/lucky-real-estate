@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { MapPin } from 'lucide-react';
 import { getAllListingSlugs, getListingBySlug } from '@/lib/listings';
-import { buildListingMetadata, buildListingJsonLd } from '@/lib/seo';
+import { buildListingMetadata, buildListingJsonLd, buildBreadcrumbJsonLd } from '@/lib/seo';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { Breadcrumb } from '@/components/listings/Breadcrumb';
 import { ImageSlider } from '@/components/listings/ImageSlider';
@@ -41,6 +41,11 @@ export default async function ListingDetailPage({ params }: { params: Promise<{ 
   return (
     <article className="mx-auto max-w-6xl px-4 py-8">
       <JsonLd data={buildListingJsonLd(l)} />
+      <JsonLd data={buildBreadcrumbJsonLd([
+        { name: '홈', path: '/' },
+        { name: '매물검색', path: '/listings' },
+        { name: l.title, path: `/listings/${l.slug}` },
+      ])} />
       <Breadcrumb items={[{ label: '홈', href: '/' }, { label: '매물검색', href: '/listings' }, { label: '매물상세' }]} />
 
       <div className="mt-4 grid items-start gap-8 lg:grid-cols-[1fr_1.4fr]">
