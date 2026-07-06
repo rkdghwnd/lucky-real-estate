@@ -25,7 +25,7 @@ export function UsefulLinks() {
             className="flex flex-col items-center gap-2 rounded-lg border border-hairline p-3 text-center transition hover:border-brand hover:bg-brand-light/50"
           >
             <span className="flex h-8 items-center justify-center">
-              <img src={link.logo} alt={link.name} className="max-h-8 max-w-full object-contain" loading="lazy" />
+              <img src={link.logo} alt={link.name} className="max-h-8 max-w-full object-contain" />
             </span>
             <span className="text-[0.72rem] font-medium leading-tight text-muted">{link.name}</span>
           </a>
