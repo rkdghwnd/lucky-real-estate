@@ -36,17 +36,19 @@ export function SearchFilters({
   regions,
   onApply,
   onReset,
+  sticky = true,
 }: {
   initial: FilterDraft;
   regions: string[];
   onApply: (draft: FilterDraft) => void;
   onReset: () => void;
+  sticky?: boolean;
 }) {
   const [d, setD] = useState<FilterDraft>(initial);
   const set = (patch: Partial<FilterDraft>) => setD(prev => ({ ...prev, ...patch }));
 
   return (
-    <Card className="h-fit lg:sticky lg:top-24" styles={{ body: { padding: 20 } }}>
+    <Card className={`h-fit${sticky ? ' lg:sticky lg:top-24' : ''}`} styles={{ body: { padding: 20 } }}>
       <p className="mb-5 flex items-center gap-2 text-base font-bold text-ink">
         <SlidersHorizontal className="size-[1.05rem] text-brand" aria-hidden="true" />
         필터
