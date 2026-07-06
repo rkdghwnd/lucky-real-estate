@@ -44,7 +44,7 @@ export function Header() {
         <div className="mx-auto flex min-h-[64px] max-w-6xl items-center justify-between gap-4 px-4">
           <Link href="/" className="flex min-w-0 items-center gap-2.5" aria-label={siteConfig.shortName}>
             <span className="flex min-w-0 items-baseline gap-2">
-              <span className="truncate text-xl font-bold tracking-tight text-ink">{siteConfig.shortName}</span>
+              <span className="truncate text-2xl font-bold tracking-tight text-ink">{siteConfig.shortName}</span>
               <span className="hidden whitespace-nowrap text-xs font-medium text-muted lg:inline">
                 공장·창고·토지 전문 중개
               </span>

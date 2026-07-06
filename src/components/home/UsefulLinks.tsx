@@ -1,4 +1,4 @@
-/* eslint-disable @next/next/no-img-element */
+import Image from 'next/image';
 import { Card } from 'antd';
 
 // Official Korean real-estate / government reference sites — identity taken from each
@@ -24,8 +24,15 @@ export function UsefulLinks() {
             rel="noopener noreferrer"
             className="flex flex-col items-center gap-2 rounded-lg border border-hairline p-3 text-center transition hover:border-brand hover:bg-brand-light/50"
           >
-            <span className="flex h-8 items-center justify-center">
-              <img src={link.logo} alt={link.name} className="max-h-8 max-w-full object-contain" />
+            <span className="flex h-8 w-full items-center justify-center">
+              <Image
+                src={link.logo}
+                alt={link.name}
+                width={120}
+                height={32}
+                className="h-8 w-full object-contain"
+                unoptimized
+              />
             </span>
             <span className="text-[0.72rem] font-medium leading-tight text-muted">{link.name}</span>
           </a>

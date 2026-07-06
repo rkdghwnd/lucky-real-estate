@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** 행운부동산 사이트를 gongjangtown.com식 정보밀집형 공장·창고 포털 구성으로 재구축한다(제자리 재스킨).
+**Goal:** 행운부동산공인중개사사무소 사이트를 gongjangtown.com식 정보밀집형 공장·창고 포털 구성으로 재구축한다(제자리 재스킨).
 
 **Architecture:** 기존 Next.js 16 App Router / Supabase / shadcn 프리미티브를 재사용한다. 순수 필터 로직을 확장하고, 홈을 검색 페이지로 통합하며, 확장 필터 사이드바 + ㎡↔평 변환기 + 조밀 카드로 UI를 교체한다. 디자인 토큰(색)은 유지하되 라운드·간격만 조밀하게 조정한다.
 
@@ -750,7 +750,7 @@ export function ListingSearch({ listings }: { listings: Listing[] }) {
         <div className="order-2 lg:order-1">
           {shown.length === 0 ? (
             <p className="rounded-md border border-hairline bg-canvas py-16 text-center text-muted">
-              조건에 맞는 공개 매물이 없습니다. 전화 주시면 비공개 매물까지 찾아드립니다.
+              조건에 맞는 공개 매물이 없습니다. 전화 주시면  찾아드립니다.
             </p>
           ) : (
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">

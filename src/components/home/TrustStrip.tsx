@@ -10,7 +10,7 @@ const ITEMS = [
 
 export function TrustStrip() {
   return (
-    <section aria-label="행운부동산 강점" className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+    <section aria-label="행운부동산공인중개사사무소 강점" className="grid grid-cols-2 gap-3 lg:grid-cols-4">
       {ITEMS.map(({ icon: Icon, label }) => (
         <Card key={label} size="small" styles={{ body: { display: 'flex', alignItems: 'center', gap: 12 } }}>
           <span className="grid size-10 shrink-0 place-items-center rounded-full bg-brand-light text-brand">

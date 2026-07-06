@@ -1,7 +1,7 @@
 # Ant Design UI 리뉴얼 설계 (Design Spec)
 
 **작성일:** 2026-07-06
-**대상:** 행운부동산 공개 사이트 (Next.js 16 App Router · React 19 · SSG)
+**대상:** 행운부동산공인중개사사무소 공개 사이트 (Next.js 16 App Router · React 19 · SSG)
 **결정:** 절충안 — **Tailwind 유지 + 브랜드 테마드 antd 공존**
 
 ---

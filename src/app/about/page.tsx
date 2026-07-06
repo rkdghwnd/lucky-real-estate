@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
-import { Card, Descriptions } from 'antd';
-import { Building2, Target, Zap, Handshake } from 'lucide-react';
+import {  Descriptions } from 'antd';
 import { siteConfig } from '@/lib/site';
 
 export const metadata: Metadata = {
@@ -10,12 +9,7 @@ export const metadata: Metadata = {
   alternates: { canonical: `${siteConfig.siteUrl}/about` },
 };
 
-const FEATURES = [
-  { icon: Building2, title: '전문성', desc: '공장·창고·토지 전문 중개로 조건에 맞는 매물을 정확히 매칭합니다.' },
-  { icon: Target, title: '정확함', desc: '정확한 매물 정보와 시세를 바탕으로 신뢰를 최우선으로 합니다.' },
-  { icon: Zap, title: '신속함', desc: '신속한 매물 상담과 빠른 연결로 소중한 시간을 아껴드립니다.' },
-  { icon: Handshake, title: '책임감', desc: '계약까지 성실히 책임지는 중개 서비스를 제공합니다.' },
-] as const;
+
 
 const OFFICE: [string, string][] = [
   ['상호', siteConfig.name],
@@ -42,21 +36,8 @@ export default function AboutPage() {
             행운부동산은 인천 서구 공장·창고·토지 전문 부동산입니다.
           </h2>
           <p className="mt-4 max-w-3xl leading-relaxed text-muted">
-            인천 서구 오류동·검단 일대의 공장·창고·토지 매물을 전문으로 중개합니다. 네이버에 없는 물건까지, 조건에
-            맞는 매물을 찾아 전화 한 통으로 편하게 연결해 드립니다.
+            인천 서구 오류동·검단 일대의 공장·창고·토지 매물을 전문으로 중개합니다.
           </p>
-        </section>
-
-        <section className="grid gap-4 sm:grid-cols-2">
-          {FEATURES.map(({ icon: Icon, title, desc }) => (
-            <Card key={title}>
-              <span className="grid size-12 place-items-center rounded-lg bg-brand-light text-brand">
-                <Icon className="size-6" aria-hidden="true" />
-              </span>
-              <p className="mt-4 text-lg font-bold text-ink">{title}</p>
-              <p className="mt-1.5 text-sm leading-relaxed text-muted">{desc}</p>
-            </Card>
-          ))}
         </section>
 
         <section>
@@ -68,7 +49,7 @@ export default function AboutPage() {
               items={OFFICE.map(([k, v]) => ({ key: k, label: k, children: v }))}
             />
             <div className="relative aspect-[4/3] overflow-hidden rounded-lg border border-hairline bg-brand-light">
-              <Image src="/banner1.jpg" alt="행운부동산 사무소" fill sizes="(max-width:1024px) 100vw, 360px" className="object-cover" />
+              <Image src="/banner1.jpg" alt="행운부동산공인중개사사무소 사무소" fill sizes="(max-width:1024px) 100vw, 360px" className="object-cover" />
             </div>
           </div>
         </section>
