@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
-import Image from 'next/image';
-import {  Descriptions } from 'antd';
+import { Descriptions } from 'antd';
 import { siteConfig } from '@/lib/site';
+import { OfficeCarousel } from '@/components/about/OfficeCarousel';
 
 export const metadata: Metadata = {
   title: '회사소개',
@@ -48,9 +48,7 @@ export default function AboutPage() {
               column={1}
               items={OFFICE.map(([k, v]) => ({ key: k, label: k, children: v }))}
             />
-            <div className="relative aspect-[4/3] overflow-hidden rounded-lg border border-hairline bg-brand-light">
-              <Image src="/banner1.jpg" alt="행운부동산공인중개사사무소 사무소" fill sizes="(max-width:1024px) 100vw, 360px" className="object-cover" />
-            </div>
+            <OfficeCarousel />
           </div>
         </section>
       </div>

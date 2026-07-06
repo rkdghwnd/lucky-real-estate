@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { getAdminAccess } from '@/lib/admin/auth';
 import {
   createAdminListing,
+  deleteAdminListing,
   setAdminListingStatus,
   updateAdminListing,
 } from '@/lib/admin/listings';
@@ -129,5 +130,21 @@ export async function setListingStatusAction(
     return { ok: true, data: listing };
   } catch {
     return { ok: false, code: 'DATABASE', message: '매물 상태를 변경하지 못했습니다.' };
+  }
+}
+
+export async function deleteListingAction(id: string): Promise<AdminActionResult<{ slug: string }>> {
+  const client = await adminClient();
+  if (!client) return { ok: false, code: 'UNAUTHORIZED', message: '로그인이 만료되었습니다. 다시 로그인해주세요.' };
+
+  const parsed = z.string().uuid().safeParse(id);
+  if (!parsed.success) return { ok: false, code: 'VALIDATION', message: '매물 요청이 올바르지 않습니다.' };
+
+  try {
+    const { slug } = await deleteAdminListing(client, parsed.data);
+    revalidateListingPaths(slug);
+    return { ok: true, data: { slug } };
+  } catch {
+    return { ok: false, code: 'DATABASE', message: '매물을 삭제하지 못했습니다. 다시 시도해주세요.' };
   }
 }

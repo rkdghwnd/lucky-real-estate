@@ -93,8 +93,8 @@ alter table admin_users enable row level security;
 
 revoke all on admin_users from anon, authenticated;
 grant select on listings to anon, authenticated;
-grant insert, update on listings to authenticated;
-revoke delete on listings from anon, authenticated;
+grant insert, update, delete on listings to authenticated;
+revoke delete on listings from anon;
 
 drop policy if exists "public reads open listings" on listings;
 create policy "public reads open listings" on listings
@@ -114,6 +114,11 @@ create policy "admin updates listings" on listings
   for update to authenticated
   using ((select public.is_admin()))
   with check ((select public.is_admin()) and status in ('공개','거래완료'));
+
+drop policy if exists "admin deletes listings" on listings;
+create policy "admin deletes listings" on listings
+  for delete to authenticated
+  using ((select public.is_admin()));
 
 drop policy if exists "public reads published posts" on posts;
 create policy "public reads published posts" on posts

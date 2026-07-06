@@ -7,6 +7,7 @@ const mocks = vi.hoisted(() => ({
   createAdminListing: vi.fn(),
   updateAdminListing: vi.fn(),
   setAdminListingStatus: vi.fn(),
+  deleteAdminListing: vi.fn(),
   revalidateListingPaths: vi.fn(),
 }));
 
@@ -16,10 +17,11 @@ vi.mock('@/lib/admin/listings', () => ({
   createAdminListing: mocks.createAdminListing,
   updateAdminListing: mocks.updateAdminListing,
   setAdminListingStatus: mocks.setAdminListingStatus,
+  deleteAdminListing: mocks.deleteAdminListing,
 }));
 vi.mock('@/lib/admin/revalidate', () => ({ revalidateListingPaths: mocks.revalidateListingPaths }));
 
-import { createListingAction, setListingStatusAction } from './actions';
+import { createListingAction, deleteListingAction, setListingStatusAction } from './actions';
 
 const payload: ListingPayload = {
   id: '123e4567-e89b-12d3-a456-426614174000',
@@ -48,6 +50,7 @@ beforeEach(() => {
   mocks.getAdminAccess.mockResolvedValue({ userId: 'u1', email: 'admin@example.com' });
   mocks.createAdminListing.mockResolvedValue({ ...payload, slug: 'listing-a' });
   mocks.setAdminListingStatus.mockResolvedValue({ slug: 'listing-a' });
+  mocks.deleteAdminListing.mockResolvedValue({ slug: 'listing-a' });
 });
 
 describe('admin actions', () => {
@@ -71,5 +74,22 @@ describe('admin actions', () => {
     await expect(setListingStatusAction(payload.id, '거래완료')).resolves.toMatchObject({ ok: true });
     expect(mocks.setAdminListingStatus).toHaveBeenCalledWith(mocks.client, payload.id, '거래완료');
     expect(mocks.revalidateListingPaths).toHaveBeenCalledWith('listing-a');
+  });
+
+  it('deletes a listing and revalidates the affected paths', async () => {
+    await expect(deleteListingAction(payload.id)).resolves.toMatchObject({ ok: true, data: { slug: 'listing-a' } });
+    expect(mocks.deleteAdminListing).toHaveBeenCalledWith(mocks.client, payload.id);
+    expect(mocks.revalidateListingPaths).toHaveBeenCalledWith('listing-a');
+  });
+
+  it('rejects a delete with a malformed id', async () => {
+    await expect(deleteListingAction('not-a-uuid')).resolves.toMatchObject({ ok: false, code: 'VALIDATION' });
+    expect(mocks.deleteAdminListing).not.toHaveBeenCalled();
+  });
+
+  it('rejects a delete when the session is not an allowed admin', async () => {
+    mocks.getAdminAccess.mockResolvedValue(null);
+    await expect(deleteListingAction(payload.id)).resolves.toMatchObject({ ok: false, code: 'UNAUTHORIZED' });
+    expect(mocks.deleteAdminListing).not.toHaveBeenCalled();
   });
 });

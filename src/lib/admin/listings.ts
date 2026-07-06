@@ -88,3 +88,36 @@ export async function setAdminListingStatus(
   if (error || !data) databaseFailure(error);
   return { slug: String((data as { slug: string }).slug) };
 }
+
+// Managed storage paths look like "<uuid>/<file>.webp". Legacy absolute URLs and
+// blob/data URLs are left alone. Mirrors cleanupListingImages() in ./images.ts —
+// duplicated here so this server module never pulls in the browser image library.
+function isManagedImagePath(path: string): boolean {
+  return path.length > 0
+    && !path.startsWith('/')
+    && !/^(?:https?:|blob:|data:)/i.test(path)
+    && !path.includes('..');
+}
+
+export async function deleteAdminListing(
+  client: SupabaseClient,
+  id: string,
+): Promise<{ slug: string }> {
+  const { data, error } = await client
+    .from('listings')
+    .delete()
+    .eq('id', id)
+    .select('slug, images')
+    .single();
+  if (error || !data) databaseFailure(error);
+  const row = data as { slug: string; images: string[] | null };
+  const managed = [...new Set((row.images ?? []).filter(isManagedImagePath))];
+  if (managed.length > 0) {
+    try {
+      await client.storage.from('listing-images').remove(managed);
+    } catch {
+      // Best effort: the row is already gone. Orphaned files can be cleaned later.
+    }
+  }
+  return { slug: String(row.slug) };
+}

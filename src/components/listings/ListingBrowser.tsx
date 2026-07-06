@@ -1,7 +1,7 @@
 'use client';
 import { useMemo } from 'react';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
-import { Select, Pagination, Empty } from 'antd';
+import { Select, Pagination, Empty, Button } from 'antd';
 import { searchListings, criteriaFromParams, availableRegions, type SortKey } from '@/lib/search';
 import type { Listing } from '@/lib/types';
 import { SearchFilters, type FilterDraft } from './SearchFilters';
@@ -91,16 +91,31 @@ export function ListingBrowser({ listings }: { listings: Listing[] }) {
 
         {result.items.length === 0 ? (
           <div className="rounded-lg border border-dashed border-hairline bg-canvas px-6 py-16">
-            <Empty
-              image={Empty.PRESENTED_IMAGE_SIMPLE}
-              description={
-                <span className="text-ink">
-                  조건에 맞는 공개 매물이 없습니다.
-                  <br />
-                  <span className="text-sm text-muted">전화 주시면 찾아드립니다.</span>
-                </span>
-              }
-            />
+            {listings.length === 0 ? (
+              <Empty
+                image={Empty.PRESENTED_IMAGE_SIMPLE}
+                description={
+                  <span className="text-ink">
+                    아직 등록된 매물이 없습니다.
+                    <br />
+                    <span className="text-sm text-muted">전화 주시면 조건에 맞는 매물을 찾아드립니다.</span>
+                  </span>
+                }
+              />
+            ) : (
+              <Empty
+                image={Empty.PRESENTED_IMAGE_SIMPLE}
+                description={
+                  <span className="text-ink">
+                    조건에 맞는 매물이 없습니다.
+                    <br />
+                    <span className="text-sm text-muted">필터를 바꾸거나 초기화해 보세요.</span>
+                  </span>
+                }
+              >
+                <Button onClick={() => push(new URLSearchParams())}>필터 초기화</Button>
+              </Empty>
+            )}
           </div>
         ) : (
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">

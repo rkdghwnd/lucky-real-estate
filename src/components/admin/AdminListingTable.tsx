@@ -6,6 +6,7 @@ import { useMemo, useState } from 'react';
 import { Search } from 'lucide-react';
 import { Button, Modal, Tag } from 'antd';
 import {
+  deleteListingAction,
   setListingStatusAction,
   type AdminActionResult,
 } from '@/app/admin/actions';
@@ -14,6 +15,7 @@ import type { ListingStatus } from '@/lib/types';
 
 type VisibleStatus = Extract<ListingStatus, '공개' | '거래완료'>;
 type StatusAction = (id: string, status: VisibleStatus) => Promise<AdminActionResult<{ slug: string }>>;
+type DeleteAction = (id: string) => Promise<AdminActionResult<{ slug: string }>>;
 
 function formatPrice(listing: AdminListing) {
   const deposit = `${Math.round(listing.price / 10_000).toLocaleString('ko-KR')}만원`;
@@ -42,9 +44,11 @@ function statusCopy(status: VisibleStatus) {
 export function AdminListingTable({
   listings,
   statusAction = setListingStatusAction,
+  deleteAction = deleteListingAction,
 }: {
   listings: AdminListing[];
   statusAction?: StatusAction;
+  deleteAction?: DeleteAction;
 }) {
   const router = useRouter();
   const [activeStatus, setActiveStatus] = useState<VisibleStatus>('공개');
@@ -53,6 +57,9 @@ export function AdminListingTable({
   const [pending, setPending] = useState(false);
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
+  const [deleteTarget, setDeleteTarget] = useState<AdminListing | null>(null);
+  const [deletePending, setDeletePending] = useState(false);
+  const [deleteError, setDeleteError] = useState('');
 
   const counts = useMemo(() => ({
     공개: listings.filter(listing => listing.status === '공개').length,
@@ -83,6 +90,21 @@ export function AdminListingTable({
       ? '거래완료로 변경했습니다. 공개 사이트에서는 숨겨집니다.'
       : '매물을 다시 공개했습니다.');
     setSelected(null);
+    router.refresh();
+  }
+
+  async function removeListing() {
+    if (!deleteTarget) return;
+    setDeletePending(true);
+    setDeleteError('');
+    const result = await deleteAction(deleteTarget.id);
+    setDeletePending(false);
+    if (!result.ok) {
+      setDeleteError(result.message);
+      return;
+    }
+    setNotice('매물을 삭제했습니다.');
+    setDeleteTarget(null);
     router.refresh();
   }
 
@@ -188,6 +210,19 @@ export function AdminListingTable({
                           >
                             {copy.confirm}
                           </Button>
+                          <Button
+                            htmlType="button"
+                            size="small"
+                            type="text"
+                            danger
+                            aria-label={`${listing.title} 삭제`}
+                            onClick={() => {
+                              setDeleteError('');
+                              setDeleteTarget(listing);
+                            }}
+                          >
+                            삭제
+                          </Button>
                         </div>
                       </td>
                     </tr>
@@ -217,6 +252,30 @@ export function AdminListingTable({
           <>
             <p className="text-muted">{statusCopy(selected.status as VisibleStatus).description}</p>
             {error ? <p role="alert" className="mt-4 rounded-lg bg-red-50 p-3 text-sm font-semibold text-danger">{error}</p> : null}
+          </>
+        ) : null}
+      </Modal>
+
+      <Modal
+        open={deleteTarget !== null}
+        title="매물 삭제"
+        onCancel={() => !deletePending && setDeleteTarget(null)}
+        centered
+        closable={!deletePending}
+        maskClosable={!deletePending}
+        footer={deleteTarget ? [
+          <Button key="cancel" htmlType="button" onClick={() => setDeleteTarget(null)} disabled={deletePending}>취소</Button>,
+          <Button key="confirm" type="primary" danger htmlType="button" onClick={removeListing} disabled={deletePending} loading={deletePending}>
+            {deletePending ? '삭제 중…' : '삭제'}
+          </Button>,
+        ] : null}
+      >
+        {deleteTarget ? (
+          <>
+            <p className="text-muted">
+              <strong className="text-ink">{deleteTarget.title}</strong> 매물을 완전히 삭제합니다. 등록된 사진도 함께 지워지며 되돌릴 수 없습니다.
+            </p>
+            {deleteError ? <p role="alert" className="mt-4 rounded-lg bg-red-50 p-3 text-sm font-semibold text-danger">{deleteError}</p> : null}
           </>
         ) : null}
       </Modal>

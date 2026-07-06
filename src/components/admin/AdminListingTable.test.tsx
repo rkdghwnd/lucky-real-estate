@@ -5,7 +5,7 @@ import type { AdminListing } from '@/lib/admin/listings';
 
 const router = vi.hoisted(() => ({ refresh: vi.fn() }));
 vi.mock('next/navigation', () => ({ useRouter: () => router }));
-vi.mock('@/app/admin/actions', () => ({ setListingStatusAction: vi.fn() }));
+vi.mock('@/app/admin/actions', () => ({ setListingStatusAction: vi.fn(), deleteListingAction: vi.fn() }));
 
 import { AdminListingTable } from './AdminListingTable';
 
@@ -114,6 +114,37 @@ it('keeps the dialog open and reports a failed status change', async () => {
   await userEvent.click(screen.getByRole('button', { name: '거래완료로 변경' }));
 
   expect(await screen.findByRole('alert')).toHaveTextContent('상태 변경에 실패했습니다.');
+  expect(screen.getByRole('dialog')).toBeInTheDocument();
+  expect(router.refresh).not.toHaveBeenCalled();
+});
+
+it('confirms a delete, performs it, and refreshes the dashboard', async () => {
+  const action = vi.fn(async () => ({ ok: true as const, data: { slug: 'factory-sale-01' } }));
+  render(<AdminListingTable listings={listings} deleteAction={action} />);
+
+  await userEvent.click(screen.getByRole('button', { name: '오류동 제조공장 삭제' }));
+  const dialog = screen.getByRole('dialog');
+  expect(within(dialog).getByText(/완전히 삭제/)).toBeInTheDocument();
+  await userEvent.click(within(dialog).getByRole('button', { name: '삭제' }));
+
+  await waitFor(() => expect(action).toHaveBeenCalledWith(listings[0].id));
+  expect(router.refresh).toHaveBeenCalledOnce();
+  expect(screen.getByRole('status')).toHaveTextContent('매물을 삭제했습니다.');
+});
+
+it('keeps the delete dialog open and reports a failed delete', async () => {
+  const action = vi.fn(async () => ({
+    ok: false as const,
+    code: 'DATABASE' as const,
+    message: '삭제에 실패했습니다.',
+  }));
+  render(<AdminListingTable listings={listings} deleteAction={action} />);
+
+  await userEvent.click(screen.getByRole('button', { name: '오류동 제조공장 삭제' }));
+  const dialog = screen.getByRole('dialog');
+  await userEvent.click(within(dialog).getByRole('button', { name: '삭제' }));
+
+  expect(await screen.findByRole('alert')).toHaveTextContent('삭제에 실패했습니다.');
   expect(screen.getByRole('dialog')).toBeInTheDocument();
   expect(router.refresh).not.toHaveBeenCalled();
 });
