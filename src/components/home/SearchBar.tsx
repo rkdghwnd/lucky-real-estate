@@ -25,7 +25,7 @@ export function SearchBar({ regions }: { regions: string[] }) {
   };
 
   return (
-    <div className="flex flex-col gap-2 rounded-xl border border-hairline bg-canvas p-3 shadow-[0_12px_32px_rgba(10,11,13,0.12)] sm:flex-row sm:flex-wrap lg:flex-nowrap lg:items-center">
+    <div className="flex flex-col gap-2 rounded-xl border border-hairline bg-canvas p-3 shadow-floating sm:flex-row sm:flex-wrap lg:flex-nowrap lg:items-center">
       <Select
         aria-label="거래유형"
         size="large"

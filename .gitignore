@@ -46,3 +46,6 @@ desktop.ini
 
 # Isolated feature worktrees
 .worktrees/
+
+# Superloopy loop state + evidence
+.superloopy/
