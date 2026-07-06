@@ -196,12 +196,11 @@ export function AdminListingTable({
                         {new Intl.DateTimeFormat('ko-KR', { dateStyle: 'medium' }).format(new Date(listing.updatedAt))}
                       </td>
                       <td className="px-5 py-5">
-                        <div className="flex justify-end gap-2">
-                          <Button href={`/admin/listings/${listing.id}/edit`} size="small">수정</Button>
+                        <div className="flex flex-wrap justify-end gap-2">
+                          <Button href={`/admin/listings/${listing.id}/edit`} size="large">수정</Button>
                           <Button
                             htmlType="button"
-                            size="small"
-                            type="text"
+                            size="large"
                             aria-label={`${listing.title} ${listing.status === '공개' ? '거래완료 처리' : '다시 공개'}`}
                             onClick={() => {
                               setError('');
@@ -212,8 +211,7 @@ export function AdminListingTable({
                           </Button>
                           <Button
                             htmlType="button"
-                            size="small"
-                            type="text"
+                            size="large"
                             danger
                             aria-label={`${listing.title} 삭제`}
                             onClick={() => {

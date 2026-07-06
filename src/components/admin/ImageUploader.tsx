@@ -145,32 +145,32 @@ export function ImageUploader({
                   <div className="flex gap-1">
                     <Button
                       htmlType="button"
-                      size="small"
+                      size="middle"
                       type="text"
                       aria-label={`${index + 1}번 사진을 왼쪽으로 이동`}
                       onClick={() => move(index, -1)}
                       disabled={disabled || index === 0}
-                      icon={<ChevronLeft aria-hidden="true" className="size-4" />}
+                      icon={<ChevronLeft aria-hidden="true" className="size-5" />}
                     />
                     <Button
                       htmlType="button"
-                      size="small"
+                      size="middle"
                       type="text"
                       aria-label={`${index + 1}번 사진을 오른쪽으로 이동`}
                       onClick={() => move(index, 1)}
                       disabled={disabled || index === items.length - 1}
-                      icon={<ChevronRight aria-hidden="true" className="size-4" />}
+                      icon={<ChevronRight aria-hidden="true" className="size-5" />}
                     />
                   </div>
                   <Button
                     htmlType="button"
-                    size="small"
+                    size="middle"
                     type="text"
                     danger
                     aria-label={`${index + 1}번 사진 삭제`}
                     onClick={() => remove(index)}
                     disabled={disabled}
-                    icon={<Trash2 aria-hidden="true" className="size-4" />}
+                    icon={<Trash2 aria-hidden="true" className="size-5" />}
                   />
                 </div>
               </li>

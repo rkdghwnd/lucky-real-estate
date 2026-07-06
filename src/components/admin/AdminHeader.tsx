@@ -29,7 +29,7 @@ export function AdminHeader({ email, logout = logoutAction }: { email: string; l
         <div className="flex items-center gap-4 text-sm">
           <Link href="/" target="_blank" className="font-semibold text-brand">사이트 보기</Link>
           <span className="hidden text-muted sm:inline">{email}</span>
-          <Button htmlType="button" size="small" onClick={handleLogout} disabled={pending}>로그아웃</Button>
+          <Button htmlType="button" size="large" onClick={handleLogout} disabled={pending}>로그아웃</Button>
         </div>
       </div>
     </header>
