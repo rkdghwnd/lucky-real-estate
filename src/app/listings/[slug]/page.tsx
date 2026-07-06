@@ -43,7 +43,7 @@ export default async function ListingDetailPage({ params }: { params: Promise<{ 
       <JsonLd data={buildListingJsonLd(l)} />
       <Breadcrumb items={[{ label: '홈', href: '/' }, { label: '매물검색', href: '/listings' }, { label: '매물상세' }]} />
 
-      <div className="mt-4 grid gap-8 lg:grid-cols-[1.1fr_1fr]">
+      <div className="mt-4 grid items-start gap-8 lg:grid-cols-[1fr_1.4fr]">
         <ImageSlider images={l.images} alt={l.title} />
         <div>
           <div className="flex gap-1.5">
@@ -70,7 +70,7 @@ export default async function ListingDetailPage({ params }: { params: Promise<{ 
           </dl>
 
           <div className="mt-5">
-            <ContactBox title={l.title} />
+            <ContactBox />
           </div>
         </div>
       </div>

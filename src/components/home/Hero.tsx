@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { Phone } from 'lucide-react';
 import { Button, Typography } from 'antd';
-import { siteConfig } from '@/lib/site';
+import { PhoneConsultButton } from '@/components/layout/PhoneConsultButton';
 
 // antd compound sub-components (Typography.Title/…) are only reachable inside a
 // client component — across the server/client boundary `Typography` is an opaque
@@ -25,15 +25,15 @@ export function Hero() {
             style={{ margin: '8px 0 0', color: '#fff' }}
             className="text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl"
           >
-            행운부동산
+            행운부동산 공인중개사사무소
           </Title>
           <Paragraph style={{ margin: '16px 0 0', color: 'rgba(255,255,255,0.85)' }} className="max-w-lg sm:text-lg">
             공장·창고·토지 전문 중개로 최적의 매물을 찾아드립니다.
           </Paragraph>
           <div className="mt-7 flex flex-wrap gap-2.5">
-            <Button type="primary" size="large" href={siteConfig.phoneHref} icon={<Phone className="size-5" aria-hidden="true" />}>
+            <PhoneConsultButton type="primary" size="large" icon={<Phone className="size-5" aria-hidden="true" />}>
               전화상담
-            </Button>
+            </PhoneConsultButton>
             <Button size="large" href="/listings">
               매물보기
             </Button>

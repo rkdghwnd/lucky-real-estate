@@ -1,6 +1,7 @@
 import { Phone } from 'lucide-react';
-import { Button, Card } from 'antd';
+import { Card } from 'antd';
 import { siteConfig } from '@/lib/site';
+import { PhoneConsultButton } from '@/components/layout/PhoneConsultButton';
 
 export function HomeCta() {
   return (
@@ -10,15 +11,14 @@ export function HomeCta() {
           <p className="text-lg font-bold text-ink sm:text-xl">원하시는 조건의 매물을 찾지 못하셨나요?</p>
           <p className="mt-1 text-muted">조건을 알려주시면 맞춤으로 찾아드립니다.</p>
         </div>
-        <Button
+        <PhoneConsultButton
           type="primary"
           size="large"
           className="shrink-0"
-          href={siteConfig.phoneHref}
           icon={<Phone className="size-5" aria-hidden="true" />}
         >
           {siteConfig.phone}
-        </Button>
+        </PhoneConsultButton>
       </div>
     </Card>
   );

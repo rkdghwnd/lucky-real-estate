@@ -43,9 +43,6 @@ export function Header() {
       <div className="border-b border-hairline">
         <div className="mx-auto flex min-h-[64px] max-w-6xl items-center justify-between gap-4 px-4">
           <Link href="/" className="flex min-w-0 items-center gap-2.5" aria-label={siteConfig.shortName}>
-            <span className="grid size-10 shrink-0 place-items-center rounded-lg bg-brand text-white">
-              <Building2 className="size-5" aria-hidden="true" />
-            </span>
             <span className="flex min-w-0 items-baseline gap-2">
               <span className="truncate text-xl font-bold tracking-tight text-ink">{siteConfig.shortName}</span>
               <span className="hidden whitespace-nowrap text-xs font-medium text-muted lg:inline">
@@ -127,7 +124,7 @@ export function Header() {
           </div>
 
           <div className="mt-auto p-4">
-            <Button type="primary" size="large" block href={siteConfig.phoneHref} icon={<Phone className="size-5" aria-hidden="true" />} onClick={close}>
+            <Button type="primary" size="large" block icon={<Phone className="size-5" aria-hidden="true" />} onClick={() => { close(); setPhoneOpen(true); }}>
               전화상담
             </Button>
           </div>
