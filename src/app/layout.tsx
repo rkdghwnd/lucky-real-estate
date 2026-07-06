@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.siteUrl),
   title: { default: `${siteConfig.name} | 인천 서구 공장·창고·토지`, template: `%s | ${siteConfig.shortName}` },
   description: siteConfig.positioning,
-  openGraph: { siteName: siteConfig.name, locale: 'ko_KR', type: 'website' },
+  openGraph: { siteName: siteConfig.name, locale: 'ko_KR', type: 'website', images: ['/banner1.jpg'] },
   verification: buildVerificationMetadata(),
 };
 

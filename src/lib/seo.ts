@@ -11,7 +11,7 @@ export function buildListingMetadata(l: Listing): Metadata {
   const title = `${l.title} | ${siteConfig.shortName}`;
   const description = `${l.address} · ${l.propertyType} ${l.dealType} · ${formatArea(l.landAreaM2)} · ${formatDealPrice(l)}. 인천 서구 공장·창고·토지 전문 ${siteConfig.name}.`;
   const url = absoluteUrl(`/listings/${l.slug}`);
-  const image = l.images[0] ?? absoluteUrl('/og-default.png');
+  const image = l.images[0] ?? absoluteUrl('/banner1.jpg');
   return {
     title,
     description,

@@ -49,3 +49,6 @@ desktop.ini
 
 # Superloopy loop state + evidence
 .superloopy/
+
+# Open-design visual editor scratch
+.od-skills/

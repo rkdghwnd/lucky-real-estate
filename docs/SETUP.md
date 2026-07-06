@@ -74,7 +74,7 @@ Supabase Dashboard → **Authentication → URL Configuration**에서 설정합�
   - `http://localhost:3000/**`
   - Netlify Preview를 쓸 때: `https://**--YOUR-SITE.netlify.app/**`
 
-운영 도메인이 바뀌면 Supabase의 Site URL과 배포 환경의 `NEXT_PUBLIC_SITE_URL`을 함께 바꿉니다.
+운영 도메인이 바뀌면 Supabase의 Site URL을 새 주소로 바꿉니다. `NEXT_PUBLIC_SITE_URL`은 **선택** 사항으로, 미설정 시 Netlify가 사이트 기본 도메인(빌드 환경변수 `URL`)에서 자동 유추합니다. 특정 주소로 고정하려면 이 변수를 설정합니다.
 
 ## 5. 환경 변수
 
@@ -83,6 +83,7 @@ Supabase Dashboard → **Project Settings → API**에서 Project URL과 publish
 ```dotenv
 NEXT_PUBLIC_SUPABASE_URL=https://YOUR-PROJECT.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=YOUR-ANON-KEY
+# 선택 — 미설정 시 Netlify 기본 도메인에서 자동 유추. 커스텀 도메인으로 고정할 때만 설정.
 NEXT_PUBLIC_SITE_URL=https://haengun.example.com
 NEXT_PUBLIC_NAVER_MAP_CLIENT_ID=
 ```
@@ -124,7 +125,7 @@ PC에서 아래 순서대로 한 번씩 확인합니다.
 ## 8. 실제 사업자 정보와 검색 등록
 
 - `src/lib/site.ts`의 상호, 대표자명, 중개등록번호, 전화, 주소, 영업시간을 실제 정보로 교체합니다.
-- `public/og-default.png`에 1200×630 기본 공유 이미지를 둡니다.
+- 기본 공유(OG) 이미지는 `public/banner1.jpg`(히어로 배너)를 사용합니다. 다른 이미지를 원하면 같은 경로에 교체합니다(권장 1200×630).
 - 네이버 서치어드바이저와 구글 서치콘솔에 사이트를 등록하고 `/sitemap.xml`을 제출합니다.
 
 ## 참고 문서
