@@ -10,7 +10,7 @@
 - [ ] **실제 매물 6건 + 사진** → `supabase/seed.sql`을 실제 데이터로 교체
   - 사진은 Supabase **Storage**에 공개 버킷 만들어 업로드 → 공개 URL을 각 매물 `images` 배열에 채우기
   - 교체 후 Supabase SQL Editor에서 재실행 → Netlify에서 재배포(다음 push 시 자동 반영)
-- [x] **OG 이미지**(카톡/검색 공유 미리보기용) → 기본값으로 `public/banner1.jpg` 사용(별도 파일 불필요). 다른 이미지를 원하면 같은 경로에 교체(권장 1200×630).
+- [x] **OG 이미지**(카톡/검색 공유 미리보기용) → 기본값으로 `public/banner0.png` 사용. 다른 이미지를 원하면 같은 경로에 교체(권장 1200×630).
 - [ ] **정식 도메인** 구매 시:
   - Netlify → Domain management에서 커스텀 도메인 연결(연결하면 자동배포에서 새 도메인이 canonical/OG/sitemap에 자동 반영됨)
   - `NEXT_PUBLIC_SITE_URL` 환경변수는 **선택** — 미설정 시 Netlify 기본 도메인을 자동 사용. 특정 URL로 고정하고 싶을 때만 이 변수로 덮어씀

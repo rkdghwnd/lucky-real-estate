@@ -10,7 +10,7 @@ import { PhoneConsultButton } from '@/components/layout/PhoneConsultButton';
 // reference and `.Title` resolves to undefined.
 const { Title, Paragraph, Text } = Typography;
 
-const BANNERS = ['/banner1.jpg', '/banner2.jpg', '/banner3.jpg'];
+const BANNERS = ['/banner0.jpg','/banner5.avif', '/banner6.jpg', '/banner7.jpg'];
 
 export function Hero() {
   return (

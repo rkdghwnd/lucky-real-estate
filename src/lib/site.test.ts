@@ -3,7 +3,7 @@ import { siteConfig } from './site';
 
 describe('siteConfig', () => {
   it('exposes all legally-required office fields as strings', () => {
-    for (const key of ['name', 'representative', 'registrationNumber', 'phone', 'address', 'businessHours'] as const) {
+    for (const key of ['name', 'representative', 'registrationNumber', 'phone', 'landline', 'address', 'businessHours'] as const) {
       expect(typeof siteConfig[key]).toBe('string');
       expect(siteConfig[key].length).toBeGreaterThan(0);
     }

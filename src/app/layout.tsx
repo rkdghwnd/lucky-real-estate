@@ -29,8 +29,8 @@ export const metadata: Metadata = {
     icon: [{ url: '/favicon-96x96.png', type: 'image/png', sizes: '96x96' }],
     apple: [{ url: '/apple-touch-icon.png' }],
   },
-  openGraph: { siteName: siteConfig.name, locale: 'ko_KR', type: 'website', images: ['/banner1.jpg'] },
-  twitter: { card: 'summary_large_image', title: defaultTitle, description: siteConfig.positioning, images: ['/banner1.jpg'] },
+  openGraph: { siteName: siteConfig.name, locale: 'ko_KR', type: 'website', images: ['/banner0.png'] },
+  twitter: { card: 'summary_large_image', title: defaultTitle, description: siteConfig.positioning, images: ['/banner0.png'] },
   verification: buildVerificationMetadata(),
 };
 
@@ -43,6 +43,7 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ko" className={notoSansKr.variable}>
+      <meta name="naver-site-verification" content="1b7d635990b8e4031244fd905dd57c9e48452de8" />
       <body className="min-h-screen">
         <JsonLd data={buildOrgJsonLd()} />
         <JsonLd data={buildWebsiteJsonLd()} />
