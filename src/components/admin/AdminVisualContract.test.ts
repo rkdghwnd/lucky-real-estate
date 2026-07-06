@@ -4,7 +4,6 @@ import { describe, expect, it } from 'vitest';
 const adminSources = [
   'src/app/admin/layout.tsx',
   'src/app/admin/(auth)/login/page.tsx',
-  'src/app/admin/(auth)/forgot-password/page.tsx',
   'src/app/admin/(auth)/reset-password/page.tsx',
   'src/components/admin/ListingForm.tsx',
 ].map(path => readFileSync(path, 'utf8')).join('\n');

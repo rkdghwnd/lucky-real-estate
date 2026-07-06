@@ -1,6 +1,5 @@
 'use client';
 
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState, type FormEvent } from 'react';
 import { Button } from 'antd';
@@ -39,9 +38,6 @@ export function LoginForm({ action = loginAction }: { action?: LoginAction }) {
         <input id="admin-password" name="password" type="password" autoComplete="current-password" required className="h-12 w-full rounded-md border border-hairline px-3 outline-none focus:border-brand focus:ring-2 focus:ring-brand/20" />
       </div>
       <Button type="primary" htmlType="submit" block disabled={pending}>{pending ? '로그인 중…' : '로그인'}</Button>
-      <div className="text-center">
-        <Link href="/admin/forgot-password" className="text-sm font-semibold text-brand hover:underline">비밀번호를 잊으셨나요?</Link>
-      </div>
     </form>
   );
 }

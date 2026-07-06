@@ -7,12 +7,10 @@ vi.mock('next/navigation', () => ({ useRouter: () => router }));
 vi.mock('@/app/admin/actions', () => ({
   loginAction: vi.fn(),
   logoutAction: vi.fn(),
-  requestPasswordResetAction: vi.fn(),
   updatePasswordAction: vi.fn(),
 }));
 
 import { LoginForm } from './LoginForm';
-import { PasswordRecoveryForm } from './PasswordRecoveryForm';
 import { PasswordResetForm } from './PasswordResetForm';
 
 beforeEach(() => vi.clearAllMocks());
@@ -50,14 +48,6 @@ describe('LoginForm', () => {
 });
 
 describe('password forms', () => {
-  it('confirms a password recovery email request', async () => {
-    const action = vi.fn(async () => ({ ok: true as const, data: undefined }));
-    render(<PasswordRecoveryForm action={action} />);
-    await userEvent.type(screen.getByLabelText('아이디(이메일)'), 'admin@example.com');
-    await userEvent.click(screen.getByRole('button', { name: '재설정 메일 보내기' }));
-    expect(await screen.findByRole('status')).toHaveTextContent('재설정 메일을 보냈습니다');
-  });
-
   it('shows a reset validation error', async () => {
     const action = vi.fn(async () => ({
       ok: false as const,
