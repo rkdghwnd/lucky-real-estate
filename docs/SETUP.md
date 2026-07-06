@@ -1,4 +1,4 @@
-# 행운부동산 운영·배포 가이드
+# 행운부동산공인중개사사무소 운영·배포 가이드
 
 공개 사이트와 `/admin` 매물 관리 화면을 처음 연결할 때 사용하는 운영 런북입니다.
 
@@ -70,12 +70,11 @@ on conflict (singleton) do update set user_id = excluded.user_id;
 Supabase Dashboard → **Authentication → URL Configuration**에서 설정합니다.
 
 - **Site URL**: 실제 운영 주소, 예: `https://haengun.example.com`
-- **Redirect URLs**:
+- **Redirect URLs** (현재 이메일 기반 인증 흐름은 없어 필수는 아니며, 로컬·프리뷰 허용 목록으로만 둡니다):
   - `http://localhost:3000/**`
-  - `https://haengun.example.com/admin/auth/callback?next=/admin/reset-password`
   - Netlify Preview를 쓸 때: `https://**--YOUR-SITE.netlify.app/**`
 
-운영 도메인이 바뀌면 Supabase의 Site URL/Redirect URLs와 배포 환경의 `NEXT_PUBLIC_SITE_URL`을 함께 바꿉니다. 비밀번호 재설정 메일이 다른 주소로 가면 이 세 값이 일치하는지 먼저 확인합니다.
+운영 도메인이 바뀌면 Supabase의 Site URL과 배포 환경의 `NEXT_PUBLIC_SITE_URL`을 함께 바꿉니다.
 
 ## 5. 환경 변수
 
@@ -105,7 +104,7 @@ Netlify는 GitHub 저장소를 연결하면 `netlify.toml` 설정으로 빌드�
 
 - `/`, `/listings`, 실제 `/listings/{slug}`
 - `/sitemap.xml`, `/robots.txt`
-- `/admin/login`, `/admin/forgot-password`
+- `/admin/login`
 - 로그인 전 `/admin` 접근 시 `/admin/login`으로 이동
 
 ## 7. 관리자 인수 테스트
@@ -119,7 +118,6 @@ PC에서 아래 순서대로 한 번씩 확인합니다.
 5. **거래완료로 변경** 후 공개 목록과 상세에서 사라지는지 확인합니다.
 6. 거래완료 탭에서 **다시 공개** 후 공개 페이지에 돌아오는지 확인합니다.
 7. 로그아웃 후 `/admin`에 다시 접근할 수 없는지 확인합니다.
-8. **비밀번호를 잊으셨나요?** 메일을 받아 새 비밀번호로 로그인합니다.
 
 사진 업로드 중 저장에 실패하면 화면 값은 유지됩니다. 다시 저장하기 전에 네트워크와 Supabase Storage 정책을 확인합니다.
 
