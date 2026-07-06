@@ -23,7 +23,7 @@ export function Header() {
   return (
     <header className="sticky top-0 z-40 bg-canvas">
       {/* Utility bar — desktop only */}
-      <div className="hidden border-b border-hairline bg-brand-light md:block">
+      <div className="hidden border-b border-hairline bg-[#f5f6f8] md:block">
         <div className="mx-auto flex h-9 max-w-6xl items-center justify-between px-4 text-xs text-muted">
           <span className="truncate">{siteConfig.address}</span>
           <div className="flex items-center gap-4">

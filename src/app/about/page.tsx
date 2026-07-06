@@ -29,10 +29,10 @@ const OFFICE: [string, string][] = [
 export default function AboutPage() {
   return (
     <div>
-      <section className="bg-gradient-to-br from-brand to-brand-dark">
+      <section className="border-b border-hairline bg-[#f5f6f8]">
         <div className="mx-auto max-w-6xl px-4 py-16 sm:py-20">
-          <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl">회사소개</h1>
-          <p className="mt-3 max-w-xl text-white/85 sm:text-lg">정확하고 신뢰할 수 있는 거래를 제공하는 인천 서구 전문 부동산</p>
+          <h1 className="text-4xl font-extrabold tracking-tight text-ink sm:text-5xl">회사소개</h1>
+          <p className="mt-3 max-w-xl text-muted sm:text-lg">정확하고 신뢰할 수 있는 거래를 제공하는 인천 서구 전문 부동산</p>
         </div>
       </section>
 

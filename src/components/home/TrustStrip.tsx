@@ -1,4 +1,5 @@
 import { Factory, ShieldCheck, Headphones, MapPin } from 'lucide-react';
+import { Card } from 'antd';
 
 const ITEMS = [
   { icon: Factory, label: '공장·창고·토지 전문' },
@@ -11,12 +12,12 @@ export function TrustStrip() {
   return (
     <section aria-label="행운부동산 강점" className="grid grid-cols-2 gap-3 lg:grid-cols-4">
       {ITEMS.map(({ icon: Icon, label }) => (
-        <div key={label} className="flex items-center gap-3 rounded-lg border border-hairline bg-canvas px-4 py-4">
+        <Card key={label} size="small" styles={{ body: { display: 'flex', alignItems: 'center', gap: 12 } }}>
           <span className="grid size-10 shrink-0 place-items-center rounded-full bg-brand-light text-brand">
             <Icon className="size-5" aria-hidden="true" />
           </span>
           <p className="text-sm font-bold text-ink">{label}</p>
-        </div>
+        </Card>
       ))}
     </section>
   );
