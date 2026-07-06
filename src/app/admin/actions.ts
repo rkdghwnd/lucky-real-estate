@@ -62,37 +62,6 @@ export async function logoutAction(): Promise<AdminActionResult> {
   return { ok: true, data: undefined };
 }
 
-export async function requestPasswordResetAction(formData: FormData): Promise<AdminActionResult> {
-  const email = z.string().trim().email().safeParse(formData.get('email'));
-  if (!email.success) return { ok: false, code: 'VALIDATION', message: '아이디(이메일)를 확인해주세요.' };
-
-  const client = await createServerSupabaseClient();
-  const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000').replace(/\/$/, '');
-  const { error } = await client.auth.resetPasswordForEmail(email.data, {
-    redirectTo: `${siteUrl}/admin/auth/callback?next=/admin/reset-password`,
-  });
-  if (error) return { ok: false, code: 'DATABASE', message: '비밀번호 재설정 메일을 보내지 못했습니다.' };
-  return { ok: true, data: undefined };
-}
-
-export async function updatePasswordAction(formData: FormData): Promise<AdminActionResult> {
-  const parsed = z.object({
-    password: z.string().min(10, '비밀번호는 10자 이상 입력해주세요.'),
-    confirmPassword: z.string(),
-  }).refine(value => value.password === value.confirmPassword, {
-    path: ['confirmPassword'],
-    message: '비밀번호가 서로 다릅니다.',
-  }).safeParse({ password: formData.get('password'), confirmPassword: formData.get('confirmPassword') });
-  if (!parsed.success) {
-    return { ok: false, code: 'VALIDATION', message: parsed.error.issues[0]?.message ?? '비밀번호를 확인해주세요.' };
-  }
-
-  const client = await createServerSupabaseClient();
-  const { error } = await client.auth.updateUser({ password: parsed.data.password });
-  if (error) return { ok: false, code: 'DATABASE', message: '비밀번호를 변경하지 못했습니다.' };
-  return { ok: true, data: undefined };
-}
-
 export async function createListingAction(input: unknown): Promise<AdminActionResult<{ id: string; slug: string }>> {
   const client = await adminClient();
   if (!client) return { ok: false, code: 'UNAUTHORIZED', message: '로그인이 만료되었습니다. 다시 로그인해주세요.' };

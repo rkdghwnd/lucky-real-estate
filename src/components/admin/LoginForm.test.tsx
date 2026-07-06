@@ -7,11 +7,9 @@ vi.mock('next/navigation', () => ({ useRouter: () => router }));
 vi.mock('@/app/admin/actions', () => ({
   loginAction: vi.fn(),
   logoutAction: vi.fn(),
-  updatePasswordAction: vi.fn(),
 }));
 
 import { LoginForm } from './LoginForm';
-import { PasswordResetForm } from './PasswordResetForm';
 
 beforeEach(() => vi.clearAllMocks());
 
@@ -44,20 +42,5 @@ describe('LoginForm', () => {
     await userEvent.click(screen.getByRole('button', { name: '로그인' }));
     expect(await screen.findByRole('alert')).toHaveTextContent('아이디 또는 비밀번호를 확인해주세요.');
     expect(screen.getByLabelText('아이디(이메일)')).toHaveValue('wrong@example.com');
-  });
-});
-
-describe('password forms', () => {
-  it('shows a reset validation error', async () => {
-    const action = vi.fn(async () => ({
-      ok: false as const,
-      code: 'VALIDATION' as const,
-      message: '비밀번호가 서로 다릅니다.',
-    }));
-    render(<PasswordResetForm action={action} />);
-    await userEvent.type(screen.getByLabelText('새 비밀번호'), 'password1234');
-    await userEvent.type(screen.getByLabelText('새 비밀번호 확인'), 'password9999');
-    await userEvent.click(screen.getByRole('button', { name: '비밀번호 변경' }));
-    expect(await screen.findByRole('alert')).toHaveTextContent('비밀번호가 서로 다릅니다.');
   });
 });
