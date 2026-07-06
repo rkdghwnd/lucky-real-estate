@@ -2,8 +2,8 @@
 
 import { useRouter } from 'next/navigation';
 import { useState, type FormEvent } from 'react';
+import { Button } from 'antd';
 import { updatePasswordAction, type AdminActionResult } from '@/app/admin/actions';
-import { Button } from '@/components/ui/button';
 
 type ResetAction = (form: FormData) => Promise<AdminActionResult>;
 
@@ -37,7 +37,7 @@ export function PasswordResetForm({ action = updatePasswordAction }: { action?: 
         <label htmlFor="confirm-password" className="mb-2 block text-sm font-bold text-ink">새 비밀번호 확인</label>
         <input id="confirm-password" name="confirmPassword" type="password" minLength={10} autoComplete="new-password" required className="h-12 w-full rounded-md border border-hairline px-3 outline-none focus:border-brand focus:ring-2 focus:ring-brand/20" />
       </div>
-      <Button type="submit" className="w-full" disabled={pending}>{pending ? '변경 중…' : '비밀번호 변경'}</Button>
+      <Button type="primary" htmlType="submit" block disabled={pending}>{pending ? '변경 중…' : '비밀번호 변경'}</Button>
     </form>
   );
 }

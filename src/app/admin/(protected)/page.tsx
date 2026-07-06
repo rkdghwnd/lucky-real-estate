@@ -1,7 +1,6 @@
-import Link from 'next/link';
 import { Plus } from 'lucide-react';
+import { Button } from 'antd';
 import { AdminListingTable } from '@/components/admin/AdminListingTable';
-import { Button } from '@/components/ui/button';
 import { getAdminListings } from '@/lib/admin/listings';
 import { getAdminDashboardNotice } from '@/lib/admin/notice';
 import { createServerSupabaseClient } from '@/lib/supabase/server';
@@ -23,8 +22,8 @@ export default async function AdminDashboardPage({
           <h1 className="mt-1 text-3xl font-black tracking-tight text-ink">매물 관리</h1>
           <p className="mt-2 text-muted">매물을 등록하고 공개 상태를 관리합니다.</p>
         </div>
-        <Button asChild size="lg">
-          <Link href="/admin/listings/new"><Plus aria-hidden="true" /> 새 매물 등록</Link>
+        <Button type="primary" size="large" href="/admin/listings/new" icon={<Plus aria-hidden="true" />}>
+          새 매물 등록
         </Button>
       </header>
       {notice ? (

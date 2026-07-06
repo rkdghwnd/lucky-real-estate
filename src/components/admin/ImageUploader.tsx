@@ -2,12 +2,12 @@
 
 import { useEffect, useRef, useState, type ChangeEvent } from 'react';
 import { ChevronLeft, ChevronRight, ImagePlus, Trash2 } from 'lucide-react';
+import { Button } from 'antd';
 import {
   isPendingListingImage,
   validateImageFiles,
   type ListingImageItem,
 } from '@/lib/admin/images';
-import { Button } from '@/components/ui/button';
 
 type UploadStatus = 'uploading' | 'done' | 'failed';
 
@@ -144,37 +144,34 @@ export function ImageUploader({
                 <div className="flex items-center justify-between gap-1 p-2">
                   <div className="flex gap-1">
                     <Button
-                      type="button"
-                      size="icon-sm"
-                      variant="ghost"
+                      htmlType="button"
+                      size="small"
+                      type="text"
                       aria-label={`${index + 1}번 사진을 왼쪽으로 이동`}
                       onClick={() => move(index, -1)}
                       disabled={disabled || index === 0}
-                    >
-                      <ChevronLeft aria-hidden="true" className="size-4" />
-                    </Button>
+                      icon={<ChevronLeft aria-hidden="true" className="size-4" />}
+                    />
                     <Button
-                      type="button"
-                      size="icon-sm"
-                      variant="ghost"
+                      htmlType="button"
+                      size="small"
+                      type="text"
                       aria-label={`${index + 1}번 사진을 오른쪽으로 이동`}
                       onClick={() => move(index, 1)}
                       disabled={disabled || index === items.length - 1}
-                    >
-                      <ChevronRight aria-hidden="true" className="size-4" />
-                    </Button>
+                      icon={<ChevronRight aria-hidden="true" className="size-4" />}
+                    />
                   </div>
                   <Button
-                    type="button"
-                    size="icon-sm"
-                    variant="ghost"
+                    htmlType="button"
+                    size="small"
+                    type="text"
+                    danger
                     aria-label={`${index + 1}번 사진 삭제`}
                     onClick={() => remove(index)}
                     disabled={disabled}
-                    className="text-danger hover:bg-red-50 hover:text-danger"
-                  >
-                    <Trash2 aria-hidden="true" className="size-4" />
-                  </Button>
+                    icon={<Trash2 aria-hidden="true" className="size-4" />}
+                  />
                 </div>
               </li>
             );

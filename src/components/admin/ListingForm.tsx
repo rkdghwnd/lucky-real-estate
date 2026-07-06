@@ -3,6 +3,7 @@
 import { useCallback, useRef, useState, type FormEvent, type ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, Building2, Images, MapPin, Ruler, Save, WalletCards } from 'lucide-react';
+import { Button } from 'antd';
 import {
   createListingAction,
   updateListingAction,
@@ -10,7 +11,6 @@ import {
 } from '@/app/admin/actions';
 import { ImageUploader } from '@/components/admin/ImageUploader';
 import { NaverMap } from '@/components/map/NaverMap';
-import { Button } from '@/components/ui/button';
 import {
   cleanupListingImages,
   ListingImageUploadError,
@@ -365,11 +365,10 @@ export function ListingForm({
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-5 py-4">
           <p className="hidden text-sm font-semibold text-muted sm:block">저장하면 공개 사이트에 즉시 반영됩니다.</p>
           <div className="ml-auto flex gap-2">
-            <Button type="button" variant="outline" onClick={() => router.push('/admin')} disabled={pending} aria-label="목록으로 취소">
-              <ArrowLeft aria-hidden="true" /> 취소
+            <Button htmlType="button" onClick={() => router.push('/admin')} disabled={pending} aria-label="목록으로 취소" icon={<ArrowLeft aria-hidden="true" />}>
+              취소
             </Button>
-            <Button type="submit" disabled={pending}>
-              <Save aria-hidden="true" />
+            <Button type="primary" htmlType="submit" disabled={pending} icon={<Save aria-hidden="true" />}>
               {pending ? '사진 처리 중…' : mode === 'create' ? '저장하고 바로 공개' : '수정 내용 저장'}
             </Button>
           </div>

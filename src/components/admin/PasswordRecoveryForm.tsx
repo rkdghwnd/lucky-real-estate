@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, type FormEvent } from 'react';
+import { Button } from 'antd';
 import { requestPasswordResetAction, type AdminActionResult } from '@/app/admin/actions';
-import { Button } from '@/components/ui/button';
 
 type RecoveryAction = (form: FormData) => Promise<AdminActionResult>;
 
@@ -30,7 +30,7 @@ export function PasswordRecoveryForm({ action = requestPasswordResetAction }: { 
         <label htmlFor="recovery-email" className="mb-2 block text-sm font-bold text-ink">아이디(이메일)</label>
         <input id="recovery-email" name="email" type="email" autoComplete="username" required className="h-12 w-full rounded-md border border-hairline px-3 outline-none focus:border-brand focus:ring-2 focus:ring-brand/20" />
       </div>
-      <Button type="submit" className="w-full" disabled={pending}>{pending ? '보내는 중…' : '재설정 메일 보내기'}</Button>
+      <Button type="primary" htmlType="submit" block disabled={pending}>{pending ? '보내는 중…' : '재설정 메일 보내기'}</Button>
     </form>
   );
 }

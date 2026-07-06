@@ -4,21 +4,13 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
 import { Search } from 'lucide-react';
+import { Button, Modal, Tag } from 'antd';
 import {
   setListingStatusAction,
   type AdminActionResult,
 } from '@/app/admin/actions';
 import type { AdminListing } from '@/lib/admin/listings';
 import type { ListingStatus } from '@/lib/types';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-} from '@/components/ui/dialog';
 
 type VisibleStatus = Extract<ListingStatus, '공개' | '거래완료'>;
 type StatusAction = (id: string, status: VisibleStatus) => Promise<AdminActionResult<{ slug: string }>>;
@@ -170,7 +162,7 @@ export function AdminListingTable({
                               >
                                 {listing.title}
                               </Link>
-                              <Badge variant={listing.status === '공개' ? 'brand' : 'default'}>{listing.status}</Badge>
+                              <Tag color={listing.status === '공개' ? 'blue' : undefined}>{listing.status}</Tag>
                             </div>
                             <p className="mt-1 truncate text-muted">{listing.address}</p>
                           </div>
@@ -183,13 +175,11 @@ export function AdminListingTable({
                       </td>
                       <td className="px-5 py-5">
                         <div className="flex justify-end gap-2">
-                          <Button asChild size="sm" variant="outline">
-                            <Link href={`/admin/listings/${listing.id}/edit`}>수정</Link>
-                          </Button>
+                          <Button href={`/admin/listings/${listing.id}/edit`} size="small">수정</Button>
                           <Button
-                            type="button"
-                            size="sm"
-                            variant="ghost"
+                            htmlType="button"
+                            size="small"
+                            type="text"
                             aria-label={`${listing.title} ${listing.status === '공개' ? '거래완료 처리' : '다시 공개'}`}
                             onClick={() => {
                               setError('');
@@ -209,23 +199,27 @@ export function AdminListingTable({
         )}
       </div>
 
-      <Dialog open={selected !== null} onOpenChange={open => !open && !pending && setSelected(null)}>
+      <Modal
+        open={selected !== null}
+        title={selected ? statusCopy(selected.status as VisibleStatus).title : undefined}
+        onCancel={() => !pending && setSelected(null)}
+        centered
+        closable={!pending}
+        maskClosable={!pending}
+        footer={selected ? [
+          <Button key="cancel" htmlType="button" onClick={() => setSelected(null)} disabled={pending}>취소</Button>,
+          <Button key="confirm" type="primary" htmlType="button" onClick={changeStatus} disabled={pending} loading={pending}>
+            {pending ? '변경 중…' : statusCopy(selected.status as VisibleStatus).confirm}
+          </Button>,
+        ] : null}
+      >
         {selected ? (
-          <DialogContent>
-            <DialogTitle>{statusCopy(selected.status as VisibleStatus).title}</DialogTitle>
-            <DialogDescription>{statusCopy(selected.status as VisibleStatus).description}</DialogDescription>
+          <>
+            <p className="text-muted">{statusCopy(selected.status as VisibleStatus).description}</p>
             {error ? <p role="alert" className="mt-4 rounded-lg bg-red-50 p-3 text-sm font-semibold text-danger">{error}</p> : null}
-            <div className="mt-6 flex justify-center gap-2">
-              <DialogClose asChild>
-                <Button type="button" variant="outline" disabled={pending}>취소</Button>
-              </DialogClose>
-              <Button type="button" onClick={changeStatus} disabled={pending}>
-                {pending ? '변경 중…' : statusCopy(selected.status as VisibleStatus).confirm}
-              </Button>
-            </div>
-          </DialogContent>
+          </>
         ) : null}
-      </Dialog>
+      </Modal>
     </section>
   );
 }
