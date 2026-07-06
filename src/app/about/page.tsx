@@ -42,7 +42,7 @@ export default function AboutPage() {
 
         <section>
           <h2 className="mb-4 text-2xl font-bold tracking-tight text-ink">사무소 정보</h2>
-          <div className="grid gap-6 lg:grid-cols-[1fr_360px]">
+          <div className="grid gap-6 lg:grid-cols-[1fr_360px] lg:items-start">
             <Descriptions
               bordered
               column={1}
