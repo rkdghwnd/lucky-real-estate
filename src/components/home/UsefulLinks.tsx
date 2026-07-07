@@ -34,7 +34,6 @@ export function UsefulLinks() {
                 unoptimized
               />
             </span>
-            <span className="text-[0.72rem] font-medium leading-tight text-muted">{link.name}</span>
           </a>
         ))}
       </div>
