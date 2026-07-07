@@ -9,8 +9,12 @@
     "lint": "eslint",
     "test": "vitest run",
     "test:watch": "vitest",
+    "kill:workerd": "node -e \"try{require('child_process').execSync('taskkill /F /IM workerd.exe',{stdio:'ignore'})}catch{}\"",
+    "prepreview": "npm run kill:workerd",
     "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
+    "predeploy": "npm run kill:workerd",
     "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
+    "preupload": "npm run kill:workerd",
     "upload": "opennextjs-cloudflare build && opennextjs-cloudflare upload",
     "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts"
   },
