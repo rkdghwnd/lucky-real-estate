@@ -20,7 +20,7 @@ export function FeaturedListings({ listings }: { listings: Listing[] }) {
           <p className="mt-1.5 text-muted">찾으시는 조건이 있으면 전화 주세요. 바로 찾아드립니다.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
           {listings.map(l => (
             <ListingCard key={l.id} listing={l} />
           ))}

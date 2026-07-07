@@ -21,9 +21,9 @@ export function Header() {
   const close = () => setOpen(false);
 
   return (
-    <header className="sticky top-0 z-40 bg-canvas">
+    <header className="sticky top-0 z-50 bg-canvas/90 backdrop-blur-md border-b border-hairline/60">
       {/* Utility bar — desktop only */}
-      <div className="hidden border-b border-hairline bg-[#f5f6f8] md:block">
+      <div className="hidden border-b border-hairline/40 bg-surface/80 md:block">
         <div className="mx-auto flex h-9 max-w-6xl items-center justify-between px-4 text-xs text-muted">
           <span className="truncate">{siteConfig.address}</span>
           <div className="flex items-center gap-4">
@@ -40,8 +40,8 @@ export function Header() {
       </div>
 
       {/* Main bar */}
-      <div className="border-b border-hairline">
-        <div className="mx-auto flex min-h-[64px] max-w-6xl items-center justify-between gap-4 px-4">
+      <div>
+        <div className="mx-auto flex min-h-[68px] max-w-6xl items-center justify-between gap-4 px-4">
           <Link href="/" className="flex min-w-0 items-center gap-2.5" aria-label={siteConfig.shortName}>
             <span className="flex min-w-0 items-baseline gap-2">
               <span className="truncate text-2xl font-bold tracking-tight text-ink">{siteConfig.shortName}</span>

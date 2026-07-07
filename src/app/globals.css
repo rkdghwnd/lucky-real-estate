@@ -11,24 +11,24 @@
   --color-brand-dark: #0958d9;
   --color-brand-light: #e6f4ff;
 
-  /* Neutrals — near-black ink (never pure #000), a single grey ramp. */
-  --color-ink: #0a0b0d;
-  --color-muted: #5b616e;
+  /* Neutrals — slate/zinc tinted grey ramp for a cooler, premium feel matching the blue. */
+  --color-ink: #090a0b;
+  --color-muted: #64748b;
   --color-canvas: #ffffff;
-  --color-surface: #f7f8fa;
-  --color-hairline: #dee1e6;
-  --color-hairline-soft: #eef0f3;
-  --color-surface-dark: #0a0b0d;
-  --color-surface-dark-elevated: #16181c;
+  --color-surface: #f8fafc;
+  --color-hairline: #e2e8f0;
+  --color-hairline-soft: #f1f5f9;
+  --color-surface-dark: #0f172a;
+  --color-surface-dark-elevated: #1e293b;
 
   /* Semantic */
   --color-sale: #1677ff;
   --color-rent: #059669;
   --color-danger: #dc2626;
 
-  /* Elevation ladder — ink-tinted, not one flat #000 shadow (see DESIGN.md §7). */
-  --shadow-raised: 0 1px 2px rgba(10, 11, 13, 0.05), 0 2px 8px rgba(10, 11, 13, 0.05);
-  --shadow-floating: 0 8px 24px rgba(10, 11, 13, 0.1), 0 2px 6px rgba(10, 11, 13, 0.06);
+  /* Elevation ladder — ultra-smooth, wide-spread tinted shadows for premium depth. */
+  --shadow-raised: 0 2px 10px -2px rgba(9, 10, 11, 0.05), 0 4px 20px -4px rgba(9, 10, 11, 0.04);
+  --shadow-floating: 0 12px 40px -6px rgba(9, 10, 11, 0.12), 0 4px 16px -2px rgba(9, 10, 11, 0.06);
 }
 
 html {

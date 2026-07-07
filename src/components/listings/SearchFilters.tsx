@@ -48,10 +48,10 @@ export function SearchFilters({
   const set = (patch: Partial<FilterDraft>) => setD(prev => ({ ...prev, ...patch }));
 
   return (
-    <Card className={`h-fit${sticky ? ' lg:sticky lg:top-24' : ''}`} styles={{ body: { padding: 20 } }}>
-      <p className="mb-5 flex items-center gap-2 text-base font-bold text-ink">
-        <SlidersHorizontal className="size-[1.05rem] text-brand" aria-hidden="true" />
-        필터
+    <Card className={`h-fit overflow-hidden rounded-2xl border border-hairline/80 bg-canvas shadow-sm${sticky ? ' lg:sticky lg:top-24' : ''}`} styles={{ body: { padding: 24 } }}>
+      <p className="mb-6 flex items-center gap-2 text-base font-extrabold tracking-tight text-ink">
+        <SlidersHorizontal className="size-[1.1rem] text-brand" aria-hidden="true" />
+        상세 검색
       </p>
       <form
         onSubmit={e => {
@@ -111,11 +111,12 @@ export function SearchFilters({
           </div>
         </div>
 
-        <div className="flex gap-2 pt-1">
-          <Button type="primary" htmlType="submit" size="large" className="flex-1">검색</Button>
+        <div className="flex gap-2 pt-2">
+          <Button type="primary" htmlType="submit" size="large" className="flex-1 font-semibold shadow-md shadow-brand/20">매물 검색</Button>
           <Button
             htmlType="button"
             size="large"
+            className="font-medium hover:text-ink"
             onClick={() => {
               setD(EMPTY_DRAFT);
               onReset();
