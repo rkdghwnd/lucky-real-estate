@@ -16,6 +16,8 @@ const eslintConfig = defineConfig([
     // Isolated git worktrees are separate checkouts (own src + build output);
     // linting them here is noise. Mirrors the vitest `exclude`.
     ".worktrees/**",
+    // OpenNext (Cloudflare) generated build output — not source.
+    ".open-next/**",
   ]),
 ]);
 

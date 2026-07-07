@@ -16,7 +16,8 @@ export async function createServerSupabaseClient() {
         try {
           cookiesToSet.forEach(({ name, value, options }) => cookieStore.set(name, value, options));
         } catch {
-          // Server Components cannot write cookies. Proxy refreshes them for requests.
+          // Server Components cannot write cookies; the failed write is ignored here.
+          // Session tokens are refreshed by Server Actions (login/mutations), which can set cookies.
         }
       },
     },
