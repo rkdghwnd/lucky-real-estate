@@ -27,7 +27,7 @@ describe('Header', () => {
     const user = userEvent.setup();
     render(<Header />);
 
-    expect(screen.getByRole('banner')).toHaveClass('bg-canvas');
+    expect(screen.getByRole('banner')).toHaveClass('bg-canvas/90');
     await user.click(screen.getByRole('button', { name: '메뉴' }));
     expect(screen.getByRole('navigation', { name: '모바일 메뉴' })).toHaveClass('bg-canvas');
   });
