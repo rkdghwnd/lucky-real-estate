@@ -48,9 +48,9 @@ export function SearchFilters({
   const set = (patch: Partial<FilterDraft>) => setD(prev => ({ ...prev, ...patch }));
 
   return (
-    <Card className={`h-fit overflow-hidden rounded-2xl border border-hairline/80 bg-canvas shadow-sm${sticky ? ' lg:sticky lg:top-24' : ''}`} styles={{ body: { padding: 24 } }}>
-      <p className="mb-6 flex items-center gap-2 text-base font-extrabold tracking-tight text-ink">
-        <SlidersHorizontal className="size-[1.1rem] text-brand" aria-hidden="true" />
+    <Card className={`h-fit overflow-hidden rounded-3xl border border-hairline/80 bg-canvas shadow-sm${sticky ? ' lg:sticky lg:top-24' : ''}`} styles={{ body: { padding: 24 } }}>
+      <p className="mb-6 flex items-center gap-2 text-lg font-extrabold tracking-tight text-ink">
+        <SlidersHorizontal className="size-5 text-brand" aria-hidden="true" />
         상세 검색
       </p>
       <form
@@ -59,29 +59,29 @@ export function SearchFilters({
           onApply(d);
         }}
         aria-label="매물 검색 필터"
-        className="flex flex-col gap-5"
+        className="flex flex-col gap-6"
       >
         <div>
-          <label htmlFor="f-keyword" className="mb-2 block text-sm font-bold text-ink">키워드</label>
-          <Input id="f-keyword" aria-label="키워드" size="large" value={d.keyword} onChange={e => set({ keyword: e.target.value })} placeholder="예: 원당동 공장" />
+          <label htmlFor="f-keyword" className="mb-2 block text-xs font-bold text-muted uppercase tracking-wider">키워드</label>
+          <Input id="f-keyword" aria-label="키워드" size="large" value={d.keyword} onChange={e => set({ keyword: e.target.value })} placeholder="예: 원당동 공장" className="rounded-xl border-hairline/80 focus:border-brand" />
         </div>
 
         <div>
-          <p className="mb-2 text-sm font-bold text-ink">거래유형</p>
-          <Radio.Group value={d.dealType} onChange={e => set({ dealType: e.target.value })} className="flex flex-col gap-1.5">
-            {DEALS.map(o => <Radio key={o} value={o}>{o}</Radio>)}
+          <p className="mb-2.5 text-xs font-bold text-muted uppercase tracking-wider">거래유형</p>
+          <Radio.Group value={d.dealType} onChange={e => set({ dealType: e.target.value })} className="flex flex-col gap-2">
+            {DEALS.map(o => <Radio key={o} value={o} className="text-[0.95rem] font-semibold text-ink">{o}</Radio>)}
           </Radio.Group>
         </div>
 
         <div>
-          <p className="mb-2 text-sm font-bold text-ink">매물종류</p>
-          <Radio.Group value={d.propertyType} onChange={e => set({ propertyType: e.target.value })} className="flex flex-col gap-1.5">
-            {TYPES.map(o => <Radio key={o} value={o}>{o}</Radio>)}
+          <p className="mb-2.5 text-xs font-bold text-muted uppercase tracking-wider">매물종류</p>
+          <Radio.Group value={d.propertyType} onChange={e => set({ propertyType: e.target.value })} className="flex flex-col gap-2">
+            {TYPES.map(o => <Radio key={o} value={o} className="text-[0.95rem] font-semibold text-ink">{o}</Radio>)}
           </Radio.Group>
         </div>
 
         <div>
-          <label htmlFor="f-region" className="mb-2 block text-sm font-bold text-ink">지역</label>
+          <label htmlFor="f-region" className="mb-2 block text-xs font-bold text-muted uppercase tracking-wider">지역</label>
           <Select
             id="f-region"
             aria-label="지역"
@@ -94,29 +94,29 @@ export function SearchFilters({
         </div>
 
         <div>
-          <p className="mb-2 text-sm font-bold text-ink">가격 (만원)</p>
+          <p className="mb-2 text-xs font-bold text-muted uppercase tracking-wider">가격 (만원)</p>
           <div className="flex items-center gap-2">
             <InputNumber aria-label="가격 최소" size="large" min={0} controls={false} style={{ width: '100%' }} placeholder="최소" value={strToNum(d.priceMin)} onChange={v => set({ priceMin: numToStr(v) })} />
-            <span className="text-muted">~</span>
+            <span className="text-muted font-bold">~</span>
             <InputNumber aria-label="가격 최대" size="large" min={0} controls={false} style={{ width: '100%' }} placeholder="최대" value={strToNum(d.priceMax)} onChange={v => set({ priceMax: numToStr(v) })} />
           </div>
         </div>
 
         <div>
-          <p className="mb-2 text-sm font-bold text-ink">면적 (㎡)</p>
+          <p className="mb-2 text-xs font-bold text-muted uppercase tracking-wider">면적 (㎡)</p>
           <div className="flex items-center gap-2">
             <InputNumber aria-label="면적 최소" size="large" min={0} controls={false} style={{ width: '100%' }} placeholder="최소" value={strToNum(d.areaMin)} onChange={v => set({ areaMin: numToStr(v) })} />
-            <span className="text-muted">~</span>
+            <span className="text-muted font-bold">~</span>
             <InputNumber aria-label="면적 최대" size="large" min={0} controls={false} style={{ width: '100%' }} placeholder="최대" value={strToNum(d.areaMax)} onChange={v => set({ areaMax: numToStr(v) })} />
           </div>
         </div>
 
-        <div className="flex gap-2 pt-2">
-          <Button type="primary" htmlType="submit" size="large" className="flex-1 font-semibold shadow-md shadow-brand/20">매물 검색</Button>
+        <div className="flex gap-2 pt-3">
+          <Button type="primary" htmlType="submit" size="large" className="flex-1 font-bold rounded-xl shadow-none">검색</Button>
           <Button
             htmlType="button"
             size="large"
-            className="font-medium hover:text-ink"
+            className="font-bold rounded-xl bg-surface border-0 text-ink hover:bg-hairline"
             onClick={() => {
               setD(EMPTY_DRAFT);
               onReset();

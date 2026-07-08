@@ -9,12 +9,12 @@ antd 컴포넌트는 `AntdProvider`의 theme 토큰으로, 커스텀(Tailwind) �
 프레임워크 기본 티를 줄인 "정돈된 antd" — 타입 스케일·여백 리듬·깊이 ladder로 완성도를 올린다.
 대상은 사업자 + 고령 운영자 → 큰 본문(16px 기준), 넉넉한 터치 타깃, 절제된 모션.
 
-## 2. Color (accent lock: 파랑 하나)
-- **Accent** `--color-brand #1677ff` · dark `#0958d9` · light `#e6f4ff` — 전 페이지 단일 강조색.
-- **Neutrals** ink `#0a0b0d`(순수 #000 아님) · muted `#5b616e` · canvas `#ffffff` ·
-  surface `#f7f8fa`(라이트 밴드/푸터/유틸바) · hairline `#dee1e6` · hairline-soft `#eef0f3`.
-- **Semantic** 매매=`#1677ff` · 임대=`#059669` · danger `#dc2626`.
-- 잠금: 섹션마다 강조색을 바꾸지 않는다(warm-grey 사이트에 7번 섹션만 다른 파랑 CTA 금지).
+## 2. Color (accent lock: 토스 블루 단일 파랑)
+- **Accent** `--color-brand #3182f6` · dark `#1b64da` · light `#e8f3ff` — 전 페이지 단일 강조색 (TDS).
+- **Neutrals** ink `#191f28` · muted `#4e5968` · canvas `#ffffff` ·
+  surface `#f2f4f6`(토스 라이트그레이) · hairline `#e5e8eb` · hairline-soft `#f8f9fa`.
+- **Semantic** 매매=`#3182f6` · 임대=`#059669` · danger `#f04452`.
+- 잠금: 섹션마다 강조색을 바꾸지 않는다. 토스 고유의 청량한 블루와 맑은 뉴트럴을 엄격히 고수한다.
 
 ## 3. Typography (Noto Sans KR, 400/500/700)
 - Root `18px`. antd base `fontSize 16`(고령 가독성 + 커스텀 섹션과 일치).
@@ -29,9 +29,9 @@ antd 컴포넌트는 `AntdProvider`의 theme 토큰으로, 커스텀(Tailwind) �
 - 매직 간격 금지 — 위 스케일만.
 
 ## 5. Components (antd, themed)
-- 반경: 기본 `8`, 카드 `12`, 작은 요소 `6`. 하나의 radius 스케일 잠금.
-- Card = 주 표면(hoverable 매물 카드는 hover lift). Button 강조는 primary, 보조는 default.
-- 폼: Select/Input/InputNumber `size="large"`. Tag로 거래유형(매매 파랑 / 임대 녹색)·종류 표기.
+- 반경: 기본 `12`, 카드 `18` 또는 `24`, 버튼 및 입력 단독 요소 `12`. 토스 특유의 둥글고 시원한 코너 반경을 일관되게 고수한다.
+- Card = 주 표면 (hoverable 매물 카드는 hover 시 `translateY(-4px)` + `--shadow-floating`, 300ms ease-out). Button 강조는 primary(토스 블루), 보조는 bg-surface (토스 그레이 배경).
+- 폼: Select/Input/InputNumber `size="large"`, `controlHeight="48"`. Tag로 거래유형(매매 파랑 / 임대 녹색)·종류 표기.
 - 상태: hover/active/focus/disabled 항상 처리. 빈 상태 = antd `Empty`.
   공개 페이지는 SSG라 로딩/에러 상태는 대부분 N/A(있으면 명시 처리).
 

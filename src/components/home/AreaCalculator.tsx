@@ -22,9 +22,10 @@ export function AreaCalculator() {
   };
 
   return (
-    <Card size="small" title="평수 계산기">
-      <div className="flex flex-col gap-3">
-        <label className="flex flex-col gap-1 text-sm font-medium text-muted">
+    <Card styles={{ body: { padding: 20 } }} className="border border-hairline/80 shadow-sm rounded-2xl bg-canvas">
+      <h3 className="mb-4 text-base font-extrabold text-ink">평수 계산기</h3>
+      <div className="flex flex-col gap-4">
+        <label className="flex flex-col gap-1.5 text-xs font-bold text-muted">
           제곱미터 (㎡)
           <InputNumber
             aria-label="제곱미터"
@@ -32,11 +33,11 @@ export function AreaCalculator() {
             onChange={fromM2}
             min={0}
             size="large"
-            style={{ width: '100%' }}
+            className="w-full rounded-xl bg-surface border-0 focus:bg-canvas focus:ring-2 focus:ring-brand/20 transition-all"
             placeholder="0"
           />
         </label>
-        <label className="flex flex-col gap-1 text-sm font-medium text-muted">
+        <label className="flex flex-col gap-1.5 text-xs font-bold text-muted">
           평
           <InputNumber
             aria-label="평"
@@ -44,11 +45,11 @@ export function AreaCalculator() {
             onChange={fromPyeong}
             min={0}
             size="large"
-            style={{ width: '100%' }}
+            className="w-full rounded-xl bg-surface border-0 focus:bg-canvas focus:ring-2 focus:ring-brand/20 transition-all"
             placeholder="0"
           />
         </label>
-        <p className="text-xs text-muted">1평 = 3.3058㎡ · 1㎡ = 0.3025평</p>
+        <p className="text-xs font-semibold text-muted/60 mt-1">1평 = 3.3058㎡ · 1㎡ = 0.3025평</p>
       </div>
     </Card>
   );

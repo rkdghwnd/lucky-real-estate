@@ -51,9 +51,9 @@ export function Header() {
             </span>
           </Link>
 
-          <nav className="hidden items-center gap-7 text-[0.95rem] font-medium text-ink md:flex" aria-label="주요 메뉴">
+          <nav className="hidden items-center gap-8 text-[0.95rem] font-semibold text-muted md:flex" aria-label="주요 메뉴">
             {NAV_LINKS.map(link => (
-              <Link key={link.label} href={link.href} className="transition hover:text-brand">
+              <Link key={link.label} href={link.href} className="transition-colors duration-200 hover:text-ink">
                 {link.label}
               </Link>
             ))}
@@ -65,7 +65,7 @@ export function Header() {
               size="large"
               onClick={() => setPhoneOpen(true)}
               icon={<Phone className="size-4" aria-hidden="true" />}
-              className="hidden sm:inline-flex"
+              className="hidden sm:inline-flex rounded-xl font-bold shadow-none"
             >
               전화상담
             </Button>
@@ -124,7 +124,7 @@ export function Header() {
           </div>
 
           <div className="mt-auto p-4">
-            <Button type="primary" size="large" block icon={<Phone className="size-5" aria-hidden="true" />} onClick={() => { close(); setPhoneOpen(true); }}>
+            <Button type="primary" size="large" block icon={<Phone className="size-5" aria-hidden="true" />} className="rounded-xl font-bold shadow-none" onClick={() => { close(); setPhoneOpen(true); }}>
               전화상담
             </Button>
           </div>

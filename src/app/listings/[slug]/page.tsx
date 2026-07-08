@@ -52,29 +52,29 @@ export default async function ListingDetailPage({ params }: { params: Promise<{ 
         <ImageSlider images={l.images} alt={l.title} />
         <div>
           <div className="flex gap-1.5">
-            <span className={`rounded-md px-2.5 py-1 text-xs font-bold text-white ${l.dealType === '매매' ? 'bg-brand' : 'bg-emerald-600'}`}>{l.dealType}</span>
-            <span className="rounded-md bg-ink px-2.5 py-1 text-xs font-bold text-white">{l.propertyType}</span>
+            <span className={`rounded-lg px-2.5 py-1 text-xs font-bold text-white ${l.dealType === '매매' ? 'bg-brand' : 'bg-emerald-600'}`}>{l.dealType}</span>
+            <span className="rounded-lg bg-surface px-2.5 py-1 text-xs font-bold text-muted border border-hairline/60">{l.propertyType}</span>
           </div>
-          <h1 className="mt-3 text-2xl font-extrabold tracking-tight text-ink sm:text-3xl">{l.title}</h1>
-          <p className="mt-1.5 flex items-center gap-1 text-muted">
-            <MapPin className="size-4 shrink-0" aria-hidden="true" />
+          <h1 className="mt-4 text-3xl font-extrabold tracking-tight text-ink sm:text-4xl lg:leading-[1.15]">{l.title}</h1>
+          <p className="mt-2 flex items-center gap-1.5 text-sm font-semibold text-muted">
+            <MapPin className="size-4 shrink-0 text-muted/60" aria-hidden="true" />
             {l.address}
           </p>
-          <p className="mt-4 text-3xl font-extrabold tracking-tight text-brand">{formatDealPrice(l)}</p>
-          {l.landAreaM2 != null && <p className="mt-1 text-muted">{formatArea(l.landAreaM2)}</p>}
+          <p className="mt-5 text-4xl font-extrabold tracking-tight text-brand">{formatDealPrice(l)}</p>
+          {l.landAreaM2 != null && <p className="mt-1.5 text-sm font-semibold text-muted/80">{formatArea(l.landAreaM2)}</p>}
 
-          <dl className="mt-5 divide-y divide-hairline border-y border-hairline">
+          <dl className="mt-6 divide-y divide-hairline-soft border-y border-hairline/65">
             {keyFacts
               .filter(([, v]) => v)
               .map(([k, v]) => (
-                <div key={k} className="flex gap-4 py-2.5 text-sm">
-                  <dt className="w-20 shrink-0 font-semibold text-muted">{k}</dt>
-                  <dd className="text-ink">{v}</dd>
+                <div key={k} className="flex gap-4 py-3.5 text-sm">
+                  <dt className="w-24 shrink-0 font-bold text-muted">{k}</dt>
+                  <dd className="text-ink font-semibold">{v}</dd>
                 </div>
               ))}
           </dl>
 
-          <div className="mt-5">
+          <div className="mt-6">
             <ContactBox />
           </div>
         </div>

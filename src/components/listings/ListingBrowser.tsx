@@ -76,8 +76,8 @@ export function ListingBrowser({ listings }: { listings: Listing[] }) {
     <div className="grid gap-6 lg:grid-cols-[280px_1fr]">
       <SearchFilters key={spString} initial={draftFromParams(sp)} regions={regions} onApply={applyFilters} onReset={() => push(new URLSearchParams())} />
       <div>
-        <div className="mb-4 flex items-center justify-between gap-3">
-          <p className="text-lg font-bold text-ink">
+        <div className="mb-5 flex items-center justify-between gap-3">
+          <p className="text-lg font-extrabold text-ink">
             전체 매물 <span className="text-brand">{result.total}</span>건
           </p>
           <Select
@@ -85,20 +85,21 @@ export function ListingBrowser({ listings }: { listings: Listing[] }) {
             value={criteria.sort ?? 'latest'}
             onChange={changeSort}
             options={SORTS}
-            style={{ width: 140 }}
+            style={{ width: 130 }}
+            className="rounded-xl border-hairline"
           />
         </div>
 
         {result.items.length === 0 ? (
-          <div className="rounded-lg border border-dashed border-hairline bg-canvas px-6 py-16">
+          <div className="rounded-3xl border border-hairline bg-canvas px-6 py-20 text-center shadow-sm">
             {listings.length === 0 ? (
               <Empty
                 image={Empty.PRESENTED_IMAGE_SIMPLE}
                 description={
-                  <span className="text-ink">
+                  <span className="text-ink font-bold">
                     아직 등록된 매물이 없습니다.
                     <br />
-                    <span className="text-sm text-muted">전화 주시면 조건에 맞는 매물을 찾아드립니다.</span>
+                    <span className="text-sm font-semibold text-muted">전화 주시면 조건에 맞는 매물을 찾아드립니다.</span>
                   </span>
                 }
               />
@@ -106,19 +107,19 @@ export function ListingBrowser({ listings }: { listings: Listing[] }) {
               <Empty
                 image={Empty.PRESENTED_IMAGE_SIMPLE}
                 description={
-                  <span className="text-ink">
+                  <span className="text-ink font-bold">
                     조건에 맞는 매물이 없습니다.
                     <br />
-                    <span className="text-sm text-muted">필터를 바꾸거나 초기화해 보세요.</span>
+                    <span className="text-sm font-semibold text-muted">필터를 바꾸거나 초기화해 보세요.</span>
                   </span>
                 }
               >
-                <Button onClick={() => push(new URLSearchParams())}>필터 초기화</Button>
+                <Button className="rounded-xl font-bold bg-surface border-0 text-ink hover:bg-hairline" onClick={() => push(new URLSearchParams())}>필터 초기화</Button>
               </Empty>
             )}
           </div>
         ) : (
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
             {result.items.map(l => <ListingCard key={l.id} listing={l} />)}
           </div>
         )}

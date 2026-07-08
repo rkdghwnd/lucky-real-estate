@@ -16,19 +16,22 @@ const FONT_FAMILY =
 const theme: ThemeConfig = {
   token: {
     fontFamily: FONT_FAMILY,
-    colorPrimary: '#1677ff',
-    colorLink: '#1677ff',
+    colorPrimary: '#3182f6',
+    colorLink: '#3182f6',
     fontSize: 16,
-    borderRadius: 8,
-    colorText: '#0a0b0d',
-    colorTextSecondary: '#5b616e',
-    colorBorder: '#dee1e6',
-    colorBorderSecondary: '#eef0f3',
-    colorBgLayout: '#f7f8fa',
+    borderRadius: 12,
+    colorText: '#191f28',
+    colorTextSecondary: '#4e5968',
+    colorBorder: '#e5e8eb',
+    colorBorderSecondary: '#f2f4f6',
+    colorBgLayout: '#f2f4f6',
   },
   components: {
-    Card: { borderRadiusLG: 12 },
-    Button: { fontWeight: 600 },
+    Card: { borderRadiusLG: 18 },
+    Button: { fontWeight: 600, controlHeightLG: 48, borderRadiusLG: 12 },
+    Input: { controlHeightLG: 48, borderRadiusLG: 12 },
+    Select: { controlHeightLG: 48, borderRadiusLG: 12 },
+    InputNumber: { controlHeightLG: 48, borderRadiusLG: 12 },
   },
 };
 

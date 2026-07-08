@@ -11,7 +11,7 @@ const BANNERS = ['/banner1.jpg', '/banner2.jpg', '/banner3.jpg', '/banner4.jpg']
 // leave a gap under the image).
 export function OfficeCarousel() {
   return (
-    <div className="overflow-hidden rounded-lg border border-hairline bg-brand-light">
+    <div className="overflow-hidden rounded-2xl border border-hairline/80 bg-brand-light/30 shadow-sm">
       <Carousel autoplay autoplaySpeed={4000} draggable>
         {BANNERS.map((src, i) => (
           <div key={src}>

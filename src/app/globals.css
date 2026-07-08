@@ -6,29 +6,29 @@
 @import "tailwindcss";
 
 @theme {
-  /* Accent — one locked blue across the whole site (see DESIGN.md §2). */
-  --color-brand: #1677ff;
-  --color-brand-dark: #0958d9;
-  --color-brand-light: #e6f4ff;
+  /* Accent — Toss Blue (TDS). */
+  --color-brand: #3182f6;
+  --color-brand-dark: #1b64da;
+  --color-brand-light: #e8f3ff;
 
-  /* Neutrals — slate/zinc tinted grey ramp for a cooler, premium feel matching the blue. */
-  --color-ink: #090a0b;
-  --color-muted: #64748b;
+  /* Neutrals — Toss Design System scale */
+  --color-ink: #191f28;
+  --color-muted: #4e5968;
   --color-canvas: #ffffff;
-  --color-surface: #f8fafc;
-  --color-hairline: #e2e8f0;
-  --color-hairline-soft: #f1f5f9;
-  --color-surface-dark: #0f172a;
-  --color-surface-dark-elevated: #1e293b;
+  --color-surface: #f2f4f6;
+  --color-hairline: #e5e8eb;
+  --color-hairline-soft: #f8f9fa;
+  --color-surface-dark: #191f28;
+  --color-surface-dark-elevated: #2c3440;
 
   /* Semantic */
-  --color-sale: #1677ff;
+  --color-sale: #3182f6;
   --color-rent: #059669;
-  --color-danger: #dc2626;
+  --color-danger: #f04452;
 
-  /* Elevation ladder — ultra-smooth, wide-spread tinted shadows for premium depth. */
-  --shadow-raised: 0 2px 10px -2px rgba(9, 10, 11, 0.05), 0 4px 20px -4px rgba(9, 10, 11, 0.04);
-  --shadow-floating: 0 12px 40px -6px rgba(9, 10, 11, 0.12), 0 4px 16px -2px rgba(9, 10, 11, 0.06);
+  /* Elevation ladder — super-smooth, wide-spread Toss-style shadows */
+  --shadow-raised: 0 8px 24px rgba(0, 0, 0, 0.04), 0 2px 8px rgba(0, 0, 0, 0.02);
+  --shadow-floating: 0 16px 40px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.03);
 }
 
 html {
