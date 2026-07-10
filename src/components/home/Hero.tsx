@@ -14,7 +14,7 @@ export function Hero() {
         <div className="grid gap-12 lg:grid-cols-12 lg:items-center">
           {/* Text content - left side */}
           <div className="flex flex-col justify-center lg:col-span-6">
-            <div className="mb-4 inline-flex self-start items-center rounded-full bg-brand-light px-3.5 py-1.5 text-xs font-bold tracking-tight text-brand">
+            <div className="mb-4 inline-flex self-start items-center rounded-md bg-brand-light px-3.5 py-1.5 text-xs font-bold tracking-tight text-brand">
               인천 서구 공장·창고·토지 전문
             </div>
             <h1 className="text-4xl font-extrabold tracking-tight text-ink sm:text-5xl lg:text-6xl lg:leading-[1.15]">
@@ -22,8 +22,8 @@ export function Hero() {
               <span className="text-brand">공인중개사사무소</span>
             </h1>
             <p className="mt-6 max-w-xl text-base font-medium leading-relaxed text-muted sm:text-lg">
-              수년간의 중개 노하우와 철저한 현장 검증을 통해<br className="hidden sm:block" />
-              고객님의 비즈니스 성장에 최적화된 매물을 정직하게 찾아드립니다.
+              25년간의 중개 노하우와 철저한 현장 검증을 통해<br className="hidden sm:block" />
+              고객님이 필요한 매물을 정직하게 찾아드립니다.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <PhoneConsultButton 
