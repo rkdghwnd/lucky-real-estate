@@ -29,6 +29,7 @@ export function Footer() {
               <a href={mapUrl} target="_blank" rel="noopener noreferrer" className="transition-colors duration-200 hover:text-ink">
                 네이버 지도에서 사무소 위치 보기
               </a>
+              <Link to="/admin/login" className="transition-colors duration-200 hover:text-ink">로그인</Link>
             </nav>
           </div>
         </div>
