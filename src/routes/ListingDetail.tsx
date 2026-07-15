@@ -8,6 +8,7 @@ import { Breadcrumb } from '@/components/listings/Breadcrumb';
 import { ImageSlider } from '@/components/listings/ImageSlider';
 import { SpecTable } from '@/components/listings/SpecTable';
 import { ContactBox } from '@/components/listings/ContactBox';
+import { NaverMap } from '@/components/map/NaverMap';
 import { formatArea, formatDealPrice } from '@/lib/format';
 import { NotFound } from './NotFound';
 
@@ -54,10 +55,12 @@ export function ListingDetail() {
             <span className="rounded-lg bg-surface px-2.5 py-1 text-xs font-bold text-muted border border-hairline/60">{l.propertyType}</span>
           </div>
           <h1 className="mt-4 text-3xl font-extrabold tracking-tight text-ink sm:text-4xl lg:leading-[1.15]">{l.title}</h1>
-          <p className="mt-2 flex items-center gap-1.5 text-sm font-semibold text-muted">
-            <MapPin className="size-4 shrink-0 text-muted/60" aria-hidden="true" />
-            {l.address}
-          </p>
+          {l.addressPublic && l.address ? (
+            <p className="mt-2 flex items-center gap-1.5 text-sm font-semibold text-muted">
+              <MapPin className="size-4 shrink-0 text-muted/60" aria-hidden="true" />
+              {l.address}
+            </p>
+          ) : null}
           <p className="mt-5 text-4xl font-extrabold tracking-tight text-brand">{formatDealPrice(l)}</p>
           {l.landAreaM2 != null && <p className="mt-1.5 text-sm font-semibold text-muted/80">{formatArea(l.landAreaM2)}</p>}
 
@@ -89,6 +92,14 @@ export function ListingDetail() {
           <div className="whitespace-pre-line leading-8 text-ink">{l.description}</div>
         </section>
       )}
+
+      {/* Location map — only when the address is public (private → no address, no map). */}
+      {l.addressPublic && l.address ? (
+        <section className="mt-8">
+          <h2 className="mb-3 text-xl font-bold text-ink">위치</h2>
+          <NaverMap lat={l.lat} lng={l.lng} address={l.address} />
+        </section>
+      ) : null}
     </article>
   );
 }

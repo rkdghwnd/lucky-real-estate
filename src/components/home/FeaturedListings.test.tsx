@@ -12,6 +12,7 @@ const listing: Listing = {
   dealType: '매매',
   status: '공개',
   address: '인천광역시 서구 오류동 10',
+  addressPublic: true,
   landAreaM2: 1000,
   buildingAreaM2: 600,
   price: 1_850_000_000,

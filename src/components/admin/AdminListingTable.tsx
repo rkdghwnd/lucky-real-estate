@@ -1,20 +1,13 @@
-'use client';
-
 import { Link, useNavigate } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
 import { useMemo, useState } from 'react';
 import { Search } from 'lucide-react';
 import { Button, Modal, Tag } from 'antd';
-import {
-  deleteListingAction,
-  setListingStatusAction,
-  type AdminActionResult,
-} from '@/lib/admin/api';
+import { deleteListingAction, type AdminActionResult } from '@/lib/admin/api';
 import type { AdminListing } from '@/lib/admin/listings';
 import type { ListingStatus } from '@/lib/types';
 
 type VisibleStatus = Extract<ListingStatus, '공개' | '거래완료'>;
-type StatusAction = (id: string, status: VisibleStatus) => Promise<AdminActionResult<{ slug: string }>>;
 type DeleteAction = (id: string) => Promise<AdminActionResult<{ slug: string }>>;
 
 function formatPrice(listing: AdminListing) {
@@ -25,38 +18,20 @@ function formatPrice(listing: AdminListing) {
   return deposit;
 }
 
-function statusCopy(status: VisibleStatus) {
-  return status === '공개'
-    ? {
-        next: '거래완료' as const,
-        title: '거래완료로 변경',
-        description: '공개 사이트에서 즉시 숨겨집니다. 거래완료로 변경할까요?',
-        confirm: '거래완료로 변경',
-      }
-    : {
-        next: '공개' as const,
-        title: '다시 공개',
-        description: '이 매물을 공개 사이트에 다시 표시할까요?',
-        confirm: '다시 공개',
-      };
-}
-
+// Status (공개/거래완료) is set on the listing form now, so the dashboard only
+// lists, filters, searches, edits, and deletes. The status tabs below just
+// filter the view; they don't change a listing's status.
 export function AdminListingTable({
   listings,
-  statusAction = setListingStatusAction,
   deleteAction = deleteListingAction,
 }: {
   listings: AdminListing[];
-  statusAction?: StatusAction;
   deleteAction?: DeleteAction;
 }) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [activeStatus, setActiveStatus] = useState<VisibleStatus>('공개');
   const [query, setQuery] = useState('');
-  const [selected, setSelected] = useState<AdminListing | null>(null);
-  const [pending, setPending] = useState(false);
-  const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
   const [deleteTarget, setDeleteTarget] = useState<AdminListing | null>(null);
   const [deletePending, setDeletePending] = useState(false);
@@ -75,24 +50,6 @@ export function AdminListingTable({
       return `${listing.title} ${listing.address}`.toLocaleLowerCase('ko-KR').includes(normalized);
     });
   }, [activeStatus, listings, query]);
-
-  async function changeStatus() {
-    if (!selected) return;
-    const copy = statusCopy(selected.status as VisibleStatus);
-    setPending(true);
-    setError('');
-    const result = await statusAction(selected.id, copy.next);
-    setPending(false);
-    if (!result.ok) {
-      setError(result.message);
-      return;
-    }
-    setNotice(copy.next === '거래완료'
-      ? '거래완료로 변경했습니다. 공개 사이트에서는 숨겨집니다.'
-      : '매물을 다시 공개했습니다.');
-    setSelected(null);
-    queryClient.invalidateQueries({ queryKey: ['adminListings'] });
-  }
 
   async function removeListing() {
     if (!deleteTarget) return;
@@ -163,97 +120,59 @@ export function AdminListingTable({
                 </tr>
               </thead>
               <tbody className="divide-y divide-hairline">
-                {filtered.map(listing => {
-                  const copy = statusCopy(listing.status as VisibleStatus);
-                  return (
-                    <tr key={listing.id} className="align-middle hover:bg-[#fafbfc]">
-                      <td className="px-5 py-5">
-                        <div className="flex max-w-md items-center gap-3">
-                          <div className="grid size-16 shrink-0 place-items-center overflow-hidden rounded-xl bg-[#eef0f3] text-[11px] font-semibold text-muted">
-                            {listing.images[0] ? (
-                              // Managed and legacy image URLs are both supported in the admin preview.
-                              // eslint-disable-next-line @next/next/no-img-element
-                              <img src={listing.images[0]} alt={`${listing.title} 대표 사진`} className="size-full object-cover" />
-                            ) : '사진 없음'}
-                          </div>
-                          <div className="min-w-0">
-                            <div className="flex items-center gap-2">
-                              <Link
-                                to={`/admin/listings/${listing.id}/edit`}
-                                aria-label={`${listing.title} 수정`}
-                                className="truncate font-extrabold text-ink hover:text-brand hover:underline"
-                              >
-                                {listing.title}
-                              </Link>
-                              <Tag color={listing.status === '공개' ? 'blue' : undefined}>{listing.status}</Tag>
-                            </div>
-                            <p className="mt-1 truncate text-muted">{listing.address}</p>
-                          </div>
+                {filtered.map(listing => (
+                  <tr key={listing.id} className="align-middle hover:bg-[#fafbfc]">
+                    <td className="px-5 py-5">
+                      <div className="flex max-w-md items-center gap-3">
+                        <div className="grid size-16 shrink-0 place-items-center overflow-hidden rounded-xl bg-[#eef0f3] text-[11px] font-semibold text-muted">
+                          {listing.images[0] ? (
+                            <img src={listing.images[0]} alt={`${listing.title} 대표 사진`} className="size-full object-cover" />
+                          ) : '사진 없음'}
                         </div>
-                      </td>
-                      <td className="px-4 py-5 font-semibold text-ink">{listing.propertyType} · {listing.dealType}</td>
-                      <td className="px-4 py-5 font-semibold text-ink">{formatPrice(listing)}</td>
-                      <td className="px-4 py-5 text-muted">
-                        {new Intl.DateTimeFormat('ko-KR', { dateStyle: 'medium' }).format(new Date(listing.updatedAt))}
-                      </td>
-                      <td className="px-5 py-5">
-                        <div className="flex flex-wrap justify-end gap-2">
-                          <Button onClick={() => navigate(`/admin/listings/${listing.id}/edit`)} size="large">수정</Button>
-                          <Button
-                            htmlType="button"
-                            size="large"
-                            aria-label={`${listing.title} ${listing.status === '공개' ? '거래완료 처리' : '다시 공개'}`}
-                            onClick={() => {
-                              setError('');
-                              setSelected(listing);
-                            }}
-                          >
-                            {copy.confirm}
-                          </Button>
-                          <Button
-                            htmlType="button"
-                            size="large"
-                            danger
-                            aria-label={`${listing.title} 삭제`}
-                            onClick={() => {
-                              setDeleteError('');
-                              setDeleteTarget(listing);
-                            }}
-                          >
-                            삭제
-                          </Button>
+                        <div className="min-w-0">
+                          <div className="flex items-center gap-2">
+                            <Link
+                              to={`/admin/listings/${listing.id}/edit`}
+                              aria-label={`${listing.title} 수정`}
+                              className="truncate font-extrabold text-ink hover:text-brand hover:underline"
+                            >
+                              {listing.title}
+                            </Link>
+                            <Tag color={listing.status === '공개' ? 'blue' : undefined}>{listing.status}</Tag>
+                          </div>
+                          <p className="mt-1 truncate text-muted">{listing.address}</p>
                         </div>
-                      </td>
-                    </tr>
-                  );
-                })}
+                      </div>
+                    </td>
+                    <td className="px-4 py-5 font-semibold text-ink">{listing.propertyType} · {listing.dealType}</td>
+                    <td className="px-4 py-5 font-semibold text-ink">{formatPrice(listing)}</td>
+                    <td className="px-4 py-5 text-muted">
+                      {new Intl.DateTimeFormat('ko-KR', { dateStyle: 'medium' }).format(new Date(listing.updatedAt))}
+                    </td>
+                    <td className="px-5 py-5">
+                      <div className="flex flex-wrap justify-end gap-2">
+                        <Button onClick={() => navigate(`/admin/listings/${listing.id}/edit`)} size="large">수정</Button>
+                        <Button
+                          htmlType="button"
+                          size="large"
+                          danger
+                          aria-label={`${listing.title} 삭제`}
+                          onClick={() => {
+                            setDeleteError('');
+                            setDeleteTarget(listing);
+                          }}
+                        >
+                          삭제
+                        </Button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
         )}
       </div>
-
-      <Modal
-        open={selected !== null}
-        title={selected ? statusCopy(selected.status as VisibleStatus).title : undefined}
-        onCancel={() => !pending && setSelected(null)}
-        centered
-        closable={!pending}
-        maskClosable={!pending}
-        footer={selected ? [
-          <Button key="cancel" htmlType="button" onClick={() => setSelected(null)} disabled={pending}>취소</Button>,
-          <Button key="confirm" type="primary" htmlType="button" onClick={changeStatus} disabled={pending} loading={pending}>
-            {pending ? '변경 중…' : statusCopy(selected.status as VisibleStatus).confirm}
-          </Button>,
-        ] : null}
-      >
-        {selected ? (
-          <>
-            <p className="text-muted">{statusCopy(selected.status as VisibleStatus).description}</p>
-            {error ? <p role="alert" className="mt-4 rounded-lg bg-red-50 p-3 text-sm font-semibold text-danger">{error}</p> : null}
-          </>
-        ) : null}
-      </Modal>
 
       <Modal
         open={deleteTarget !== null}

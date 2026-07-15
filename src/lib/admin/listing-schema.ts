@@ -15,7 +15,9 @@ const writableFields = {
   title: z.string().trim().min(2, '매물 제목을 2자 이상 입력해주세요.').max(80, '매물 제목은 80자까지 입력할 수 있습니다.'),
   propertyType: z.enum(propertyTypes, { message: '매물 종류를 선택해주세요.' }),
   dealType: z.enum(dealTypes, { message: '거래 유형을 선택해주세요.' }),
+  status: z.enum(['공개', '거래완료'], { message: '상태를 선택해주세요.' }),
   address: z.string().trim().min(5, '주소를 5자 이상 입력해주세요.').max(200, '주소는 200자까지 입력할 수 있습니다.'),
+  addressPublic: z.boolean(),
   price: z.number().finite().nonnegative('가격은 0 이상이어야 합니다.'),
   monthlyRent: z.number().finite().nonnegative().nullable(),
   landAreaM2: optionalPositiveNumber,
@@ -96,7 +98,9 @@ export function parseListingForm(form: FormData): ListingFormParseResult {
     title: textValue(form, 'title'),
     propertyType: textValue(form, 'propertyType'),
     dealType,
+    status: textValue(form, 'status'),
     address: textValue(form, 'address'),
+    addressPublic: form.get('addressPublic') === 'true',
     price: manwonToWon(form.get('priceManwon')),
     monthlyRent: dealType === '매매'
       ? null

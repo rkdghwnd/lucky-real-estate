@@ -12,7 +12,7 @@ export function rowToListingWithUrl(r: ListingRow, supabaseUrl: string): Listing
   return {
     id: r.id, slug: r.slug, title: r.title,
     propertyType: r.property_type, dealType: r.deal_type, status: r.status,
-    address: r.address, landAreaM2: r.land_area_m2, buildingAreaM2: r.building_area_m2,
+    address: r.address, addressPublic: r.address_public, landAreaM2: r.land_area_m2, buildingAreaM2: r.building_area_m2,
     price: r.price, monthlyRent: r.monthly_rent,
     zoning: r.zoning, landCategory: r.land_category, roadAccess: r.road_access,
     ceilingHeightM: r.ceiling_height_m, powerCapacity: r.power_capacity, completionYear: r.completion_year,
@@ -94,7 +94,7 @@ export function applyFilters(listings: Listing[], f: ListingFilter): Listing[] {
 }
 
 export async function getPublishedListings(client: SupabaseClient = supabase): Promise<Listing[]> {
-  const { data, error } = await client.from('listings').select('*').eq('status', '공개').order('created_at', { ascending: false });
+  const { data, error } = await client.from('listings_public').select('*').eq('status', '공개').order('created_at', { ascending: false });
   if (error) throw error;
   return ((data as ListingRow[]) ?? []).map(rowToListing);
 }
@@ -105,13 +105,13 @@ export async function getFeaturedListings(limit = 6, client?: SupabaseClient): P
 }
 
 export async function getListingBySlug(slug: string, client: SupabaseClient = supabase): Promise<Listing | null> {
-  const { data, error } = await client.from('listings').select('*').eq('slug', slug).eq('status', '공개').single();
+  const { data, error } = await client.from('listings_public').select('*').eq('slug', slug).eq('status', '공개').single();
   if (error || !data) return null;
   return rowToListing(data as ListingRow);
 }
 
 export async function getAllListingSlugs(client: SupabaseClient = supabase): Promise<string[]> {
-  const { data, error } = await client.from('listings').select('slug').eq('status', '공개');
+  const { data, error } = await client.from('listings_public').select('slug').eq('status', '공개');
   if (error) throw error;
   return ((data as { slug: string }[]) ?? []).map(r => r.slug);
 }

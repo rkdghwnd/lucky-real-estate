@@ -39,10 +39,12 @@ export function ListingCard({ listing: l }: { listing: Listing }) {
         className="h-full overflow-hidden rounded-3xl border border-hairline/80 bg-canvas transition-all duration-300 ease-out hover:-translate-y-1.5 hover:border-hairline hover:shadow-[var(--shadow-floating)]"
       >
         <h3 className="line-clamp-1 text-lg font-extrabold tracking-tight text-ink group-hover:text-brand transition-colors duration-200">{l.title}</h3>
-        <p className="mt-2 flex items-center gap-1.5 text-[0.9rem] font-semibold text-muted">
-          <MapPin className="size-3.5 shrink-0 text-muted/60" aria-hidden="true" />
-          <span className="line-clamp-1">{l.address}</span>
-        </p>
+        {l.addressPublic && l.address ? (
+          <p className="mt-2 flex items-center gap-1.5 text-[0.9rem] font-semibold text-muted">
+            <MapPin className="size-3.5 shrink-0 text-muted/60" aria-hidden="true" />
+            <span className="line-clamp-1">{l.address}</span>
+          </p>
+        ) : null}
         <p className="mt-1 text-[0.85rem] font-medium text-muted/70">{formatArea(l.landAreaM2)}</p>
         <p className="mt-4 text-xl font-extrabold tracking-tight text-brand">{formatDealPrice(l)}</p>
       </Card>

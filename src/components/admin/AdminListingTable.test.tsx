@@ -6,14 +6,14 @@ import { MemoryRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import type { AdminListing } from '@/lib/admin/listings';
 
-vi.mock('@/lib/admin/api', () => ({ setListingStatusAction: vi.fn(), deleteListingAction: vi.fn() }));
+vi.mock('@/lib/admin/api', () => ({ deleteListingAction: vi.fn() }));
 
 import { AdminListingTable } from './AdminListingTable';
 
 let invalidateSpy: MockInstance;
 
 // AdminListingTable needs a Router (Link/useNavigate) and a QueryClient
-// (invalidateQueries replaces the old router.refresh after a mutation).
+// (invalidateQueries refreshes the list after a delete).
 function renderTable(ui: ReactElement) {
   const queryClient = new QueryClient();
   invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries');
@@ -33,6 +33,7 @@ const listings: AdminListing[] = [
     dealType: '매매',
     status: '공개',
     address: '인천광역시 서구 오류동 10',
+    addressPublic: true,
     landAreaM2: 1000,
     buildingAreaM2: 600,
     price: 1_850_000_000,
@@ -59,6 +60,7 @@ const listings: AdminListing[] = [
     dealType: '임대',
     status: '거래완료',
     address: '인천광역시 서구 왕길동 20',
+    addressPublic: true,
     landAreaM2: 2000,
     buildingAreaM2: 1200,
     price: 100_000_000,
@@ -101,36 +103,6 @@ it('shows status counts, searches title/address, and links to editing', async ()
 
   await userEvent.click(screen.getByRole('button', { name: '거래완료 1' }));
   expect(screen.getByText('왕길동 대형창고')).toBeInTheDocument();
-});
-
-it('confirms a status change, performs it, and refreshes the dashboard', async () => {
-  const action = vi.fn(async () => ({ ok: true as const, data: { slug: 'factory-sale-01' } }));
-  renderTable(<AdminListingTable listings={listings} statusAction={action} />);
-
-  await userEvent.click(screen.getByRole('button', { name: '오류동 제조공장 거래완료 처리' }));
-  const dialog = screen.getByRole('dialog');
-  expect(within(dialog).getByText('공개 사이트에서 즉시 숨겨집니다. 거래완료로 변경할까요?')).toBeInTheDocument();
-  await userEvent.click(within(dialog).getByRole('button', { name: '거래완료로 변경' }));
-
-  await waitFor(() => expect(action).toHaveBeenCalledWith(listings[0].id, '거래완료'));
-  expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['adminListings'] });
-  expect(screen.getByRole('status')).toHaveTextContent('거래완료로 변경했습니다. 공개 사이트에서는 숨겨집니다.');
-});
-
-it('keeps the dialog open and reports a failed status change', async () => {
-  const action = vi.fn(async () => ({
-    ok: false as const,
-    code: 'DATABASE' as const,
-    message: '상태 변경에 실패했습니다.',
-  }));
-  renderTable(<AdminListingTable listings={listings} statusAction={action} />);
-
-  await userEvent.click(screen.getByRole('button', { name: '오류동 제조공장 거래완료 처리' }));
-  await userEvent.click(screen.getByRole('button', { name: '거래완료로 변경' }));
-
-  expect(await screen.findByRole('alert')).toHaveTextContent('상태 변경에 실패했습니다.');
-  expect(screen.getByRole('dialog')).toBeInTheDocument();
-  expect(invalidateSpy).not.toHaveBeenCalled();
 });
 
 it('confirms a delete, performs it, and refreshes the dashboard', async () => {

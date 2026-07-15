@@ -20,7 +20,9 @@ function writableRow(input: ListingPayload) {
     title: input.title,
     property_type: input.propertyType,
     deal_type: input.dealType,
+    status: input.status,
     address: input.address,
+    address_public: input.addressPublic,
     price: input.price,
     monthly_rent: input.monthlyRent,
     land_area_m2: input.landAreaM2,
@@ -62,7 +64,6 @@ export async function createAdminListing(
   const { data, error } = await client.from('listings').insert({
     id: input.id,
     slug: makeListingSlug(input.id, now),
-    status: '공개',
     ...writableRow(input),
   }).select('*').single();
   if (error || !data) databaseFailure(error);

@@ -6,7 +6,9 @@ const basePayload = {
   title: '오류동 제조공장',
   propertyType: '공장' as const,
   dealType: '매매' as const,
+  status: '공개' as const,
   address: '인천 서구 오류동 1',
+  addressPublic: true,
   price: 1_850_000_000,
   monthlyRent: null,
   landAreaM2: 1653,
@@ -46,7 +48,7 @@ describe('listing admin schema', () => {
   });
 
   it('rejects server-controlled and unknown fields', () => {
-    const result = listingPayloadSchema.safeParse({ ...basePayload, status: '거래완료' });
+    const result = listingPayloadSchema.safeParse({ ...basePayload, slug: 'listing-x' });
     expect(result.success).toBe(false);
   });
 
@@ -55,7 +57,9 @@ describe('listing admin schema', () => {
     form.set('title', '오류동 제조공장');
     form.set('propertyType', '공장');
     form.set('dealType', '매매');
+    form.set('status', '공개');
     form.set('address', '인천 서구 오류동 1');
+    form.set('addressPublic', 'true');
     form.set('priceManwon', '185000');
     form.set('landAreaM2', '1653');
 
@@ -73,6 +77,7 @@ describe('listing admin schema', () => {
     form.set('title', '창고 임대');
     form.set('propertyType', '창고');
     form.set('dealType', '임대');
+    form.set('status', '공개');
     form.set('address', '인천 서구 왕길동 1');
     form.set('priceManwon', '0');
 

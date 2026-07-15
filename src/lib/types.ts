@@ -10,6 +10,7 @@ export interface ListingRow {
   deal_type: DealType;
   status: ListingStatus;
   address: string;
+  address_public: boolean;
   land_area_m2: number | null;
   building_area_m2: number | null;
   price: number;
@@ -36,6 +37,7 @@ export interface Listing {
   dealType: DealType;
   status: ListingStatus;
   address: string;
+  addressPublic: boolean;
   landAreaM2: number | null;
   buildingAreaM2: number | null;
   price: number;

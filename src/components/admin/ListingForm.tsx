@@ -3,7 +3,7 @@
 import { useCallback, useRef, useState, type FormEvent, type ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Building2, Images, MapPin, Ruler, Save, WalletCards } from 'lucide-react';
-import { Button } from 'antd';
+import { Button, Switch } from 'antd';
 import {
   createListingAction,
   updateListingAction,
@@ -11,6 +11,7 @@ import {
 } from '@/lib/admin/api';
 import { ImageUploader } from '@/components/admin/ImageUploader';
 import { NaverMap } from '@/components/map/NaverMap';
+import { AddressSearch } from '@/components/map/AddressSearch';
 import {
   cleanupListingImages,
   ListingImageUploadError,
@@ -26,7 +27,9 @@ export interface ListingFormInitialValues {
   title?: string;
   propertyType?: PropertyType;
   dealType?: DealType;
+  status?: '공개' | '거래완료';
   address?: string;
+  addressPublic?: boolean;
   priceManwon?: string;
   monthlyRentManwon?: string;
   landAreaM2?: string;
@@ -126,6 +129,7 @@ export function ListingForm({
   const [landAreaM2, setLandAreaM2] = useState(initialValues.landAreaM2 ?? '');
   const [buildingAreaM2, setBuildingAreaM2] = useState(initialValues.buildingAreaM2 ?? '');
   const [address, setAddress] = useState(initialValues.address ?? '');
+  const [addressPublic, setAddressPublic] = useState(initialValues.addressPublic ?? true);
   const [coordinates, setCoordinates] = useState({ lat: initialValues.lat ?? null, lng: initialValues.lng ?? null });
   const [images, setImages] = useState<ListingImageItem[]>(initialImages);
   const [imageStatuses, setImageStatuses] = useState<Record<string, 'uploading' | 'done' | 'failed'>>({});
@@ -143,7 +147,9 @@ export function ListingForm({
     const names: Record<string, string> = { price: 'priceManwon', monthlyRent: 'monthlyRentManwon' };
     const selector = key === 'images'
       ? '[aria-label="매물 사진 선택"]'
-      : `[name="${names[key] ?? key}"]`;
+      : key === 'address'
+        ? '[aria-label="주소 검색"]'
+        : `[name="${names[key] ?? key}"]`;
     requestAnimationFrame(() => formRef.current?.querySelector<HTMLElement>(selector)?.focus());
   }
 
@@ -201,11 +207,6 @@ export function ListingForm({
     }
   }
 
-  function changeAddress(value: string) {
-    setAddress(value);
-    setCoordinates({ lat: null, lng: null });
-  }
-
   const priceLabel = dealType === '매매' ? '매매가(만원)' : '보증금(만원)';
 
   return (
@@ -250,20 +251,41 @@ export function ListingForm({
               </select>
               <ErrorText id="deal-type-error" error={fieldErrors.dealType} />
             </label>
-            <label className="block lg:col-span-2">
-              <span className="font-bold text-ink">주소 <span className="text-danger">*</span></span>
-              <input
-                name="address"
-                aria-label="주소"
-                value={address}
-                onChange={event => changeAddress(event.target.value)}
-                placeholder="도로명 또는 지번 주소"
-                aria-invalid={Boolean(fieldErrors.address)}
-                aria-describedby={fieldErrors.address ? 'address-error' : undefined}
-                className={inputClass}
-              />
-              <ErrorText id="address-error" error={fieldErrors.address} />
+            <label className="block">
+              <span className="font-bold text-ink">공개 상태 <span className="text-danger">*</span></span>
+              <select name="status" aria-label="공개 상태" defaultValue={initialValues.status ?? '공개'} className={inputClass}>
+                <option value="공개">공개</option>
+                <option value="거래완료">거래완료</option>
+              </select>
+              <ErrorText id="status-error" error={fieldErrors.status} />
             </label>
+            <div className="block lg:col-span-2">
+              <span className="font-bold text-ink">주소 <span className="text-danger">*</span></span>
+              <div className="mt-2">
+                <AddressSearch
+                  initial={address}
+                  onSelect={candidate => {
+                    setAddress(candidate.address);
+                    setCoordinates({ lat: candidate.lat, lng: candidate.lng });
+                  }}
+                />
+              </div>
+              <input type="hidden" name="address" value={address} readOnly />
+              {address ? (
+                <p className="mt-2 flex items-center gap-1.5 text-sm font-semibold text-ink">
+                  <MapPin className="size-4 text-brand" aria-hidden="true" /> {address}
+                </p>
+              ) : null}
+              <ErrorText id="address-error" error={fieldErrors.address} />
+              <label className="mt-4 flex items-center gap-3">
+                <Switch checked={addressPublic} onChange={setAddressPublic} />
+                <span className="text-sm font-semibold text-ink">
+                  주소·지도 공개
+                  <span className="ml-1 font-medium text-muted">(끄면 외부 상세페이지에서 주소·지도 숨김)</span>
+                </span>
+              </label>
+              <input type="hidden" name="addressPublic" value={addressPublic ? 'true' : 'false'} readOnly />
+            </div>
           </div>
         </Section>
 

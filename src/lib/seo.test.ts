@@ -5,7 +5,7 @@ import type { Listing } from './types';
 const factory: Listing = {
   id: '1', slug: 'factory-sale-01', title: '오류동 제조공장',
   propertyType: '공장', dealType: '매매', status: '공개',
-  address: '인천광역시 서구 오류동 000-0',
+  address: '인천광역시 서구 오류동 000-0', addressPublic: true,
   landAreaM2: 1000, buildingAreaM2: 600, price: 1_850_000_000, monthlyRent: null,
   zoning: '계획관리지역', landCategory: '공장용지', roadAccess: '6m 도로 접함',
   ceilingHeightM: 8, powerCapacity: '150kW', completionYear: 2015,
