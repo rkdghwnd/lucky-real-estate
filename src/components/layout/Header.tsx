@@ -1,6 +1,6 @@
 'use client';
 
-import Link from 'next/link';
+import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { Phone, Menu, X, ChevronRight, Clock, Building2 } from 'lucide-react';
 import { Button, Drawer } from 'antd';
@@ -42,7 +42,7 @@ export function Header() {
       {/* Main bar */}
       <div>
         <div className="mx-auto flex min-h-[68px] max-w-6xl items-center justify-between gap-4 px-4">
-          <Link href="/" className="flex min-w-0 items-center gap-2.5" aria-label={siteConfig.shortName}>
+          <Link to="/" className="flex min-w-0 items-center gap-2.5" aria-label={siteConfig.shortName}>
             <span className="flex min-w-0 items-baseline gap-2">
               <span className="truncate text-2xl font-bold tracking-tight text-ink">{siteConfig.shortName}</span>
               <span className="hidden whitespace-nowrap text-xs font-medium text-muted lg:inline">
@@ -53,7 +53,7 @@ export function Header() {
 
           <nav className="hidden items-center gap-8 text-[0.95rem] font-semibold text-muted md:flex" aria-label="주요 메뉴">
             {NAV_LINKS.map(link => (
-              <Link key={link.label} href={link.href} className="transition-colors duration-200 hover:text-ink">
+              <Link key={link.label} to={link.href} className="transition-colors duration-200 hover:text-ink">
                 {link.label}
               </Link>
             ))}
@@ -113,7 +113,7 @@ export function Header() {
             {NAV_LINKS.map(link => (
               <Link
                 key={link.label}
-                href={link.href}
+                to={link.href}
                 onClick={close}
                 className="flex items-center justify-between py-4 text-base font-semibold text-ink"
               >

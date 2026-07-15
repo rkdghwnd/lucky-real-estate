@@ -10,7 +10,7 @@ export interface AdminListing extends Listing {
 
 function toAdminListing(row: ListingRow): AdminListing {
   return {
-    ...rowToListingWithUrl(row, process.env.NEXT_PUBLIC_SUPABASE_URL ?? ''),
+    ...rowToListingWithUrl(row, import.meta.env.VITE_SUPABASE_URL ?? ''),
     imagePaths: row.images ?? [],
   };
 }

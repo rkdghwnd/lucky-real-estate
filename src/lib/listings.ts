@@ -1,10 +1,11 @@
-import { createClient, type SupabaseClient } from '@supabase/supabase-js';
+import type { SupabaseClient } from '@supabase/supabase-js';
 import type { Listing, ListingRow, PropertyType, DealType } from './types';
 import { pyeong } from './format';
 import { resolveListingImage } from './listing-images';
+import { supabase } from './supabase/client';
 
 export function rowToListing(r: ListingRow): Listing {
-  return rowToListingWithUrl(r, process.env.NEXT_PUBLIC_SUPABASE_URL ?? '');
+  return rowToListingWithUrl(r, import.meta.env.VITE_SUPABASE_URL ?? '');
 }
 
 export function rowToListingWithUrl(r: ListingRow, supabaseUrl: string): Listing {
@@ -92,14 +93,7 @@ export function applyFilters(listings: Listing[], f: ListingFilter): Listing[] {
   });
 }
 
-export function createSupabaseServerClient(): SupabaseClient {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-  if (!url || !key) throw new Error('Supabase env vars (NEXT_PUBLIC_SUPABASE_URL/ANON_KEY) are missing');
-  return createClient(url, key, { auth: { persistSession: false } });
-}
-
-export async function getPublishedListings(client: SupabaseClient = createSupabaseServerClient()): Promise<Listing[]> {
+export async function getPublishedListings(client: SupabaseClient = supabase): Promise<Listing[]> {
   const { data, error } = await client.from('listings').select('*').eq('status', '공개').order('created_at', { ascending: false });
   if (error) throw error;
   return ((data as ListingRow[]) ?? []).map(rowToListing);
@@ -110,13 +104,13 @@ export async function getFeaturedListings(limit = 6, client?: SupabaseClient): P
   return all.slice(0, limit);
 }
 
-export async function getListingBySlug(slug: string, client: SupabaseClient = createSupabaseServerClient()): Promise<Listing | null> {
+export async function getListingBySlug(slug: string, client: SupabaseClient = supabase): Promise<Listing | null> {
   const { data, error } = await client.from('listings').select('*').eq('slug', slug).eq('status', '공개').single();
   if (error || !data) return null;
   return rowToListing(data as ListingRow);
 }
 
-export async function getAllListingSlugs(client: SupabaseClient = createSupabaseServerClient()): Promise<string[]> {
+export async function getAllListingSlugs(client: SupabaseClient = supabase): Promise<string[]> {
   const { data, error } = await client.from('listings').select('slug').eq('status', '공개');
   if (error) throw error;
   return ((data as { slug: string }[]) ?? []).map(r => r.slug);

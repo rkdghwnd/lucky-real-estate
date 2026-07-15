@@ -1,5 +1,3 @@
-'use client';
-import Image from 'next/image';
 import { Carousel } from 'antd';
 
 export function ImageSlider({ images, alt }: { images: string[]; alt: string }) {
@@ -17,13 +15,11 @@ export function ImageSlider({ images, alt }: { images: string[]; alt: string }) 
         {images.map((src, idx) => (
           <div key={src}>
             <div className="relative aspect-[4/3] bg-brand-light">
-              <Image
+              <img
                 src={src}
                 alt={`${alt} 사진 ${idx + 1}`}
-                fill
-                sizes="(max-width:1024px) 100vw, 640px"
-                className="object-cover"
-                priority={idx === 0}
+                loading={idx === 0 ? 'eager' : 'lazy'}
+                className="absolute inset-0 h-full w-full object-cover"
               />
             </div>
           </div>

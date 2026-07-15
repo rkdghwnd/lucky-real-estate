@@ -1,6 +1,4 @@
-'use client';
-
-import Image from 'next/image';
+import { useNavigate } from 'react-router-dom';
 import { Phone } from 'lucide-react';
 import { Button, Carousel } from 'antd';
 import { PhoneConsultButton } from '@/components/layout/PhoneConsultButton';
@@ -8,6 +6,7 @@ import { PhoneConsultButton } from '@/components/layout/PhoneConsultButton';
 const BANNERS = ['/banner0.jpg', '/banner5.avif', '/banner6.jpg', '/banner7.jpg'];
 
 export function Hero() {
+  const navigate = useNavigate();
   return (
     <section className="relative overflow-hidden bg-gradient-to-tr from-brand-light/20 via-canvas to-canvas border-b border-hairline/40">
       <div className="mx-auto max-w-6xl px-4 py-12 md:py-20 lg:py-24">
@@ -26,17 +25,17 @@ export function Hero() {
               고객님이 필요한 매물을 정직하게 찾아드립니다.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <PhoneConsultButton 
-                type="primary" 
-                size="large" 
-                icon={<Phone className="size-5" aria-hidden="true" />} 
+              <PhoneConsultButton
+                type="primary"
+                size="large"
+                icon={<Phone className="size-5" aria-hidden="true" />}
                 className="h-12 px-6 rounded-xl text-base font-bold shadow-none hover:scale-[1.02] transition-transform duration-200"
               >
                 전화상담
               </PhoneConsultButton>
-              <Button 
-                size="large" 
-                href="/listings" 
+              <Button
+                size="large"
+                onClick={() => navigate('/listings')}
                 className="h-12 px-6 rounded-xl text-base font-bold bg-surface border-0 text-ink hover:bg-hairline hover:text-ink hover:scale-[1.02] transition-all duration-200"
               >
                 매물보기
@@ -51,13 +50,11 @@ export function Hero() {
                 {BANNERS.map((src, i) => (
                   <div key={src}>
                     <div className="relative aspect-[4/3] w-full">
-                      <Image 
-                        src={src} 
-                        alt="행운부동산 중개 물건" 
-                        fill 
-                        priority={i === 0} 
-                        sizes="(max-width: 1024px) 100vw, 50vw" 
-                        className="object-cover" 
+                      <img
+                        src={src}
+                        alt="행운부동산 중개 물건"
+                        loading={i === 0 ? 'eager' : 'lazy'}
+                        className="absolute inset-0 h-full w-full object-cover"
                       />
                     </div>
                   </div>

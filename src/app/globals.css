@@ -34,6 +34,8 @@
 html {
   font-size: 18px;
   scroll-behavior: smooth;
+  /* Self-hosted via @fontsource/noto-sans-kr (imported in main.tsx). */
+  --font-noto-sans-kr: 'Noto Sans KR';
 }
 
 body {

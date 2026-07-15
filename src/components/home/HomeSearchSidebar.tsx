@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useNavigate } from 'react-router-dom';
 import { SearchFilters, EMPTY_DRAFT, type FilterDraft } from '@/components/listings/SearchFilters';
 
 // Home left-sidebar search. Reuses the listings filter panel, but instead of
@@ -8,7 +8,7 @@ import { SearchFilters, EMPTY_DRAFT, type FilterDraft } from '@/components/listi
 // params (same param names as ListingBrowser reads). Sticky is handled by the
 // page's grid-item aside, so the panel's own sticky is disabled here.
 export function HomeSearchSidebar({ regions }: { regions: string[] }) {
-  const router = useRouter();
+  const navigate = useNavigate();
 
   const apply = (d: FilterDraft) => {
     const p = new URLSearchParams();
@@ -21,7 +21,7 @@ export function HomeSearchSidebar({ regions }: { regions: string[] }) {
     if (d.areaMin.trim()) p.set('amin', d.areaMin.trim());
     if (d.areaMax.trim()) p.set('amax', d.areaMax.trim());
     const qs = p.toString();
-    router.push(qs ? `/listings?${qs}` : '/listings');
+    navigate(qs ? `/listings?${qs}` : '/listings');
   };
 
   return (

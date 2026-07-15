@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import { Card } from 'antd';
 
 // Official Korean real-estate / government reference sites — identity taken from each
@@ -26,13 +25,12 @@ export function UsefulLinks() {
             className="flex flex-col items-center gap-2 rounded-xl border border-hairline/80 p-3 text-center bg-canvas transition-all duration-200 hover:border-brand/40 hover:bg-brand-light/20 hover:-translate-y-0.5"
           >
             <span className="flex h-8 w-full items-center justify-center">
-              <Image
+              <img
                 src={link.logo}
                 alt={link.name}
                 width={120}
                 height={32}
                 className="h-8 w-full object-contain filter grayscale opacity-75 hover:grayscale-0 hover:opacity-100 transition-all"
-                unoptimized
               />
             </span>
           </a>

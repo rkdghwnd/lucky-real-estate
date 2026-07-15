@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import { Link } from 'react-router-dom';
 import { siteConfig } from '@/lib/site';
 
 export function Footer() {
@@ -23,9 +23,9 @@ export function Footer() {
           <div className="md:text-right">
             <p className="text-sm font-bold text-ink">바로가기</p>
             <nav className="mt-4 flex flex-col gap-2.5 text-sm md:items-end font-medium">
-              <Link href="/" className="transition-colors duration-200 hover:text-ink">홈</Link>
-              <Link href="/listings" className="transition-colors duration-200 hover:text-ink">매물검색</Link>
-              <Link href="/about" className="transition-colors duration-200 hover:text-ink">회사소개</Link>
+              <Link to="/" className="transition-colors duration-200 hover:text-ink">홈</Link>
+              <Link to="/listings" className="transition-colors duration-200 hover:text-ink">매물검색</Link>
+              <Link to="/about" className="transition-colors duration-200 hover:text-ink">회사소개</Link>
               <a href={mapUrl} target="_blank" rel="noopener noreferrer" className="transition-colors duration-200 hover:text-ink">
                 네이버 지도에서 사무소 위치 보기
               </a>

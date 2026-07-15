@@ -1,6 +1,6 @@
 'use client';
 import { useMemo } from 'react';
-import { useRouter, usePathname, useSearchParams } from 'next/navigation';
+import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import { Select, Pagination, Empty, Button } from 'antd';
 import { searchListings, criteriaFromParams, availableRegions, type SortKey } from '@/lib/search';
 import type { Listing } from '@/lib/types';
@@ -27,9 +27,9 @@ function draftFromParams(sp: URLSearchParams): FilterDraft {
 }
 
 export function ListingBrowser({ listings }: { listings: Listing[] }) {
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
+  const [searchParams] = useSearchParams();
   const spString = searchParams.toString();
 
   const sp = useMemo(() => new URLSearchParams(spString), [spString]);
@@ -39,7 +39,7 @@ export function ListingBrowser({ listings }: { listings: Listing[] }) {
 
   const push = (next: URLSearchParams) => {
     const qs = next.toString();
-    router.push(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
+    navigate(qs ? `${pathname}?${qs}` : pathname);
   };
 
   const applyFilters = (d: FilterDraft) => {

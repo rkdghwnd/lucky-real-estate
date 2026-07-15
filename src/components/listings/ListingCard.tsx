@@ -1,5 +1,4 @@
-import Link from 'next/link';
-import Image from 'next/image';
+import { Link } from 'react-router-dom';
 import { Card } from 'antd';
 import { MapPin } from 'lucide-react';
 import type { Listing } from '@/lib/types';
@@ -9,12 +8,11 @@ export function ListingCard({ listing: l }: { listing: Listing }) {
   const cover = (
     <div className="relative aspect-[4/3] overflow-hidden bg-brand-light/30">
       {l.images[0] ? (
-        <Image
+        <img
           src={l.images[0]}
           alt={l.title}
-          fill
-          sizes="(max-width:640px) 100vw, (max-width:1024px) 50vw, 33vw"
-          className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+          loading="lazy"
+          className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
         />
       ) : (
         <div className="flex h-full items-center justify-center text-sm font-semibold text-muted">사진 준비중</div>
@@ -33,7 +31,7 @@ export function ListingCard({ listing: l }: { listing: Listing }) {
   );
 
   return (
-    <Link href={`/listings/${l.slug}`} aria-label={`${l.title} 상세보기`} className="group block h-full">
+    <Link to={`/listings/${l.slug}`} aria-label={`${l.title} 상세보기`} className="group block h-full">
       <Card
         hoverable
         cover={cover}

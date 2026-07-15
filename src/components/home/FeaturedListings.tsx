@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { ListingCard } from '@/components/listings/ListingCard';
 import type { Listing } from '@/lib/types';
@@ -9,7 +9,7 @@ export function FeaturedListings({ listings }: { listings: Listing[] }) {
       <div className="mb-5 flex items-end justify-between">
         <h2 className="text-2xl font-extrabold tracking-tight text-ink sm:text-3xl">추천 매물</h2>
         {listings.length > 0 ? (
-          <Link href="/listings" className="flex items-center gap-1 text-[0.95rem] font-bold text-brand transition-colors hover:text-brand-dark">
+          <Link to="/listings" className="flex items-center gap-1 text-[0.95rem] font-bold text-brand transition-colors hover:text-brand-dark">
             더보기 <ArrowRight className="size-4" aria-hidden="true" />
           </Link>
         ) : null}
