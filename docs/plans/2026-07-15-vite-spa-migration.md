@@ -54,16 +54,16 @@ lib/                mostly unchanged; env + supabase updated
 
 ## Execution checklist (Phase 2)
 
-- [ ] **2a** Scaffold Vite: `index.html`, `src/main.tsx`, `vite.config.ts` (react + tailwind + tsconfig paths), tsconfig (drop `next` plugin/includes, add `vite/client`), package scripts. Boot check.
-- [ ] **2b** Providers & globals: AntdProvider + `StyleProvider layer` + TanStack Query + RouterProvider; import `globals.css` + fonts; keep `--font-noto-sans-kr`.
-- [ ] **2c** Routing shell: root layout → App layout (Header/Footer/SiteChrome); route tree (`/`, `/listings`, `/listings/:slug`, `/about`, `/admin/*`, `*`→NotFound).
-- [ ] **2d** env + Supabase: `VITE_*` everywhere; single browser client; delete `supabase/server.ts`.
-- [ ] **2e** Data hooks: TanStack Query `useListings`/`useListing`/`useFeatured`; public pages → client + hooks (loading/empty/error states).
-- [ ] **2f** Swap next/*: Link, Image, navigation across all files.
-- [ ] **2g** Admin CSR rebuild: `RequireAdmin` guard, login, dashboard, new, edit (`:id` native), mutations → Query invalidate; delete `revalidate.ts`.
-- [ ] **2h** Head/SEO: index.html base tags + Org/Website JSON-LD; per-page title hook; static `public/robots.txt`, `public/manifest.webmanifest` (+ optional sitemap).
-- [ ] **2i** Remove Next/OpenNext: deps (`next`, `@opennextjs/cloudflare`, `wrangler`, `@ant-design/nextjs-registry`), `next.config.mjs`, `.open-next/`, `wrangler.jsonc`, `open-next.config.ts`, `postcss.config.mjs`, package scripts.
-- [ ] **2j** Tests + verify: router wrappers, `import.meta.env`; delete/rewrite Next-route tests (generateStaticParams, robots, sitemap, revalidate, actions); `vite build` → `dist` preview; vitest green; drive the app.
+- [x] **2a** Scaffold Vite: `index.html`, `src/main.tsx`, `vite.config.ts` (react + tailwind + tsconfig paths), tsconfig (drop `next` plugin/includes, add `vite/client`), package scripts. Boot check.
+- [x] **2b** Providers & globals: AntdProvider + `StyleProvider layer` + TanStack Query + RouterProvider; import `globals.css` + fonts; keep `--font-noto-sans-kr`.
+- [x] **2c** Routing shell: root layout → App layout (Header/Footer/SiteChrome); route tree (`/`, `/listings`, `/listings/:slug`, `/about`, `/admin/*`, `*`→NotFound).
+- [x] **2d** env + Supabase: `VITE_*` everywhere; single browser client; delete `supabase/server.ts`.
+- [x] **2e** Data hooks: TanStack Query `useListings`/`useListing`/`useFeatured`; public pages → client + hooks (loading/empty/error states).
+- [x] **2f** Swap next/*: Link, Image, navigation across all files.
+- [x] **2g** Admin CSR rebuild: `RequireAdmin` guard, login, dashboard, new, edit (`:id` native), mutations → Query invalidate; delete `revalidate.ts`.
+- [x] **2h** Head/SEO: index.html base tags + Org/Website JSON-LD; per-page title hook; static `public/robots.txt`, `public/manifest.webmanifest` (+ optional sitemap).
+- [x] **2i** Remove Next/OpenNext: deps (`next`, `@opennextjs/cloudflare`, `wrangler`, `@ant-design/nextjs-registry`), `next.config.mjs`, `.open-next/`, `wrangler.jsonc`, `open-next.config.ts`, `postcss.config.mjs`, package scripts.
+- [x] **2j** Tests + verify: router wrappers, `import.meta.env`; delete/rewrite Next-route tests (generateStaticParams, robots, sitemap, revalidate, actions); `vite build` → `dist` preview; vitest green; drive the app.
 
 ## Watch items
 - antd v6 + React 19: ConfigProvider tokens; ensure SSR extraction removed but `@layer antd` preserved via `StyleProvider layer`.
