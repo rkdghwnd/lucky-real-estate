@@ -6,8 +6,10 @@ import { AreaCalculator } from '@/components/home/AreaCalculator';
 import { UsefulLinks } from '@/components/home/UsefulLinks';
 import { useListings } from '@/lib/queries';
 import { availableRegions } from '@/lib/search';
+import { useDocumentTitle } from '@/lib/useDocumentTitle';
 
 export function Home() {
+  useDocumentTitle('행운부동산공인중개사사무소 | 인천 서구 공장·창고·토지');
   const { data: listings = [], isLoading } = useListings();
   const regions = availableRegions(listings);
 

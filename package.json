@@ -3,40 +3,27 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "vite build",
     "dev": "vite",
-    "start": "vite preview",
+    "build": "vite build",
+    "preview": "vite preview",
     "lint": "eslint",
     "test": "vitest run",
-    "test:watch": "vitest",
-    "kill:workerd": "node -e \"try{require('child_process').execSync('taskkill /F /IM workerd.exe',{stdio:'ignore'})}catch{}\"",
-    "prepreview": "npm run kill:workerd",
-    "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
-    "predeploy": "npm run kill:workerd",
-    "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
-    "preupload": "npm run kill:workerd",
-    "upload": "opennextjs-cloudflare build && opennextjs-cloudflare upload",
-    "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts"
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@ant-design/cssinjs": "^2.1.2",
-    "@ant-design/nextjs-registry": "^1.3.0",
     "@fontsource/noto-sans-kr": "^5.2.9",
-    "@opennextjs/cloudflare": "^1.20.1",
-    "@supabase/ssr": "^0.12.0",
     "@supabase/supabase-js": "^2.110.0",
     "@tanstack/react-query": "^5.101.2",
     "antd": "^6.5.0",
     "browser-image-compression": "^2.0.2",
     "lucide-react": "^1.23.0",
-    "next": "16.2.10",
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "react-router-dom": "^7.18.1",
     "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4",
     "@tailwindcss/vite": "^4.3.2",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
@@ -51,7 +38,6 @@
     "tailwindcss": "^4",
     "typescript": "^5",
     "vite": "^8.1.4",
-    "vitest": "^4.1.9",
-    "wrangler": "^4.107.0"
+    "vitest": "^4.1.9"
   }
 }

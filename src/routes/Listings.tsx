@@ -1,7 +1,9 @@
 import { ListingBrowser } from '@/components/listings/ListingBrowser';
 import { useListings } from '@/lib/queries';
+import { useDocumentTitle } from '@/lib/useDocumentTitle';
 
 export function Listings() {
+  useDocumentTitle('매물검색 | 행운부동산');
   const { data: listings = [], isLoading, isError } = useListings();
 
   return (
