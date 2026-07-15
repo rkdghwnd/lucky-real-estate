@@ -1,14 +1,14 @@
 'use client';
 
 import { useCallback, useRef, useState, type FormEvent, type ReactNode } from 'react';
-import { useRouter } from 'next/navigation';
+import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Building2, Images, MapPin, Ruler, Save, WalletCards } from 'lucide-react';
 import { Button } from 'antd';
 import {
   createListingAction,
   updateListingAction,
   type AdminActionResult,
-} from '@/app/admin/actions';
+} from '@/lib/admin/api';
 import { ImageUploader } from '@/components/admin/ImageUploader';
 import { NaverMap } from '@/components/map/NaverMap';
 import {
@@ -116,7 +116,7 @@ export function ListingForm({
   createAction = createListingAction,
   updateAction = updateListingAction,
 }: ListingFormProps) {
-  const router = useRouter();
+  const navigate = useNavigate();
   const formRef = useRef<HTMLFormElement>(null);
   const idRef = useRef(listingId ?? globalThis.crypto.randomUUID());
   const initialPathsRef = useRef(initialImages.map(image => image.path));
@@ -189,8 +189,7 @@ export function ListingForm({
         const removedStoredPaths = initialPathsRef.current.filter(path => !retained.has(path));
         await cleanupImages(client, removedStoredPaths);
       }
-      router.replace(`/admin?${mode === 'create' ? 'created' : 'updated'}=1`);
-      router.refresh();
+      navigate(`/admin?${mode === 'create' ? 'created' : 'updated'}=1`, { replace: true });
     } catch (error) {
       const uploadedPaths = error instanceof ListingImageUploadError ? error.uploadedPaths : newlyUploaded;
       if (client && uploadedPaths.length > 0) await cleanupImages(client, uploadedPaths);
@@ -365,7 +364,7 @@ export function ListingForm({
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-5 py-4">
           <p className="hidden text-sm font-semibold text-muted sm:block">저장하면 공개 사이트에 즉시 반영됩니다.</p>
           <div className="ml-auto flex gap-2">
-            <Button htmlType="button" onClick={() => router.push('/admin')} disabled={pending} aria-label="목록으로 취소" icon={<ArrowLeft aria-hidden="true" />}>
+            <Button htmlType="button" onClick={() => navigate('/admin')} disabled={pending} aria-label="목록으로 취소" icon={<ArrowLeft aria-hidden="true" />}>
               취소
             </Button>
             <Button type="primary" htmlType="submit" disabled={pending} icon={<Save aria-hidden="true" />}>

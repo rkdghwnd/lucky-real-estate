@@ -1,7 +1,7 @@
 'use client';
 
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { Link, useNavigate } from 'react-router-dom';
+import { useQueryClient } from '@tanstack/react-query';
 import { useMemo, useState } from 'react';
 import { Search } from 'lucide-react';
 import { Button, Modal, Tag } from 'antd';
@@ -9,7 +9,7 @@ import {
   deleteListingAction,
   setListingStatusAction,
   type AdminActionResult,
-} from '@/app/admin/actions';
+} from '@/lib/admin/api';
 import type { AdminListing } from '@/lib/admin/listings';
 import type { ListingStatus } from '@/lib/types';
 
@@ -50,7 +50,8 @@ export function AdminListingTable({
   statusAction?: StatusAction;
   deleteAction?: DeleteAction;
 }) {
-  const router = useRouter();
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const [activeStatus, setActiveStatus] = useState<VisibleStatus>('공개');
   const [query, setQuery] = useState('');
   const [selected, setSelected] = useState<AdminListing | null>(null);
@@ -90,7 +91,7 @@ export function AdminListingTable({
       ? '거래완료로 변경했습니다. 공개 사이트에서는 숨겨집니다.'
       : '매물을 다시 공개했습니다.');
     setSelected(null);
-    router.refresh();
+    queryClient.invalidateQueries({ queryKey: ['adminListings'] });
   }
 
   async function removeListing() {
@@ -105,7 +106,7 @@ export function AdminListingTable({
     }
     setNotice('매물을 삭제했습니다.');
     setDeleteTarget(null);
-    router.refresh();
+    queryClient.invalidateQueries({ queryKey: ['adminListings'] });
   }
 
   return (
@@ -178,7 +179,7 @@ export function AdminListingTable({
                           <div className="min-w-0">
                             <div className="flex items-center gap-2">
                               <Link
-                                href={`/admin/listings/${listing.id}/edit`}
+                                to={`/admin/listings/${listing.id}/edit`}
                                 aria-label={`${listing.title} 수정`}
                                 className="truncate font-extrabold text-ink hover:text-brand hover:underline"
                               >
@@ -197,7 +198,7 @@ export function AdminListingTable({
                       </td>
                       <td className="px-5 py-5">
                         <div className="flex flex-wrap justify-end gap-2">
-                          <Button href={`/admin/listings/${listing.id}/edit`} size="large">수정</Button>
+                          <Button onClick={() => navigate(`/admin/listings/${listing.id}/edit`)} size="large">수정</Button>
                           <Button
                             htmlType="button"
                             size="large"

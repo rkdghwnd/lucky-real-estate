@@ -1,14 +1,12 @@
-'use client';
-
-import { useRouter } from 'next/navigation';
+import { useNavigate } from 'react-router-dom';
 import { useState, type FormEvent } from 'react';
 import { Button } from 'antd';
-import { loginAction, type AdminActionResult } from '@/app/admin/actions';
+import { loginAction, type AdminActionResult } from '@/lib/admin/api';
 
 type LoginAction = (form: FormData) => Promise<AdminActionResult<{ email: string }>>;
 
 export function LoginForm({ action = loginAction }: { action?: LoginAction }) {
-  const router = useRouter();
+  const navigate = useNavigate();
   const [pending, setPending] = useState(false);
   const [error, setError] = useState('');
 
@@ -22,8 +20,7 @@ export function LoginForm({ action = loginAction }: { action?: LoginAction }) {
       setError(result.message);
       return;
     }
-    router.replace('/admin');
-    router.refresh();
+    navigate('/admin', { replace: true });
   }
 
   return (

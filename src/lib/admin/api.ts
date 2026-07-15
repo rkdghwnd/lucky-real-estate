@@ -1,0 +1,133 @@
+import { z } from 'zod';
+import { supabase } from '@/lib/supabase/client';
+import { getAdminAccess } from './auth';
+import {
+  createAdminListing,
+  deleteAdminListing,
+  setAdminListingStatus,
+  updateAdminListing,
+} from './listings';
+import { listingPayloadSchema } from './listing-schema';
+
+// Client-side admin operations for the CSR SPA. These replace the old Next.js
+// Server Actions. Authorization is enforced by Supabase RLS (is_admin()); the
+// getAdminAccess() gate here is only for UX (fail fast with a friendly message).
+
+export type AdminActionResult<T = undefined> =
+  | { ok: true; data: T }
+  | {
+      ok: false;
+      code: 'VALIDATION' | 'UNAUTHORIZED' | 'NOT_FOUND' | 'STORAGE' | 'DATABASE';
+      message: string;
+      fieldErrors?: Record<string, string>;
+    };
+
+function validationErrors(error: z.ZodError): Record<string, string> {
+  const fields: Record<string, string> = {};
+  for (const issue of error.issues) {
+    const key = String(issue.path[0] ?? 'form');
+    fields[key] ??= issue.message;
+  }
+  return fields;
+}
+
+async function requireAdmin() {
+  const access = await getAdminAccess(supabase);
+  return access ? supabase : null;
+}
+
+export async function loginAction(formData: FormData): Promise<AdminActionResult<{ email: string }>> {
+  const credentials = z.object({
+    email: z.string().trim().email(),
+    password: z.string().min(1),
+  }).safeParse({ email: formData.get('email'), password: formData.get('password') });
+  if (!credentials.success) {
+    return { ok: false, code: 'VALIDATION', message: '아이디와 비밀번호를 입력해주세요.' };
+  }
+
+  const { error } = await supabase.auth.signInWithPassword(credentials.data);
+  if (error) return { ok: false, code: 'UNAUTHORIZED', message: '아이디 또는 비밀번호를 확인해주세요.' };
+
+  const access = await getAdminAccess(supabase);
+  if (!access) {
+    await supabase.auth.signOut();
+    return { ok: false, code: 'UNAUTHORIZED', message: '관리자 권한이 없는 계정입니다.' };
+  }
+  return { ok: true, data: { email: access.email } };
+}
+
+export async function logoutAction(): Promise<AdminActionResult> {
+  await supabase.auth.signOut();
+  return { ok: true, data: undefined };
+}
+
+export async function createListingAction(input: unknown): Promise<AdminActionResult<{ id: string; slug: string }>> {
+  const client = await requireAdmin();
+  if (!client) return { ok: false, code: 'UNAUTHORIZED', message: '로그인이 만료되었습니다. 다시 로그인해주세요.' };
+
+  const parsed = listingPayloadSchema.safeParse(input);
+  if (!parsed.success) {
+    return { ok: false, code: 'VALIDATION', message: '표시된 입력 항목을 확인해주세요.', fieldErrors: validationErrors(parsed.error) };
+  }
+
+  try {
+    const listing = await createAdminListing(client, parsed.data);
+    return { ok: true, data: { id: listing.id, slug: listing.slug } };
+  } catch {
+    return { ok: false, code: 'DATABASE', message: '매물을 저장하지 못했습니다. 다시 시도해주세요.' };
+  }
+}
+
+export async function updateListingAction(id: string, input: unknown): Promise<AdminActionResult<{ id: string; slug: string }>> {
+  const client = await requireAdmin();
+  if (!client) return { ok: false, code: 'UNAUTHORIZED', message: '로그인이 만료되었습니다. 다시 로그인해주세요.' };
+
+  const parsed = listingPayloadSchema.safeParse(input);
+  if (!parsed.success || parsed.data.id !== id) {
+    return {
+      ok: false,
+      code: 'VALIDATION',
+      message: '표시된 입력 항목을 확인해주세요.',
+      fieldErrors: parsed.success ? { id: '매물 ID가 일치하지 않습니다.' } : validationErrors(parsed.error),
+    };
+  }
+
+  try {
+    const listing = await updateAdminListing(client, id, parsed.data);
+    return { ok: true, data: { id: listing.id, slug: listing.slug } };
+  } catch {
+    return { ok: false, code: 'DATABASE', message: '매물을 수정하지 못했습니다. 다시 시도해주세요.' };
+  }
+}
+
+const statusSchema = z.enum(['공개', '거래완료']);
+
+export async function setListingStatusAction(id: string, status: '공개' | '거래완료'): Promise<AdminActionResult<{ slug: string }>> {
+  const client = await requireAdmin();
+  if (!client) return { ok: false, code: 'UNAUTHORIZED', message: '로그인이 만료되었습니다. 다시 로그인해주세요.' };
+
+  const parsed = z.object({ id: z.string().uuid(), status: statusSchema }).safeParse({ id, status });
+  if (!parsed.success) return { ok: false, code: 'VALIDATION', message: '매물 상태 요청이 올바르지 않습니다.' };
+
+  try {
+    const listing = await setAdminListingStatus(client, parsed.data.id, parsed.data.status);
+    return { ok: true, data: listing };
+  } catch {
+    return { ok: false, code: 'DATABASE', message: '매물 상태를 변경하지 못했습니다.' };
+  }
+}
+
+export async function deleteListingAction(id: string): Promise<AdminActionResult<{ slug: string }>> {
+  const client = await requireAdmin();
+  if (!client) return { ok: false, code: 'UNAUTHORIZED', message: '로그인이 만료되었습니다. 다시 로그인해주세요.' };
+
+  const parsed = z.string().uuid().safeParse(id);
+  if (!parsed.success) return { ok: false, code: 'VALIDATION', message: '매물 요청이 올바르지 않습니다.' };
+
+  try {
+    const { slug } = await deleteAdminListing(client, parsed.data);
+    return { ok: true, data: { slug } };
+  } catch {
+    return { ok: false, code: 'DATABASE', message: '매물을 삭제하지 못했습니다. 다시 시도해주세요.' };
+  }
+}
