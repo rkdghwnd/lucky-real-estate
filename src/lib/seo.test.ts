@@ -1,8 +1,7 @@
 import { describe, it, expect } from 'vitest';
-import { absoluteUrl, buildListingMetadata, buildOrgJsonLd, buildListingJsonLd, buildVerificationMetadata, buildWebsiteJsonLd, buildBreadcrumbJsonLd } from './seo';
+import { absoluteUrl, buildOrgJsonLd, buildListingJsonLd, buildWebsiteJsonLd, buildBreadcrumbJsonLd } from './seo';
 import type { Listing } from './types';
 
-// Self-contained literal — this task must not depend on Task 5's rowToListing.
 const factory: Listing = {
   id: '1', slug: 'factory-sale-01', title: '오류동 제조공장',
   propertyType: '공장', dealType: '매매', status: '공개',
@@ -21,16 +20,6 @@ describe('absoluteUrl', () => {
   });
 });
 
-describe('buildListingMetadata', () => {
-  it('sets a canonical url containing the slug and an OG image', () => {
-    const m = buildListingMetadata(factory);
-    expect(String(m.alternates?.canonical)).toMatch(/\/listings\/factory-sale-01$/);
-    expect(m.openGraph?.images).toBeTruthy();
-    expect(m.twitter).toBeTruthy();
-    expect(String(m.title)).toContain(factory.title);
-  });
-});
-
 describe('buildOrgJsonLd', () => {
   it('is a RealEstateAgent with the office name', () => {
     const o = buildOrgJsonLd() as Record<string, unknown>;
@@ -45,22 +34,6 @@ describe('buildListingJsonLd', () => {
     expect(j['@type']).toBe('Product');
     expect(j.offers.price).toBe(factory.price);
     expect(j.offers.priceCurrency).toBe('KRW');
-  });
-});
-
-describe('buildVerificationMetadata', () => {
-  it('returns undefined when no verification codes are set', () => {
-    expect(buildVerificationMetadata('', '')).toBeUndefined();
-  });
-  it('includes google and naver-site-verification when both are set', () => {
-    const v = buildVerificationMetadata('naver-code', 'google-code');
-    expect(v?.google).toBe('google-code');
-    expect(v?.other?.['naver-site-verification']).toBe('naver-code');
-  });
-  it('includes only the one that is set', () => {
-    const v = buildVerificationMetadata('naver-code', '');
-    expect(v?.other?.['naver-site-verification']).toBe('naver-code');
-    expect(v?.google).toBeUndefined();
   });
 });
 

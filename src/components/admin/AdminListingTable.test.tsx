@@ -1,13 +1,28 @@
 import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { beforeEach, expect, it, vi } from 'vitest';
+import { beforeEach, expect, it, vi, type MockInstance } from 'vitest';
+import type { ReactElement } from 'react';
+import { MemoryRouter } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import type { AdminListing } from '@/lib/admin/listings';
 
-const router = vi.hoisted(() => ({ refresh: vi.fn() }));
-vi.mock('next/navigation', () => ({ useRouter: () => router }));
-vi.mock('@/app/admin/actions', () => ({ setListingStatusAction: vi.fn(), deleteListingAction: vi.fn() }));
+vi.mock('@/lib/admin/api', () => ({ setListingStatusAction: vi.fn(), deleteListingAction: vi.fn() }));
 
 import { AdminListingTable } from './AdminListingTable';
+
+let invalidateSpy: MockInstance;
+
+// AdminListingTable needs a Router (Link/useNavigate) and a QueryClient
+// (invalidateQueries replaces the old router.refresh after a mutation).
+function renderTable(ui: ReactElement) {
+  const queryClient = new QueryClient();
+  invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries');
+  return render(
+    <QueryClientProvider client={queryClient}>
+      <MemoryRouter>{ui}</MemoryRouter>
+    </QueryClientProvider>,
+  );
+}
 
 const listings: AdminListing[] = [
   {
@@ -64,10 +79,10 @@ const listings: AdminListing[] = [
   },
 ];
 
-beforeEach(() => router.refresh.mockReset());
+beforeEach(() => vi.clearAllMocks());
 
 it('shows status counts, searches title/address, and links to editing', async () => {
-  render(<AdminListingTable listings={listings} />);
+  renderTable(<AdminListingTable listings={listings} />);
 
   expect(screen.getByRole('button', { name: '공개 중 1' })).toBeInTheDocument();
   expect(screen.getByRole('button', { name: '거래완료 1' })).toBeInTheDocument();
@@ -90,7 +105,7 @@ it('shows status counts, searches title/address, and links to editing', async ()
 
 it('confirms a status change, performs it, and refreshes the dashboard', async () => {
   const action = vi.fn(async () => ({ ok: true as const, data: { slug: 'factory-sale-01' } }));
-  render(<AdminListingTable listings={listings} statusAction={action} />);
+  renderTable(<AdminListingTable listings={listings} statusAction={action} />);
 
   await userEvent.click(screen.getByRole('button', { name: '오류동 제조공장 거래완료 처리' }));
   const dialog = screen.getByRole('dialog');
@@ -98,7 +113,7 @@ it('confirms a status change, performs it, and refreshes the dashboard', async (
   await userEvent.click(within(dialog).getByRole('button', { name: '거래완료로 변경' }));
 
   await waitFor(() => expect(action).toHaveBeenCalledWith(listings[0].id, '거래완료'));
-  expect(router.refresh).toHaveBeenCalledOnce();
+  expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['adminListings'] });
   expect(screen.getByRole('status')).toHaveTextContent('거래완료로 변경했습니다. 공개 사이트에서는 숨겨집니다.');
 });
 
@@ -108,19 +123,19 @@ it('keeps the dialog open and reports a failed status change', async () => {
     code: 'DATABASE' as const,
     message: '상태 변경에 실패했습니다.',
   }));
-  render(<AdminListingTable listings={listings} statusAction={action} />);
+  renderTable(<AdminListingTable listings={listings} statusAction={action} />);
 
   await userEvent.click(screen.getByRole('button', { name: '오류동 제조공장 거래완료 처리' }));
   await userEvent.click(screen.getByRole('button', { name: '거래완료로 변경' }));
 
   expect(await screen.findByRole('alert')).toHaveTextContent('상태 변경에 실패했습니다.');
   expect(screen.getByRole('dialog')).toBeInTheDocument();
-  expect(router.refresh).not.toHaveBeenCalled();
+  expect(invalidateSpy).not.toHaveBeenCalled();
 });
 
 it('confirms a delete, performs it, and refreshes the dashboard', async () => {
   const action = vi.fn(async () => ({ ok: true as const, data: { slug: 'factory-sale-01' } }));
-  render(<AdminListingTable listings={listings} deleteAction={action} />);
+  renderTable(<AdminListingTable listings={listings} deleteAction={action} />);
 
   await userEvent.click(screen.getByRole('button', { name: '오류동 제조공장 삭제' }));
   const dialog = screen.getByRole('dialog');
@@ -128,7 +143,7 @@ it('confirms a delete, performs it, and refreshes the dashboard', async () => {
   await userEvent.click(within(dialog).getByRole('button', { name: '삭제' }));
 
   await waitFor(() => expect(action).toHaveBeenCalledWith(listings[0].id));
-  expect(router.refresh).toHaveBeenCalledOnce();
+  expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ['adminListings'] });
   expect(screen.getByRole('status')).toHaveTextContent('매물을 삭제했습니다.');
 });
 
@@ -138,7 +153,7 @@ it('keeps the delete dialog open and reports a failed delete', async () => {
     code: 'DATABASE' as const,
     message: '삭제에 실패했습니다.',
   }));
-  render(<AdminListingTable listings={listings} deleteAction={action} />);
+  renderTable(<AdminListingTable listings={listings} deleteAction={action} />);
 
   await userEvent.click(screen.getByRole('button', { name: '오류동 제조공장 삭제' }));
   const dialog = screen.getByRole('dialog');
@@ -146,5 +161,5 @@ it('keeps the delete dialog open and reports a failed delete', async () => {
 
   expect(await screen.findByRole('alert')).toHaveTextContent('삭제에 실패했습니다.');
   expect(screen.getByRole('dialog')).toBeInTheDocument();
-  expect(router.refresh).not.toHaveBeenCalled();
+  expect(invalidateSpy).not.toHaveBeenCalled();
 });

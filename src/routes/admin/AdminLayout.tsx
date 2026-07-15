@@ -6,7 +6,7 @@ import { AdminHeader } from '@/components/admin/AdminHeader';
 
 // Client-side admin guard (replaces the old server (protected)/layout.tsx).
 // getAdminAccess checks the Supabase session + is_admin() RPC. RLS is the real
-// enforcement — this just gates the UI.
+// enforcement; this just gates the UI.
 export function AdminLayout() {
   const [status, setStatus] = useState<'checking' | 'authed' | 'denied'>('checking');
   const [admin, setAdmin] = useState<AdminAccess | null>(null);

@@ -2,13 +2,16 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, expect, it, vi } from 'vitest';
-import type { AdminActionResult } from '@/app/admin/actions';
+import type { AdminActionResult } from '@/lib/admin/api';
 import type { ListingPayload } from '@/lib/admin/listing-schema';
 import type { ListingImageItem, StoredListingImage } from '@/lib/admin/images';
 
-const router = vi.hoisted(() => ({ replace: vi.fn(), refresh: vi.fn(), push: vi.fn() }));
-vi.mock('next/navigation', () => ({ useRouter: () => router }));
-vi.mock('@/app/admin/actions', () => ({
+const navigate = vi.hoisted(() => vi.fn());
+vi.mock('react-router-dom', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('react-router-dom')>()),
+  useNavigate: () => navigate,
+}));
+vi.mock('@/lib/admin/api', () => ({
   createListingAction: vi.fn(),
   updateListingAction: vi.fn(),
 }));
@@ -65,9 +68,7 @@ function dependencies(overrides: Partial<React.ComponentProps<typeof ListingForm
 }
 
 beforeEach(() => {
-  router.replace.mockReset();
-  router.refresh.mockReset();
-  router.push.mockReset();
+  navigate.mockReset();
   Object.defineProperty(URL, 'createObjectURL', { configurable: true, value: vi.fn(() => 'blob:photo') });
   Object.defineProperty(URL, 'revokeObjectURL', { configurable: true, value: vi.fn() });
 });
@@ -122,7 +123,7 @@ it('uploads a selected image and passes its managed path to create', async () =>
   const payload = createAction.mock.calls[0][0] as ListingPayload;
   expect(payload.images).toEqual(['123e4567/new-0.webp']);
   expect(payload.price).toBe(1_850_000_000);
-  expect(router.replace).toHaveBeenCalledWith('/admin?created=1');
+  expect(navigate).toHaveBeenCalledWith('/admin?created=1', { replace: true });
 });
 
 it('cleans newly uploaded paths after a create failure and preserves values', async () => {
@@ -177,7 +178,7 @@ it('saves edited image order and removes deleted stored objects only after datab
   const payload = updateAction.mock.calls[0][1] as ListingPayload;
   expect(payload.images).toEqual([second.path]);
   expect(cleanupImages).toHaveBeenCalledWith(client, [existingImage.path]);
-  expect(router.replace).toHaveBeenCalledWith('/admin?updated=1');
+  expect(navigate).toHaveBeenCalledWith('/admin?updated=1', { replace: true });
 });
 
 it('disables cancel and save while submission is pending', async () => {

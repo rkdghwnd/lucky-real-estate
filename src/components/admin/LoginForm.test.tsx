@@ -2,9 +2,12 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-const router = vi.hoisted(() => ({ replace: vi.fn(), refresh: vi.fn() }));
-vi.mock('next/navigation', () => ({ useRouter: () => router }));
-vi.mock('@/app/admin/actions', () => ({
+const navigate = vi.hoisted(() => vi.fn());
+vi.mock('react-router-dom', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('react-router-dom')>()),
+  useNavigate: () => navigate,
+}));
+vi.mock('@/lib/admin/api', () => ({
   loginAction: vi.fn(),
   logoutAction: vi.fn(),
 }));
@@ -26,8 +29,7 @@ describe('LoginForm', () => {
     await userEvent.click(screen.getByRole('button', { name: '로그인' }));
 
     await waitFor(() => expect(action).toHaveBeenCalledOnce());
-    expect(router.replace).toHaveBeenCalledWith('/admin');
-    expect(router.refresh).toHaveBeenCalled();
+    expect(navigate).toHaveBeenCalledWith('/admin', { replace: true });
   });
 
   it('shows a generic login error and keeps the form', async () => {

@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { expect, it } from 'vitest';
+import { MemoryRouter } from 'react-router-dom';
 import type { Listing } from '@/lib/types';
 import { FeaturedListings } from './FeaturedListings';
 
@@ -30,13 +31,13 @@ const listing: Listing = {
 };
 
 it('shows an empty message and hides 더보기 when there are no listings', () => {
-  render(<FeaturedListings listings={[]} />);
+  render(<MemoryRouter><FeaturedListings listings={[]} /></MemoryRouter>);
   expect(screen.getByText('현재 등록된 매물이 없습니다.')).toBeInTheDocument();
   expect(screen.queryByRole('link', { name: /더보기/ })).not.toBeInTheDocument();
 });
 
 it('renders cards and the 더보기 link when there are listings', () => {
-  render(<FeaturedListings listings={[listing]} />);
+  render(<MemoryRouter><FeaturedListings listings={[listing]} /></MemoryRouter>);
   expect(screen.queryByText('현재 등록된 매물이 없습니다.')).not.toBeInTheDocument();
   expect(screen.getByRole('link', { name: /더보기/ })).toHaveAttribute('href', '/listings');
   expect(screen.getByRole('link', { name: '오류동 제조공장 상세보기' })).toBeInTheDocument();

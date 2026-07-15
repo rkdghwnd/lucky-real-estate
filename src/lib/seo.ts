@@ -37,6 +37,14 @@ export function buildWebsiteJsonLd(): object {
     url: siteConfig.siteUrl,
     name: siteConfig.name,
     inLanguage: 'ko-KR',
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: {
+        '@type': 'EntryPoint',
+        urlTemplate: `${siteConfig.siteUrl}/listings?keyword={search_term_string}`,
+      },
+      'query-input': 'required name=search_term_string',
+    },
   };
 }
 
