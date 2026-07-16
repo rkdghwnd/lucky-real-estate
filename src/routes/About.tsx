@@ -6,7 +6,7 @@ import { OfficeCarousel } from '@/components/about/OfficeCarousel';
 const OFFICE: [string, string][] = [
   ['상호', siteConfig.name],
   ['대표', siteConfig.representative],
-  ['중개등록번호', siteConfig.registrationNumber],
+  ['사업자번호', siteConfig.registrationNumber],
   ['소재지', siteConfig.address],
   ['전화번호', `휴대폰 ${siteConfig.phone} · 사무실 ${siteConfig.landline}`],
   ['영업시간', siteConfig.businessHours],

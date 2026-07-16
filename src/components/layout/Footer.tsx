@@ -12,7 +12,7 @@ export function Footer() {
             <p className="text-lg font-bold text-ink">{siteConfig.name}</p>
             <div className="text-sm leading-relaxed space-y-1">
               <p>{siteConfig.address}</p>
-              <p>대표: {siteConfig.representative} · 중개등록번호: {siteConfig.registrationNumber}</p>
+              <p>대표: {siteConfig.representative} · 사업자번호: {siteConfig.registrationNumber}</p>
               <p>
                 전화:{' '}
                 <a href={siteConfig.phoneHref} className="font-semibold text-brand transition-colors duration-200 hover:text-brand-dark">{siteConfig.phone}</a>

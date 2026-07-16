@@ -929,7 +929,7 @@ git commit -m "feat: header adds 매매/임대 nav, denser brand mark"
 
 - [ ] **Step 1: Tighten the footer callout radius and spacing**
 
-In `src/components/layout/Footer.tsx`, change the right-hand callout box `rounded-2xl` to `rounded-md`, reduce the vertical padding of the grid (`py-6` → `py-5`), and keep every existing field (상호/대표/중개등록번호/소재지/전화/영업시간/네이버 지도 링크). Do not remove any legally-required field.
+In `src/components/layout/Footer.tsx`, change the right-hand callout box `rounded-2xl` to `rounded-md`, reduce the vertical padding of the grid (`py-6` → `py-5`), and keep every existing field (상호/대표/사업자번호/소재지/전화/영업시간/네이버 지도 링크). Do not remove any legally-required field.
 
 - [ ] **Step 2: Run Footer test**
 
