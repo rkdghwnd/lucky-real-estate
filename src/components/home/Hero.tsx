@@ -2,8 +2,9 @@ import { useNavigate } from 'react-router-dom';
 import { Phone } from 'lucide-react';
 import { Button, Carousel } from 'antd';
 import { PhoneConsultButton } from '@/components/layout/PhoneConsultButton';
+import { withBase } from '@/lib/asset';
 
-const BANNERS = ['/banner0.jpg', '/banner5.avif', '/banner6.jpg', '/banner7.jpg'];
+const BANNERS = ['/banner0.jpg', '/banner5.avif', '/banner6.jpg', '/banner7.jpg'].map(withBase);
 
 export function Hero() {
   const navigate = useNavigate();

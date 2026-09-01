@@ -1,4 +1,5 @@
 import { Card } from 'antd';
+import { withBase } from '@/lib/asset';
 
 // Official Korean real-estate / government reference sites — identity taken from each
 // logo under /public/logos.
@@ -26,7 +27,7 @@ export function UsefulLinks() {
           >
             <span className="flex h-8 w-full items-center justify-center">
               <img
-                src={link.logo}
+                src={withBase(link.logo)}
                 alt={link.name}
                 width={120}
                 height={32}

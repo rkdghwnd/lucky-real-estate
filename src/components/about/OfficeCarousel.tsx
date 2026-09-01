@@ -1,6 +1,7 @@
 import { Carousel } from 'antd';
+import { withBase } from '@/lib/asset';
 
-const BANNERS = ['/banner1.jpg', '/banner2.jpg', '/banner3.jpg', '/banner4.jpg'];
+const BANNERS = ['/banner1.jpg', '/banner2.jpg', '/banner3.jpg', '/banner4.jpg'].map(withBase);
 
 // A self-contained 4:3 banner carousel. The frame owns its aspect ratio so the
 // image (absolute inset + object-cover) always covers it edge to edge.
