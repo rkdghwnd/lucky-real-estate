@@ -9,7 +9,10 @@ import { NotFound } from '@/routes/NotFound';
 // Admin is CSR-only and heavy (forms, image compression, map). It is lazy-loaded
 // via React Router route `lazy`, so its chunks load only when /admin/* is
 // visited and stay out of the public bundle.
-export const router = createBrowserRouter([
+// basename keeps every route under the Vite `base` path (/lucky-real-estate/
+// on GitHub Pages) — <Link to="..."> values below are relative to it.
+export const router = createBrowserRouter(
+  [
   {
     element: <RootLayout />,
     children: [
@@ -34,4 +37,4 @@ export const router = createBrowserRouter([
       { path: '*', element: <NotFound /> },
     ],
   },
-]);
+], { basename: import.meta.env.BASE_URL });
