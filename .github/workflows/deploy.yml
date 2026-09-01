@@ -41,6 +41,9 @@ jobs:
           VITE_NAVER_MAP_CLIENT_ID: ${{ secrets.VITE_NAVER_MAP_CLIENT_ID }}
           VITE_NAVER_SITE_VERIFICATION: ${{ secrets.VITE_NAVER_SITE_VERIFICATION }}
           VITE_GOOGLE_SITE_VERIFICATION: ${{ secrets.VITE_GOOGLE_SITE_VERIFICATION }}
+          # Custom domain (public/CNAME = haengun.co.kr) serves the site at the
+          # domain root, so the sub-path base is no longer needed.
+          VITE_BASE_PATH: /
         run: npm run build
 
       - name: Upload Pages artifact
